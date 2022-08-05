@@ -1,24 +1,31 @@
 package token
 
-/*
-	Token identifiers.
-*/
 const (
-	DECLARE string = "declare"
-	ADDRAW         = "addraw"
-	ADDVAR         = "addvar"
-	SUBRAW         = "subraw"
-	SUBVAR         = "subvar"
+	DECLARE string = "DECLARE"
+	ADD     string = "ADD"
+	SUB     string = "SUB"
+	SAY     string = "SAY"
 )
 
 type Token struct {
-	identifier string
+	tokenType  string
 	parameters []string
 }
 
-func NewToken(identifier string, parameters []string) *Token {
+func NewToken(tokenType string, parameters []string) *Token {
 	return &Token{
-		identifier: identifier,
+		tokenType:  tokenType,
 		parameters: parameters,
 	}
+}
+
+func (token *Token) GetType() string {
+	return token.tokenType
+}
+
+func (token *Token) GetParameter(index int) string {
+	if index < 0 || index >= len(token.parameters) {
+		return ""
+	}
+	return token.parameters[index]
 }
