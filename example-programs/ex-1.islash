@@ -1,4 +1,5 @@
 declare nome "arthur"
-declare frase "eu adoro o $(nome)"
+declare sobrenome1 "sudbrack"
+declare sobrenome2 "ibarra"
 
-say frase
+say "Meu nome é $(nome) $(sobrenome1) $(sobrenome2)"

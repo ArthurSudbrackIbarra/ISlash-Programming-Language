@@ -22,7 +22,7 @@ func isRawNumber(value string) (bool, float64) {
 }
 
 func isRawString(value string) (bool, string) {
-	matched, err := regexp.MatchString(`^"[a-zA-Z0-9!@#$&()\-.+,/ ]*"$`, value)
+	matched, err := regexp.MatchString(`^"([^"]*)"`, value)
 	if !matched || err != nil {
 		return false, ""
 	}
@@ -60,10 +60,10 @@ const (
 func (interpreter *Interpreter) interpolateString(str string) string {
 	interpolated := str
 	for key, element := range interpreter.numberVarTable {
-		interpolated = strings.ReplaceAll(str, INTERPOLATION_SYMBOL_LEFT+key+INTERPOLATION_SYMBOL_RIGHT, fmt.Sprintf("%f", element))
+		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_SYMBOL_LEFT+key+INTERPOLATION_SYMBOL_RIGHT, fmt.Sprintf("%f", element))
 	}
 	for key, element := range interpreter.stringVarTable {
-		interpolated = strings.ReplaceAll(str, INTERPOLATION_SYMBOL_LEFT+key+INTERPOLATION_SYMBOL_RIGHT, element)
+		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_SYMBOL_LEFT+key+INTERPOLATION_SYMBOL_RIGHT, element)
 	}
 	return interpolated
 }
