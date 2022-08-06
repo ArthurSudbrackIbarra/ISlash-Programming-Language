@@ -1,3 +1,7 @@
-declare baiana "uma baiana"
+declare nome "arthur"
+declare sobrenomes "sudbrack ibarra"
 
-say baiana
+concat nome " "
+concat nome sobrenomes
+
+say nome

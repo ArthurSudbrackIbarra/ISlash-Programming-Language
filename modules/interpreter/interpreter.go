@@ -90,6 +90,36 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s'. Line %d.", addValue, currentToken.GetLine())
 			}
+		case token.SUB:
+			variableName := currentToken.GetParameter(0)
+			subValue := currentToken.GetParameter(1)
+			if !interpreter.isNumberVar(variableName) {
+				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(subValue); isRawNumber {
+				interpreter.numberVarTable[variableName] -= value
+			} else if interpreter.isNumberVar(subValue) {
+				interpreter.numberVarTable[variableName] -= interpreter.numberVarTable[subValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s'. Line %d.", subValue, currentToken.GetLine())
+			}
+		case token.CONCAT:
+			variableName := currentToken.GetParameter(0)
+			concatValue := currentToken.GetParameter(1)
+			if !interpreter.isStringVar(variableName) {
+				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(concatValue); isRawNumber {
+				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + fmt.Sprintf("%f", value)
+			} else if isRawString, value := isRawString(concatValue); isRawString {
+				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + value
+			} else if interpreter.isNumberVar(concatValue) {
+				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + fmt.Sprintf("%f", interpreter.numberVarTable[concatValue])
+			} else if interpreter.isStringVar(concatValue) {
+				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + interpreter.stringVarTable[concatValue]
+			} else {
+				log.Fatalf("Error: Referenced nonexistent variable '%s'. Line %d.", concatValue, currentToken.GetLine())
+			}
 		case token.SAY:
 			output := currentToken.GetParameter(0)
 			if isRawNumber, value := isRawNumber(output); isRawNumber {

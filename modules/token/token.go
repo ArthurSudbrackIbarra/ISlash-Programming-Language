@@ -4,6 +4,7 @@ const (
 	DECLARE string = "DECLARE"
 	ADD     string = "ADD"
 	SUB     string = "SUB"
+	CONCAT  string = "CONCAT"
 	SAY     string = "SAY"
 )
 
