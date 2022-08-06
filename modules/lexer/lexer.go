@@ -7,20 +7,25 @@ import (
 	"strings"
 )
 
+func splitInstruction(lineContent string) []string {
+	quote := false
+	lineFragments := strings.FieldsFunc(lineContent, func(char rune) bool {
+		if char == '"' {
+			quote = !quote
+		}
+		return !quote && char == ' '
+	})
+	return lineFragments
+}
+
 func MountTokens(filePath string) []*token.Token {
 	tokensList := make([]*token.Token, 0)
 	fileLines := io.GetFileLines(filePath)
-	for index, content := range fileLines {
-		if content == "" || strings.HasPrefix(content, "#") {
+	for index, lineContent := range fileLines {
+		if lineContent == "" || strings.HasPrefix(lineContent, "#") {
 			continue
 		}
-		quoted := false
-		lineFragments := strings.FieldsFunc(content, func(char rune) bool {
-			if char == '"' {
-				quoted = !quoted
-			}
-			return !quoted && char == ' '
-		})
+		lineFragments := splitInstruction(lineContent)
 		line := index + 1
 		tokenType := strings.ToUpper(lineFragments[0])
 		parameters := lineFragments[1:]
