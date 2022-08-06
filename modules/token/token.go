@@ -8,15 +8,21 @@ const (
 )
 
 type Token struct {
+	line       int
 	tokenType  string
 	parameters []string
 }
 
-func NewToken(tokenType string, parameters []string) *Token {
+func NewToken(line int, tokenType string, parameters []string) *Token {
 	return &Token{
+		line:       line,
 		tokenType:  tokenType,
 		parameters: parameters,
 	}
+}
+
+func (token *Token) GetLine() int {
+	return token.line
 }
 
 func (token *Token) GetType() string {

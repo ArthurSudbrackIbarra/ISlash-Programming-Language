@@ -10,11 +10,8 @@ import (
 func MountTokens(filePath string) []*token.Token {
 	tokensList := make([]*token.Token, 0)
 	fileLines := io.GetFileLines(filePath)
-	for _, content := range fileLines {
+	for index, content := range fileLines {
 		lineFragments := strings.Split(content, " ")
-		if len(lineFragments) == 0 {
-			continue
-		}
 		tokenType := strings.ToUpper(lineFragments[0])
 		parameters := lineFragments[1:]
 		switch tokenType {
@@ -37,7 +34,7 @@ func MountTokens(filePath string) []*token.Token {
 		default:
 			log.Fatalf("Invalid instruction '%s'.", tokenType)
 		}
-		tokensList = append(tokensList, token.NewToken(tokenType, parameters))
+		tokensList = append(tokensList, token.NewToken(index+1, tokenType, parameters))
 	}
 	return tokensList
 }

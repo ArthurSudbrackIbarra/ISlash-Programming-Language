@@ -9,7 +9,11 @@ import (
 	"strings"
 )
 
-func isFloat(value string) (bool, float64) {
+/*
+	Start - Helper functions
+*/
+
+func isRawNumber(value string) (bool, float64) {
 	parsedValue, err := strconv.ParseFloat(value, 64)
 	if err != nil {
 		return false, -1
@@ -17,7 +21,7 @@ func isFloat(value string) (bool, float64) {
 	return true, parsedValue
 }
 
-func isString(value string) (bool, string) {
+func isRawString(value string) (bool, string) {
 	matched, err := regexp.MatchString(`^"[a-zA-Z0-9!@#$&()\-.+,/ ]*"$`, value)
 	if !matched || err != nil {
 		return false, ""
@@ -25,68 +29,79 @@ func isString(value string) (bool, string) {
 	return true, strings.ReplaceAll(value, "\"", "")
 }
 
+/*
+	End - Helper functions
+*/
+
 type Interpreter struct {
-	variablesTable map[string]string
+	numberVarTable map[string]float64
+	stringVarTable map[string]string
 }
 
-func (interpreter *Interpreter) isVar(value string) (bool, string) {
-	if value, contains := interpreter.variablesTable[value]; contains {
-		return true, value
+func (interpreter *Interpreter) isNumberVar(value string) bool {
+	if _, contains := interpreter.numberVarTable[value]; contains {
+		return true
 	}
-	return false, ""
+	return false
+}
+
+func (interpreter *Interpreter) isStringVar(value string) bool {
+	if _, contains := interpreter.stringVarTable[value]; contains {
+		return true
+	}
+	return false
 }
 
 func NewInterpreter() *Interpreter {
 	return &Interpreter{
-		variablesTable: make(map[string]string),
+		numberVarTable: make(map[string]float64),
+		stringVarTable: make(map[string]string),
 	}
 }
 
 func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
-	for _, currentToken := range tokensList {
+	for i := 0; i < len(tokensList); i++ {
+		currentToken := tokensList[i]
 		switch currentToken.GetType() {
 		case token.DECLARE:
 			variableName := currentToken.GetParameter(0)
 			assignValue := currentToken.GetParameter(1)
-			if isNumeric, _ := isFloat(assignValue); !isNumeric {
-				if isVar, value := interpreter.isVar(assignValue); isVar {
-					interpreter.variablesTable[variableName] = value
-				} else {
-					log.Fatalf("Error: Referenced nonexistent variable '%s'.", assignValue)
-				}
+			if isRawNumber, value := isRawNumber(assignValue); isRawNumber {
+				interpreter.numberVarTable[variableName] = value
+			} else if isRawString, value := isRawString(assignValue); isRawString {
+				interpreter.stringVarTable[variableName] = value
+			} else if interpreter.isNumberVar(assignValue) {
+				interpreter.numberVarTable[variableName] = interpreter.numberVarTable[assignValue]
+			} else if interpreter.isStringVar(assignValue) {
+				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[assignValue]
 			} else {
-				interpreter.variablesTable[variableName] = assignValue
+				log.Fatalf("Invalid declaration of varible '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
 		case token.ADD:
 			variableName := currentToken.GetParameter(0)
 			addValue := currentToken.GetParameter(1)
-			isVar, value := interpreter.isVar(variableName)
-			if !isVar {
-				log.Fatalf("Error: Variable not defined '%s'.", variableName)
+			if !interpreter.isNumberVar(variableName) {
+				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
-			numToSum := 0.0
-			if isNumeric, number := isFloat(addValue); isNumeric {
-				numToSum = number
-			} else if isVar, value := interpreter.isVar(addValue); isVar {
-				if isNumeric, number := isFloat(value); isNumeric {
-					numToSum = number
-				} else {
-					log.Fatalf("Error: value of variable referenced in ADD command is not a number.")
-				}
+			if isRawNumber, value := isRawNumber(addValue); isRawNumber {
+				interpreter.numberVarTable[variableName] += value
+			} else if interpreter.isNumberVar(addValue) {
+				interpreter.numberVarTable[variableName] += interpreter.numberVarTable[addValue]
 			} else {
-				log.Fatalf("Error: ")
+				log.Fatalf("Invalid parameter '%s'. Line %d.", addValue, currentToken.GetLine())
 			}
-			// interpreter.variablesTable[variableName] =
-			fmt.Println(numToSum)
-			fmt.Println(value)
 		case token.SAY:
 			output := currentToken.GetParameter(0)
-			if isString, value := isString(output); isString {
+			if isRawNumber, value := isRawNumber(output); isRawNumber {
 				fmt.Println(value)
-			} else if isVar, value := interpreter.isVar(output); isVar {
+			} else if isRawString, value := isRawString(output); isRawString {
 				fmt.Println(value)
+			} else if interpreter.isNumberVar(output) {
+				fmt.Println(interpreter.numberVarTable[output])
+			} else if interpreter.isStringVar(output) {
+				fmt.Println(interpreter.stringVarTable[output])
 			} else {
-				log.Fatalf("Error: Referenced nonexistent variable '%s'.", output)
+				log.Fatalf("Error: Referenced nonexistent variable '%s'. Line %d.", output, currentToken.GetLine())
 			}
 		}
 	}

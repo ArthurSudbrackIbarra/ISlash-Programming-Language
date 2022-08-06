@@ -1,5 +1,9 @@
-DECLARE x 10
-DECLARE y x
-DECLARE z 30
-SAY "i-am-a-big-fan-o-the-islash-language"
-SAY z
+declare um 1
+declare dois 2
+declare tres 3
+
+declare nome "arthur"
+
+add um 6
+
+say um
