@@ -48,8 +48,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 		case token.DECLARE:
 			variableName := currentToken.GetParameter(0)
 			assignValue := currentToken.GetParameter(1)
-			isNumeric, _ := isFloat(assignValue)
-			if !isNumeric {
+			if isNumeric, _ := isFloat(assignValue); !isNumeric {
 				if isVar, value := interpreter.isVar(assignValue); isVar {
 					interpreter.variablesTable[variableName] = value
 				} else {
@@ -58,6 +57,28 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.variablesTable[variableName] = assignValue
 			}
+		case token.ADD:
+			variableName := currentToken.GetParameter(0)
+			addValue := currentToken.GetParameter(1)
+			isVar, value := interpreter.isVar(variableName)
+			if !isVar {
+				log.Fatalf("Error: Variable not defined '%s'.", variableName)
+			}
+			numToSum := 0.0
+			if isNumeric, number := isFloat(addValue); isNumeric {
+				numToSum = number
+			} else if isVar, value := interpreter.isVar(addValue); isVar {
+				if isNumeric, number := isFloat(value); isNumeric {
+					numToSum = number
+				} else {
+					log.Fatalf("Error: value of variable referenced in ADD command is not a number.")
+				}
+			} else {
+				log.Fatalf("Error: ")
+			}
+			// interpreter.variablesTable[variableName] =
+			fmt.Println(numToSum)
+			fmt.Println(value)
 		case token.SAY:
 			output := currentToken.GetParameter(0)
 			if isString, value := isString(output); isString {
