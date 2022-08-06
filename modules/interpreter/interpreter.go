@@ -52,6 +52,22 @@ func (interpreter *Interpreter) isStringVar(value string) bool {
 	return false
 }
 
+const (
+	INTERPOLATION_SYMBOL_LEFT  string = "$("
+	INTERPOLATION_SYMBOL_RIGHT string = ")"
+)
+
+func (interpreter *Interpreter) interpolateString(str string) string {
+	interpolated := str
+	for key, element := range interpreter.numberVarTable {
+		interpolated = strings.ReplaceAll(str, INTERPOLATION_SYMBOL_LEFT+key+INTERPOLATION_SYMBOL_RIGHT, fmt.Sprintf("%f", element))
+	}
+	for key, element := range interpreter.stringVarTable {
+		interpolated = strings.ReplaceAll(str, INTERPOLATION_SYMBOL_LEFT+key+INTERPOLATION_SYMBOL_RIGHT, element)
+	}
+	return interpolated
+}
+
 func NewInterpreter() *Interpreter {
 	return &Interpreter{
 		numberVarTable: make(map[string]float64),
@@ -69,7 +85,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			if isRawNumber, value := isRawNumber(assignValue); isRawNumber {
 				interpreter.numberVarTable[variableName] = value
 			} else if isRawString, value := isRawString(assignValue); isRawString {
-				interpreter.stringVarTable[variableName] = value
+				interpreter.stringVarTable[variableName] = interpreter.interpolateString(value)
 			} else if interpreter.isNumberVar(assignValue) {
 				interpreter.numberVarTable[variableName] = interpreter.numberVarTable[assignValue]
 			} else if interpreter.isStringVar(assignValue) {
@@ -112,7 +128,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			if isRawNumber, value := isRawNumber(concatValue); isRawNumber {
 				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + fmt.Sprintf("%f", value)
 			} else if isRawString, value := isRawString(concatValue); isRawString {
-				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + value
+				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + interpreter.interpolateString(value)
 			} else if interpreter.isNumberVar(concatValue) {
 				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + fmt.Sprintf("%f", interpreter.numberVarTable[concatValue])
 			} else if interpreter.isStringVar(concatValue) {
@@ -125,7 +141,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			if isRawNumber, value := isRawNumber(output); isRawNumber {
 				fmt.Println(value)
 			} else if isRawString, value := isRawString(output); isRawString {
-				fmt.Println(value)
+				fmt.Println(interpreter.interpolateString(value))
 			} else if interpreter.isNumberVar(output) {
 				fmt.Println(interpreter.numberVarTable[output])
 			} else if interpreter.isStringVar(output) {

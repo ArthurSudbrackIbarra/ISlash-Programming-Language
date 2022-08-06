@@ -1,7 +1,4 @@
 declare nome "arthur"
-declare sobrenomes "sudbrack ibarra"
+declare frase "eu adoro o $(nome)"
 
-concat nome " "
-concat nome sobrenomes
-
-say nome
+say frase
