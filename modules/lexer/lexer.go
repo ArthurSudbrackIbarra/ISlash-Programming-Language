@@ -11,7 +11,13 @@ func MountTokens(filePath string) []*token.Token {
 	tokensList := make([]*token.Token, 0)
 	fileLines := io.GetFileLines(filePath)
 	for index, content := range fileLines {
-		lineFragments := strings.Split(content, " ")
+		quoted := false
+		lineFragments := strings.FieldsFunc(content, func(r rune) bool {
+			if r == '"' {
+				quoted = !quoted
+			}
+			return !quoted && r == ' '
+		})
 		tokenType := strings.ToUpper(lineFragments[0])
 		parameters := lineFragments[1:]
 		switch tokenType {

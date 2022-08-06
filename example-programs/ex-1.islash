@@ -1,9 +1,3 @@
-declare um 1
-declare dois 2
-declare tres 3
+declare baiana "uma baiana"
 
-declare nome "arthur"
-
-add um 6
-
-say um
+say baiana
