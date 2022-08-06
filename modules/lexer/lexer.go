@@ -30,6 +30,10 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid SUB statement, expected 2 parameters but got %d.", len(parameters))
 			}
+		case token.SAY:
+			if len(parameters) != 1 {
+				log.Fatalf("Invalid SAY statement, expected 1 parameter but got %d.", len(parameters))
+			}
 		default:
 			log.Fatalf("Invalid instruction '%s'.", tokenType)
 		}
