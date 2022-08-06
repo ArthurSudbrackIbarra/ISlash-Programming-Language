@@ -2,4 +2,5 @@ declare nome "arthur"
 declare sobrenome1 "sudbrack"
 declare sobrenome2 "ibarra"
 
+# Printando o nome na tela
 say "Meu nome é $(nome) $(sobrenome1) $(sobrenome2)"

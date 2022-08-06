@@ -11,7 +11,7 @@ func MountTokens(filePath string) []*token.Token {
 	tokensList := make([]*token.Token, 0)
 	fileLines := io.GetFileLines(filePath)
 	for index, content := range fileLines {
-		if content == "" {
+		if content == "" || strings.HasPrefix(content, "#") {
 			continue
 		}
 		quoted := false
