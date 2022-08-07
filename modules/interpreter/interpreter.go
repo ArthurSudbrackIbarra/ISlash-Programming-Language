@@ -169,7 +169,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				if value >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findNext(i, tokensList, token.ENDWHILE) + 1
+					i = interpreter.findNext(i, tokensList, token.ENDWHILE)
 					if i == -1 {
 						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
@@ -178,7 +178,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				if interpreter.numberVarTable[condition] >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findNext(i, tokensList, token.ENDWHILE) + 1
+					i = interpreter.findNext(i, tokensList, token.ENDWHILE)
 					if i == -1 {
 						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
