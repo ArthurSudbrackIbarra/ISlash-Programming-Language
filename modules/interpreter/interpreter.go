@@ -37,6 +37,7 @@ func isRawString(value string) (bool, string) {
 type Interpreter struct {
 	numberVarTable map[string]float64
 	stringVarTable map[string]string
+	conditionStack *Stack
 	whileStack     *Stack
 }
 
@@ -44,6 +45,7 @@ func NewInterpreter() *Interpreter {
 	return &Interpreter{
 		numberVarTable: make(map[string]float64),
 		stringVarTable: make(map[string]string),
+		conditionStack: NewEmptyStack(),
 		whileStack:     NewEmptyStack(),
 	}
 }
@@ -423,6 +425,50 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					interpreter.numberVarTable[variableName] = 0
 				}
 			}
+		case token.IF:
+			condition := currentToken.GetParameter(0)
+			parsedCondition := -1.0
+			if isRawNumber, value := isRawNumber(condition); isRawNumber {
+				parsedCondition = value
+			} else if isRawString, value := isRawString(condition); isRawString {
+				if len(value) > 1 {
+					parsedCondition = 1
+				} else {
+					parsedCondition = 0
+				}
+			} else if interpreter.isNumberVar(condition) {
+				parsedCondition = interpreter.numberVarTable[condition]
+			} else if interpreter.isStringVar(condition) {
+				if len(interpreter.stringVarTable[condition]) > 1 {
+					parsedCondition = 1
+				} else {
+					parsedCondition = 0
+				}
+			} else {
+				log.Fatalf("Error: Invalid parameter for IF statement. Line %d.", currentToken.GetLine())
+			}
+			if parsedCondition < 1 {
+				interpreter.conditionStack.Push(1)
+				i = interpreter.findNext(i, tokensList, token.ELSE) - 1
+				if i == -1 {
+					i = interpreter.findNext(i, tokensList, token.ENDIF) - 1
+					if i == -1 {
+						log.Fatalf("Missing ENDIF statement for IF. Line %d", currentToken.GetLine())
+					}
+				}
+			} else {
+				interpreter.conditionStack.Push(0)
+			}
+		case token.ELSE:
+			shouldExecute := interpreter.conditionStack.Top()
+			if shouldExecute != 1 {
+				i = interpreter.findNext(i, tokensList, token.ENDIF) - 1
+				if i == -1 {
+					log.Fatalf("Missing ENDIF statement for ELSE. Line %d", currentToken.GetLine())
+				}
+			}
+		case token.ENDIF:
+			interpreter.conditionStack.Pop()
 		case token.CONCAT:
 			variableName := currentToken.GetParameter(0)
 			concatValue := currentToken.GetParameter(1)

@@ -81,6 +81,18 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 3 {
 				log.Fatalf("Invalid EQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.IF:
+			if len(parameters) != 1 {
+				log.Fatalf("Invalid IF statement, expected 1 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.ELSE:
+			if len(parameters) != 0 {
+				log.Fatalf("Invalid ELSE statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.ENDIF:
+			if len(parameters) != 0 {
+				log.Fatalf("Invalid ENDIF statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		case token.SAY:
 			if len(parameters) != 1 {
 				log.Fatalf("Invalid SAY statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)

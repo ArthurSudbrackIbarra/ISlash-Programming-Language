@@ -1,0 +1,5 @@
+if 1
+    say "Zero!"
+else
+    say "One!"
+endif
