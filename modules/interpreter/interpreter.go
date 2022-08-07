@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"islash/modules/token"
 	"log"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
@@ -118,57 +119,125 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Invalid declaration of varible '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
 		case token.ADD:
-			variableName := currentToken.GetParameter(0)
-			addValue := currentToken.GetParameter(1)
-			if !interpreter.isNumberVar(variableName) {
-				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
+			addValue1 := currentToken.GetParameter(0)
+			parsedAddValue1 := -1.0
+			addValue2 := currentToken.GetParameter(1)
+			parsedAddValue2 := -1.0
+			variableName := currentToken.GetParameter(2)
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
 			}
-			if isRawNumber, value := isRawNumber(addValue); isRawNumber {
-				interpreter.numberVarTable[variableName] += value
-			} else if interpreter.isNumberVar(addValue) {
-				interpreter.numberVarTable[variableName] += interpreter.numberVarTable[addValue]
+			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
+				parsedAddValue1 = value
+			} else if interpreter.isNumberVar(addValue1) {
+				parsedAddValue1 = interpreter.numberVarTable[addValue1]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", addValue, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
 			}
+			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
+				parsedAddValue2 = value
+			} else if interpreter.isNumberVar(addValue2) {
+				parsedAddValue2 = interpreter.numberVarTable[addValue2]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+			}
+			interpreter.numberVarTable[variableName] = parsedAddValue1 + parsedAddValue2
 		case token.SUB:
-			variableName := currentToken.GetParameter(0)
-			subValue := currentToken.GetParameter(1)
-			if !interpreter.isNumberVar(variableName) {
-				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
+			addValue1 := currentToken.GetParameter(0)
+			parsedAddValue1 := -1.0
+			addValue2 := currentToken.GetParameter(1)
+			parsedAddValue2 := -1.0
+			variableName := currentToken.GetParameter(2)
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
 			}
-			if isRawNumber, value := isRawNumber(subValue); isRawNumber {
-				interpreter.numberVarTable[variableName] -= value
-			} else if interpreter.isNumberVar(subValue) {
-				interpreter.numberVarTable[variableName] -= interpreter.numberVarTable[subValue]
+			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
+				parsedAddValue1 = value
+			} else if interpreter.isNumberVar(addValue1) {
+				parsedAddValue1 = interpreter.numberVarTable[addValue1]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", subValue, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
 			}
+			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
+				parsedAddValue2 = value
+			} else if interpreter.isNumberVar(addValue2) {
+				parsedAddValue2 = interpreter.numberVarTable[addValue2]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+			}
+			interpreter.numberVarTable[variableName] = parsedAddValue1 - parsedAddValue2
 		case token.MULT:
-			variableName := currentToken.GetParameter(0)
-			multValue := currentToken.GetParameter(1)
-			if !interpreter.isNumberVar(variableName) {
-				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
+			addValue1 := currentToken.GetParameter(0)
+			parsedAddValue1 := -1.0
+			addValue2 := currentToken.GetParameter(1)
+			parsedAddValue2 := -1.0
+			variableName := currentToken.GetParameter(2)
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
 			}
-			if isRawNumber, value := isRawNumber(multValue); isRawNumber {
-				interpreter.numberVarTable[variableName] *= value
-			} else if interpreter.isNumberVar(multValue) {
-				interpreter.numberVarTable[variableName] *= interpreter.numberVarTable[multValue]
+			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
+				parsedAddValue1 = value
+			} else if interpreter.isNumberVar(addValue1) {
+				parsedAddValue1 = interpreter.numberVarTable[addValue1]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", multValue, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
 			}
+			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
+				parsedAddValue2 = value
+			} else if interpreter.isNumberVar(addValue2) {
+				parsedAddValue2 = interpreter.numberVarTable[addValue2]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+			}
+			interpreter.numberVarTable[variableName] = parsedAddValue1 * parsedAddValue2
 		case token.DIV:
-			variableName := currentToken.GetParameter(0)
-			divValue := currentToken.GetParameter(1)
-			if !interpreter.isNumberVar(variableName) {
-				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
+			addValue1 := currentToken.GetParameter(0)
+			parsedAddValue1 := -1.0
+			addValue2 := currentToken.GetParameter(1)
+			parsedAddValue2 := -1.0
+			variableName := currentToken.GetParameter(2)
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
 			}
-			if isRawNumber, value := isRawNumber(divValue); isRawNumber {
-				interpreter.numberVarTable[variableName] /= value
-			} else if interpreter.isNumberVar(divValue) {
-				interpreter.numberVarTable[variableName] /= interpreter.numberVarTable[divValue]
+			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
+				parsedAddValue1 = value
+			} else if interpreter.isNumberVar(addValue1) {
+				parsedAddValue1 = interpreter.numberVarTable[addValue1]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", divValue, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
 			}
+			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
+				parsedAddValue2 = value
+			} else if interpreter.isNumberVar(addValue2) {
+				parsedAddValue2 = interpreter.numberVarTable[addValue2]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+			}
+			interpreter.numberVarTable[variableName] = parsedAddValue1 / parsedAddValue2
+		case token.MOD:
+			addValue1 := currentToken.GetParameter(0)
+			parsedAddValue1 := -1.0
+			addValue2 := currentToken.GetParameter(1)
+			parsedAddValue2 := -1.0
+			variableName := currentToken.GetParameter(2)
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
+				parsedAddValue1 = value
+			} else if interpreter.isNumberVar(addValue1) {
+				parsedAddValue1 = interpreter.numberVarTable[addValue1]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
+				parsedAddValue2 = value
+			} else if interpreter.isNumberVar(addValue2) {
+				parsedAddValue2 = interpreter.numberVarTable[addValue2]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+			}
+			interpreter.numberVarTable[variableName] = math.Mod(parsedAddValue1, parsedAddValue2)
 		case token.GREATER:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0

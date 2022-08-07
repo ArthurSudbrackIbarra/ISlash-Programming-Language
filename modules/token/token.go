@@ -6,6 +6,7 @@ const (
 	SUB          string = "SUB"
 	MULT         string = "MULT"
 	DIV          string = "DIV"
+	MOD          string = "MOD"
 	GREATER      string = "GREATER"
 	GREATEREQUAL string = "GREATEREQUAL"
 	LESSER       string = "LESSER"
