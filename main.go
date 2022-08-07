@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	tokensList := lexer.MountTokens("example-programs/even-or-odd.islash")
+	tokensList := lexer.MountTokens("example-programs/is-prime-number.islash")
 	interpreter := interpreter.NewInterpreter()
 	interpreter.Interpret(tokensList)
 }

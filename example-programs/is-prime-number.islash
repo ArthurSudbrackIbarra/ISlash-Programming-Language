@@ -1,0 +1,37 @@
+# Modify 'number' to the value you wish. 29 in this example.
+declare number 29
+
+# Variable to store how many dividers the number has.
+declare dividersCount 1
+
+# Variable to store the dividers that will be tested.
+declare divider 2
+
+# This will be our counter.
+declare counter number
+
+# While counter > 0
+while counter
+    # remainder = number % divider
+    mod number divider remainder
+    # if remainder >= 1
+    if remainder
+        # Do nothing.
+    else
+        # dividersCount = dividersCount + 1
+        add dividersCount 1 dividersCount
+    endif
+    # divider = divider + 1
+    add divider 1 divider
+    # counter = counter - 1
+    sub counter 1 counter
+endwhile
+
+# isPrime = (dividersCount == 2) ?
+equal dividersCount 2 isPrime
+
+if isPrime
+    say "The number $(number) is prime."
+else
+    say "The number $(number) is not prime."
+endif
