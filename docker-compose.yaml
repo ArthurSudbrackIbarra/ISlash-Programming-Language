@@ -6,5 +6,5 @@ services:
     image: islash/islash-programming-language:v1
     volumes:
       - type: bind
-        source: ./example-programs
-        target: /usr/local/islash/example-programs
+        source: ./programs
+        target: /usr/local/islash/programs
