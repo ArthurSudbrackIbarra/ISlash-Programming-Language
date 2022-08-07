@@ -1,8 +1,15 @@
-declare count 10
+# Soma dos N primeiros números inteiros.
 
-while count
-    say "Loopando!"
-    sub count 1
+# Modifique n para um valor desejado.
+declare n 100
+declare naux n
+
+# Variável para armazenar a soma.
+declare sum 0
+
+while n
+    add sum n
+    sub n 1
 endwhile
 
-say "End of the program."
+say "A soma dos $(naux) primeiros números inteiros é $(sum)."
