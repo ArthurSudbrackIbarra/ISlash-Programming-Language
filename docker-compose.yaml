@@ -1,7 +1,10 @@
 version: "3.9"
 services:
   islash:
-    container_name: islash-programming-language
+    container_name: islash-container
     build: .
+    image: islash/islash-programming-language:v1
     volumes:
-      - .:/example-programs
+      - type: bind
+        source: ./example-programs
+        target: /usr/local/islash/example-programs

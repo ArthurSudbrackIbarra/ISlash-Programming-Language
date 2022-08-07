@@ -3,10 +3,21 @@ package main
 import (
 	"islash/modules/interpreter"
 	"islash/modules/lexer"
+	"log"
+	"os"
+	"path/filepath"
 )
 
 func main() {
-	tokensList := lexer.MountTokens("example-programs/is-prime-number.islash")
+	if len(os.Args) < 2 {
+		log.Fatal("No program name specified.")
+	}
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatal("Unnable to get user's current directory.")
+	}
+	sourceCodePath := filepath.Join(cwd, os.Args[1])
+	tokensList := lexer.MountTokens(sourceCodePath)
 	interpreter := interpreter.NewInterpreter()
 	interpreter.Interpret(tokensList)
 }
