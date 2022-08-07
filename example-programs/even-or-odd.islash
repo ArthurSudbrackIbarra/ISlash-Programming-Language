@@ -1,12 +1,13 @@
 # Modify 'number' to the value you wish. 10 in this example.
 declare number 10
 
+# remainer = number % 2
 mod number 2 remainer
 
-# TBD...
-
-if mod
-    # Ímpar
+if remainer
+    # Odd
+    say "The number $(number) is odd."
 else
-    # Par
+    # Even
+    say "The number $(number) is even."
 endif
