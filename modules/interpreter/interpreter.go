@@ -100,6 +100,12 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 		case token.DECLARE:
 			variableName := currentToken.GetParameter(0)
 			assignValue := currentToken.GetParameter(1)
+			if interpreter.isVariableDefined(variableName) {
+				log.Fatalf("Error: Variable '%s' has already been declared. Line %d.", variableName, currentToken.GetLine())
+			}
+			if isRawNumber, _ := isRawNumber(variableName); isRawNumber {
+				log.Fatalf("Error: Variable name cannot be a number. Line %d.", currentToken.GetLine())
+			}
 			if isRawNumber, value := isRawNumber(assignValue); isRawNumber {
 				interpreter.numberVarTable[variableName] = value
 			} else if isRawString, value := isRawString(assignValue); isRawString {
@@ -109,7 +115,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else if interpreter.isStringVar(assignValue) {
 				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[assignValue]
 			} else {
-				log.Fatalf("Invalid declaration of varible '%s'. Line %d.", variableName, currentToken.GetLine())
+				log.Fatalf("Error: Invalid declaration of varible '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
 		case token.ADD:
 			variableName := currentToken.GetParameter(0)
@@ -122,7 +128,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else if interpreter.isNumberVar(addValue) {
 				interpreter.numberVarTable[variableName] += interpreter.numberVarTable[addValue]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", addValue, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", addValue, currentToken.GetLine())
 			}
 		case token.SUB:
 			variableName := currentToken.GetParameter(0)
@@ -135,7 +141,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else if interpreter.isNumberVar(subValue) {
 				interpreter.numberVarTable[variableName] -= interpreter.numberVarTable[subValue]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", subValue, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", subValue, currentToken.GetLine())
 			}
 		case token.MULT:
 			variableName := currentToken.GetParameter(0)
@@ -253,6 +259,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			secondValue := currentToken.GetParameter(1)
 			parsedSecondValue := -1.0
 			variableName := currentToken.GetParameter(2)
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
+			}
 			if isRawNumber, value := isRawNumber(firstValue); isRawNumber {
 				parsedFirstValue = value
 			} else if interpreter.isNumberVar(firstValue) {
@@ -267,16 +276,84 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
 			}
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if parsedFirstValue <= parsedSecondValue {
 				interpreter.numberVarTable[variableName] = 1
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
 		case token.EQUAL:
-			// TBD...
+			firstValue := currentToken.GetParameter(0)
+			secondValue := currentToken.GetParameter(1)
+			variableName := currentToken.GetParameter(2)
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
+			}
+			if interpreter.isNumberVar(firstValue) && interpreter.isStringVar(secondValue) {
+				interpreter.numberVarTable[variableName] = 0
+				return
+			} else if interpreter.isNumberVar(secondValue) && interpreter.isStringVar(firstValue) {
+				interpreter.numberVarTable[variableName] = 0
+				return
+			}
+			isFirstValueRawNumber, numberValue1 := isRawNumber(firstValue)
+			isFirstValueRawString, stringValue1 := isRawString(firstValue)
+			isSecondValueRawNumber, numberValue2 := isRawNumber(secondValue)
+			isSecondValueRawString, stringValue2 := isRawString(secondValue)
+			if isFirstValueRawNumber && isSecondValueRawNumber {
+				if numberValue1 == numberValue2 {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isFirstValueRawString && isSecondValueRawString {
+				if stringValue1 == stringValue2 {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isFirstValueRawNumber && interpreter.isNumberVar(secondValue) {
+				if numberValue1 == interpreter.numberVarTable[secondValue] {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isSecondValueRawNumber && interpreter.isNumberVar(firstValue) {
+				if numberValue2 == interpreter.numberVarTable[firstValue] {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isFirstValueRawString && interpreter.isStringVar(secondValue) {
+				if stringValue1 == interpreter.stringVarTable[secondValue] {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isSecondValueRawString && interpreter.isStringVar(firstValue) {
+				if stringValue2 == interpreter.stringVarTable[firstValue] {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if interpreter.isNumberVar(firstValue) && interpreter.isNumberVar(secondValue) {
+				if interpreter.numberVarTable[firstValue] == interpreter.numberVarTable[secondValue] {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if interpreter.isStringVar(firstValue) && interpreter.isStringVar(secondValue) {
+				if interpreter.stringVarTable[firstValue] == interpreter.stringVarTable[secondValue] {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else {
+				if !interpreter.isVariableDefined(firstValue) || !interpreter.isVariableDefined(secondValue) {
+					log.Fatalf("Error: One or more variables are not defined. Line %d.", currentToken.GetLine())
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			}
 		case token.CONCAT:
 			variableName := currentToken.GetParameter(0)
 			concatValue := currentToken.GetParameter(1)

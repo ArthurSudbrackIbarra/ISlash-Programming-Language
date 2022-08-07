@@ -1,0 +1,14 @@
+declare dez 10
+declare dezDeNovo 10
+
+equal dez 10 equal1
+equal dez dezDeNovo equal2
+
+equal dez 20 equal3
+declare trinta 30
+equal dez trinta equal4
+
+say equal1
+say equal2
+say equal3
+say equal4
