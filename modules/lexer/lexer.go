@@ -9,13 +9,13 @@ import (
 
 func splitInstruction(lineContent string) []string {
 	quote := false
-	lineFragments := strings.FieldsFunc(lineContent, func(char rune) bool {
+	splittedInstruction := strings.FieldsFunc(lineContent, func(char rune) bool {
 		if char == '"' {
 			quote = !quote
 		}
 		return !quote && char == ' '
 	})
-	return lineFragments
+	return splittedInstruction
 }
 
 func MountTokens(filePath string) []*token.Token {
@@ -25,10 +25,13 @@ func MountTokens(filePath string) []*token.Token {
 		if lineContent == "" || strings.HasPrefix(lineContent, "#") {
 			continue
 		}
-		lineFragments := splitInstruction(lineContent)
+		splittedInstruction := splitInstruction(lineContent)
 		line := index + 1
-		tokenType := strings.ToUpper(lineFragments[0])
-		parameters := lineFragments[1:]
+		tokenType := strings.ToUpper(splittedInstruction[0])
+		parameters := make([]string, 0)
+		if len(splittedInstruction) > 1 {
+			parameters = splittedInstruction[1:]
+		}
 		switch tokenType {
 		case token.DECLARE:
 			if len(parameters) != 2 {
@@ -49,6 +52,14 @@ func MountTokens(filePath string) []*token.Token {
 		case token.SAY:
 			if len(parameters) != 1 {
 				log.Fatalf("Invalid SAY statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+			}
+		case token.WHILE:
+			if len(parameters) != 1 {
+				log.Fatalf("Invalid WHILE statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+			}
+		case token.ENDWHILE:
+			if len(parameters) != 0 {
+				log.Fatalf("Invalid ENDWHILE statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		default:
 			log.Fatalf("Invalid instruction '%s'.", tokenType)

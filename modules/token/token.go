@@ -1,11 +1,20 @@
 package token
 
 const (
-	DECLARE string = "DECLARE"
-	ADD     string = "ADD"
-	SUB     string = "SUB"
-	CONCAT  string = "CONCAT"
-	SAY     string = "SAY"
+	DECLARE      string = "DECLARE"
+	ADD          string = "ADD"
+	SUB          string = "SUB"
+	MULT         string = "MULT"
+	DIV          string = "DIV"
+	GREATER      string = "GREATER"
+	GREATEREQUAL string = "GREATEREQUAL"
+	LESSER       string = "LESSER"
+	LESSEREQUAL  string = "LESSEREQUAL"
+	EQUAL        string = "EQUAL"
+	CONCAT       string = "CONCAT"
+	SAY          string = "SAY"
+	WHILE        string = "WHILE"
+	ENDWHILE     string = "ENDWHILE"
 )
 
 type Token struct {

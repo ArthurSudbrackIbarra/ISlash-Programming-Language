@@ -1,10 +1,8 @@
-declare nome "Arthur"
-declare sobrenome1 "Sudbrack"
-declare sobrenome2 "Ibarra"
+declare count 10
 
-# Printando o nome na tela
-say "Meu nome é $(nome) $(sobrenome1) $(sobrenome2)."
+while count
+    say "Loopando!"
+    sub count 1
+endwhile
 
-#while (contador < 10)
-#    say "UHU!"
-#endwhile
+say "End of the program."

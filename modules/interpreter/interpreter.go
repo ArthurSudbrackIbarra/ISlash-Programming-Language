@@ -36,6 +36,15 @@ func isRawString(value string) (bool, string) {
 type Interpreter struct {
 	numberVarTable map[string]float64
 	stringVarTable map[string]string
+	whileStack     *Stack
+}
+
+func NewInterpreter() *Interpreter {
+	return &Interpreter{
+		numberVarTable: make(map[string]float64),
+		stringVarTable: make(map[string]string),
+		whileStack:     NewEmptyStack(),
+	}
 }
 
 func (interpreter *Interpreter) isNumberVar(value string) bool {
@@ -53,30 +62,35 @@ func (interpreter *Interpreter) isStringVar(value string) bool {
 }
 
 const (
-	INTERPOLATION_SYMBOL_LEFT  string = "$("
-	INTERPOLATION_SYMBOL_RIGHT string = ")"
+	INTERPOLATION_LEFT  string = "$("
+	INTERPOLATION_RIGHT string = ")"
 )
 
 func (interpreter *Interpreter) interpolateString(str string) string {
 	interpolated := str
 	for key, element := range interpreter.numberVarTable {
-		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_SYMBOL_LEFT+key+INTERPOLATION_SYMBOL_RIGHT, fmt.Sprintf("%f", element))
+		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_LEFT+key+INTERPOLATION_RIGHT, fmt.Sprintf("%f", element))
 	}
 	for key, element := range interpreter.stringVarTable {
-		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_SYMBOL_LEFT+key+INTERPOLATION_SYMBOL_RIGHT, element)
+		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_LEFT+key+INTERPOLATION_RIGHT, element)
 	}
 	return interpolated
 }
 
-func NewInterpreter() *Interpreter {
-	return &Interpreter{
-		numberVarTable: make(map[string]float64),
-		stringVarTable: make(map[string]string),
+func (interpreter *Interpreter) findNext(startIndex int, tokensList []*token.Token, tokenType string) int {
+	for i := startIndex; i < len(tokensList); i++ {
+		if tokensList[i].GetType() == tokenType {
+			return i
+		}
 	}
+	return -1
 }
 
 func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 	for i := 0; i < len(tokensList); i++ {
+		if i >= len(tokensList) {
+			break
+		}
 		currentToken := tokensList[i]
 		switch currentToken.GetType() {
 		case token.DECLARE:
@@ -149,6 +163,30 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Error: Referenced nonexistent variable '%s'. Line %d.", output, currentToken.GetLine())
 			}
+		case token.WHILE:
+			condition := currentToken.GetParameter(0)
+			if isRawNumber, value := isRawNumber(condition); isRawNumber {
+				if value >= 1 {
+					interpreter.whileStack.Push(i)
+				} else {
+					i = interpreter.findNext(i, tokensList, token.ENDWHILE) + 1
+					if i == -1 {
+						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
+					}
+				}
+			} else if interpreter.isNumberVar(condition) {
+				if interpreter.numberVarTable[condition] >= 1 {
+					interpreter.whileStack.Push(i)
+				} else {
+					i = interpreter.findNext(i, tokensList, token.ENDWHILE) + 1
+					if i == -1 {
+						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
+					}
+				}
+			}
+		case token.ENDWHILE:
+			indexToGoBack := interpreter.whileStack.Pop()
+			i = indexToGoBack - 1
 		}
 	}
 }
