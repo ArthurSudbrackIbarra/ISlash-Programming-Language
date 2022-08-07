@@ -74,7 +74,7 @@ const (
 func (interpreter *Interpreter) interpolateString(str string) string {
 	interpolated := str
 	for key, element := range interpreter.numberVarTable {
-		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_LEFT+key+INTERPOLATION_RIGHT, fmt.Sprintf("%f", element))
+		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_LEFT+key+INTERPOLATION_RIGHT, strconv.FormatFloat(element, 'f', -1, 64))
 	}
 	for key, element := range interpreter.stringVarTable {
 		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_LEFT+key+INTERPOLATION_RIGHT, element)

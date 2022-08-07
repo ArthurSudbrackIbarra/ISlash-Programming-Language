@@ -1,8 +1,0 @@
-declare n 0
-declare max 10
-lesser n max isLessThanMax
-while isLessThanMax
-    say "Loop!"
-    add n 1
-    lesser n max isLessThanMax
-endwhile

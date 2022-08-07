@@ -1,6 +1,0 @@
-declare dez 10
-declare cinco 5
-
-mod dez cinco resto
-
-say resto

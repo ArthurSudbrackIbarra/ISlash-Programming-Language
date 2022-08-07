@@ -1,0 +1,18 @@
+# Modify 'n' to the value you wish.
+declare n 50
+
+# This will be our counter.
+declare counter n
+
+# Variable to store the sum of the numbers.
+declare sum 0
+
+# While counter > 0
+while counter
+    # sum = sum + counter
+    add sum counter sum
+    # counter = counter - 1
+    sub counter 1 counter
+endwhile
+
+say "The sum of the first $(n) numbers is: $(sum)."
