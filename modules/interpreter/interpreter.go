@@ -133,6 +133,32 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s'. Line %d.", subValue, currentToken.GetLine())
 			}
+		case token.MULT:
+			variableName := currentToken.GetParameter(0)
+			multValue := currentToken.GetParameter(1)
+			if !interpreter.isNumberVar(variableName) {
+				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(multValue); isRawNumber {
+				interpreter.numberVarTable[variableName] *= value
+			} else if interpreter.isNumberVar(multValue) {
+				interpreter.numberVarTable[variableName] *= interpreter.numberVarTable[multValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s'. Line %d.", multValue, currentToken.GetLine())
+			}
+		case token.DIV:
+			variableName := currentToken.GetParameter(0)
+			divValue := currentToken.GetParameter(1)
+			if !interpreter.isNumberVar(variableName) {
+				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(divValue); isRawNumber {
+				interpreter.numberVarTable[variableName] /= value
+			} else if interpreter.isNumberVar(divValue) {
+				interpreter.numberVarTable[variableName] /= interpreter.numberVarTable[divValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s'. Line %d.", divValue, currentToken.GetLine())
+			}
 		case token.CONCAT:
 			variableName := currentToken.GetParameter(0)
 			concatValue := currentToken.GetParameter(1)

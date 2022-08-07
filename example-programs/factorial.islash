@@ -1,0 +1,9 @@
+declare n 7
+declare result 1
+
+while n
+    mult result n
+    sub n 1
+endwhile
+
+say result
