@@ -84,10 +84,34 @@ func (interpreter *Interpreter) interpolateString(str string) string {
 	return interpolated
 }
 
-func (interpreter *Interpreter) findNext(startIndex int, tokensList []*token.Token, tokenType string) int {
-	for i := startIndex; i < len(tokensList); i++ {
+func (interpreter *Interpreter) findNextIndex(startIndex int, tokensList []*token.Token, tokenType string) int {
+	for i := startIndex + 1; i < len(tokensList); i++ {
 		if tokensList[i].GetType() == tokenType {
 			return i
+		}
+	}
+	return -1
+}
+
+func (interpreter *Interpreter) findMatchingEndwhileIndex(currentIndex int, tokensList []*token.Token) int {
+	whileStatementsCount := 0
+	currentWhileStatementOrder := 0
+	for i := 0; i < len(tokensList); i++ {
+		if tokensList[i].GetType() == token.WHILE {
+			if i == currentIndex {
+				currentWhileStatementOrder = whileStatementsCount
+			}
+			whileStatementsCount += 1
+		}
+	}
+	endwhileToFindOrder := math.Abs(float64(currentWhileStatementOrder) - float64(whileStatementsCount))
+	endwhilesFound := 0
+	for i := 0; i < len(tokensList); i++ {
+		if tokensList[i].GetType() == token.ENDWHILE {
+			endwhilesFound += 1
+			if endwhilesFound == int(endwhileToFindOrder) {
+				return i
+			}
 		}
 	}
 	return -1
@@ -449,9 +473,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			}
 			if parsedCondition < 1 {
 				interpreter.conditionStack.Push(1)
-				i = interpreter.findNext(i, tokensList, token.ELSE) - 1
+				i = interpreter.findNextIndex(i, tokensList, token.ELSE) - 1
 				if i == -1 {
-					i = interpreter.findNext(i, tokensList, token.ENDIF) - 1
+					i = interpreter.findNextIndex(i, tokensList, token.ENDIF) - 1
 					if i == -1 {
 						log.Fatalf("Missing ENDIF statement for IF. Line %d", currentToken.GetLine())
 					}
@@ -462,7 +486,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 		case token.ELSE:
 			shouldExecute := interpreter.conditionStack.Top()
 			if shouldExecute != 1 {
-				i = interpreter.findNext(i, tokensList, token.ENDIF) - 1
+				i = interpreter.findNextIndex(i, tokensList, token.ENDIF) - 1
 				if i == -1 {
 					log.Fatalf("Missing ENDIF statement for ELSE. Line %d", currentToken.GetLine())
 				}
@@ -505,7 +529,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				if value >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findNext(i, tokensList, token.ENDWHILE)
+					i = interpreter.findMatchingEndwhileIndex(i, tokensList)
 					if i == -1 {
 						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
@@ -514,7 +538,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				if interpreter.numberVarTable[condition] >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findNext(i, tokensList, token.ENDWHILE)
+					i = interpreter.findMatchingEndwhileIndex(i, tokensList)
 					if i == -1 {
 						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
@@ -522,7 +546,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			}
 		case token.ENDWHILE:
 			indexToGoBack := interpreter.whileStack.Pop()
-			i = indexToGoBack - 1
+			if indexToGoBack != -1 {
+				i = indexToGoBack - 1
+			}
 		}
 	}
 }

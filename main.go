@@ -17,6 +17,7 @@ func main() {
 		log.Fatal("Unnable to get user's current directory.")
 	}
 	sourceCodePath := filepath.Join(cwd, os.Args[1])
+	// sourceCodePath := "programs/sum-of-first-n-numbers.islash"
 	tokensList := lexer.MountTokens(sourceCodePath)
 	interpreter := interpreter.NewInterpreter()
 	interpreter.Interpret(tokensList)

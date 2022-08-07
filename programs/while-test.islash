@@ -1,0 +1,11 @@
+declare x 3
+declare y 5
+
+while x
+    while y
+        say "Interno $(x), $(y)."
+        sub y 1 y
+    endwhile
+    say "Externo $(x), $(y)."
+    sub x 1 x
+endwhile
