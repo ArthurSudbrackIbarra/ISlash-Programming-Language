@@ -1,11 +1,4 @@
-declare nome "arthur"
-say "Meu nome é $(nome)!"
-
-declare count 10
-
-while count
-    say "Rode"
-    sub count 1
-endwhile
-
-
+declare x 5
+declare y 2
+div x y
+say x

@@ -47,18 +47,22 @@ func NewInterpreter() *Interpreter {
 	}
 }
 
-func (interpreter *Interpreter) isNumberVar(value string) bool {
-	if _, contains := interpreter.numberVarTable[value]; contains {
+func (interpreter *Interpreter) isNumberVar(key string) bool {
+	if _, contains := interpreter.numberVarTable[key]; contains {
 		return true
 	}
 	return false
 }
 
-func (interpreter *Interpreter) isStringVar(value string) bool {
-	if _, contains := interpreter.stringVarTable[value]; contains {
+func (interpreter *Interpreter) isStringVar(key string) bool {
+	if _, contains := interpreter.stringVarTable[key]; contains {
 		return true
 	}
 	return false
+}
+
+func (interpreter *Interpreter) isVariableDefined(key string) bool {
+	return interpreter.isNumberVar(key) || interpreter.isStringVar(key)
 }
 
 const (
@@ -159,6 +163,120 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s'. Line %d.", divValue, currentToken.GetLine())
 			}
+		case token.GREATER:
+			firstValue := currentToken.GetParameter(0)
+			parsedFirstValue := -1.0
+			secondValue := currentToken.GetParameter(1)
+			parsedSecondValue := -1.0
+			variableName := currentToken.GetParameter(2)
+			if isRawNumber, value := isRawNumber(firstValue); isRawNumber {
+				parsedFirstValue = value
+			} else if interpreter.isNumberVar(firstValue) {
+				parsedFirstValue = interpreter.numberVarTable[firstValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(secondValue); isRawNumber {
+				parsedSecondValue = value
+			} else if interpreter.isNumberVar(secondValue) {
+				parsedSecondValue = interpreter.numberVarTable[secondValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
+			}
+			if parsedFirstValue > parsedSecondValue {
+				interpreter.numberVarTable[variableName] = 1
+			} else {
+				interpreter.numberVarTable[variableName] = 0
+			}
+		case token.GREATEREQUAL:
+			firstValue := currentToken.GetParameter(0)
+			parsedFirstValue := -1.0
+			secondValue := currentToken.GetParameter(1)
+			parsedSecondValue := -1.0
+			variableName := currentToken.GetParameter(2)
+			if isRawNumber, value := isRawNumber(firstValue); isRawNumber {
+				parsedFirstValue = value
+			} else if interpreter.isNumberVar(firstValue) {
+				parsedFirstValue = interpreter.numberVarTable[firstValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(secondValue); isRawNumber {
+				parsedSecondValue = value
+			} else if interpreter.isNumberVar(secondValue) {
+				parsedSecondValue = interpreter.numberVarTable[secondValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
+			}
+			if parsedFirstValue >= parsedSecondValue {
+				interpreter.numberVarTable[variableName] = 1
+			} else {
+				interpreter.numberVarTable[variableName] = 0
+			}
+		case token.LESSER:
+			firstValue := currentToken.GetParameter(0)
+			parsedFirstValue := -1.0
+			secondValue := currentToken.GetParameter(1)
+			parsedSecondValue := -1.0
+			variableName := currentToken.GetParameter(2)
+			if isRawNumber, value := isRawNumber(firstValue); isRawNumber {
+				parsedFirstValue = value
+			} else if interpreter.isNumberVar(firstValue) {
+				parsedFirstValue = interpreter.numberVarTable[firstValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(secondValue); isRawNumber {
+				parsedSecondValue = value
+			} else if interpreter.isNumberVar(secondValue) {
+				parsedSecondValue = interpreter.numberVarTable[secondValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
+			}
+			if parsedFirstValue < parsedSecondValue {
+				interpreter.numberVarTable[variableName] = 1
+			} else {
+				interpreter.numberVarTable[variableName] = 0
+			}
+		case token.LESSEREQUAL:
+			firstValue := currentToken.GetParameter(0)
+			parsedFirstValue := -1.0
+			secondValue := currentToken.GetParameter(1)
+			parsedSecondValue := -1.0
+			variableName := currentToken.GetParameter(2)
+			if isRawNumber, value := isRawNumber(firstValue); isRawNumber {
+				parsedFirstValue = value
+			} else if interpreter.isNumberVar(firstValue) {
+				parsedFirstValue = interpreter.numberVarTable[firstValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(secondValue); isRawNumber {
+				parsedSecondValue = value
+			} else if interpreter.isNumberVar(secondValue) {
+				parsedSecondValue = interpreter.numberVarTable[secondValue]
+			} else {
+				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if interpreter.isStringVar(variableName) {
+				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
+			}
+			if parsedFirstValue <= parsedSecondValue {
+				interpreter.numberVarTable[variableName] = 1
+			} else {
+				interpreter.numberVarTable[variableName] = 0
+			}
+		case token.EQUAL:
+			// TBD...
 		case token.CONCAT:
 			variableName := currentToken.GetParameter(0)
 			concatValue := currentToken.GetParameter(1)
