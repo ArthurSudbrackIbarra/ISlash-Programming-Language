@@ -61,7 +61,7 @@ say "Cool!"
 
 ### String interpolation
 
-ISlash allows the interpolations of Strings using the `$()` symbol:
+ISlash allows the interpolation of Strings using the `$()` symbol:
 
 ```
 declare name "Arthur"
@@ -74,6 +74,8 @@ say "My name is $(name) and I am $(age) years old."
 Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
 
 ## How to Use
+
+To test the ISlash language, follow the steps being described below:
 
 1. Download [Docker](https://www.docker.com/products/docker-desktop/).
 
@@ -92,7 +94,7 @@ cd ISlash-Programming-Language
 4. Start the Docker container:
 
 ```sh
-docker compose up
+docker compose up -d
 ```
 
 5. Enter inside the Docker container that you started:
@@ -113,3 +115,25 @@ islash even-or-odd.islash
 ![Running Programs](https://user-images.githubusercontent.com/69170322/183312708-8dfb28cc-7c13-418f-9f92-bb55927b13ab.png)
 
 **NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .islash files or create new ones in your host machine and then run them from inside the container. 
+
+## How to Delete
+
+To completely delete all the resources that islash created in your machine, use the following commands:
+
+1. Stop the container.
+
+```sh
+docker compose down
+```
+
+2. Delete the container.
+
+```sh
+docker rm islash-container
+```
+
+3. Delete the container image.
+
+```sh
+docker rmi islash/islash-programming-language:v1
+```
