@@ -12,10 +12,10 @@ declare counter number
 
 # While counter > 0
 while counter
-    # remainder = number % divider
-    mod number divider remainder
-    # if remainder >= 1
-    if remainder
+    # remainer = number % divider
+    mod number divider remainer
+    # if remainer >= 1
+    if remainer
         # Do nothing.
     else
         # dividersCount = dividersCount + 1

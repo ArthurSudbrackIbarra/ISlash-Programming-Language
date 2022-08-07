@@ -50,9 +50,18 @@ Instructions are **not case sensitive**.
 
 Below, ISlash language features will be explained:
 
+### Comments
+
+Comments can be made using the `#` character at the beginning of lines:
+
+```
+# This is a comment!
+say "Cool!"
+```
+
 ### String interpolation
 
-ISlash allows the interpolations of Strings using the `$()` operator:
+ISlash allows the interpolations of Strings using the `$()` symbol:
 
 ```
 declare name "Arthur"
@@ -100,5 +109,7 @@ islash <PATH_TO_MY_PROGRAM>
 # Example:
 islash even-or-odd.islash
 ```
+
+![Running Programs](https://user-images.githubusercontent.com/69170322/183312708-8dfb28cc-7c13-418f-9f92-bb55927b13ab.png)
 
 **NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .islash files or create new ones in your host machine and then run them from inside the container. 
