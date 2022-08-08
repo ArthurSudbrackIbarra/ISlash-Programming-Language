@@ -11,6 +11,7 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 * [Language Features](#language-features)
     * [Comments](#comments)
     * [String Interpolation](#string-interpolation)
+    * [New Lines in Strings](#new-lines-in-strings)
 * [Example Programs](#example-programs)
 * [Download ISlash](#download-islash)
 * [Uninstall ISlash](#uninstall-islash)
