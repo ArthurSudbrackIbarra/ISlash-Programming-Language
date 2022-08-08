@@ -11,6 +11,7 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 * [Language Features](#language-features)
     * [Comments](#comments)
     * [String Interpolation](#string-interpolation)
+    * [New Lines in Strings](#new-lines-in-strings)
 * [Example Programs](#example-programs)
 * [Download ISlash](#download-islash)
 * [Uninstall ISlash](#uninstall-islash)
@@ -33,32 +34,35 @@ In ISlash, although there is not a boolean data type, numbers can be used to rep
 
 Instructions are **not case sensitive**.
 
-|    Instruction   |         Description        |
-|:----------------:|:--------------------------:|
-|      DECLARE     |     Declares variables.    |
-|        ADD       |         + operator.        |
-|        SUB       |         - operator.        |
-|       MULT       |         * operator.        |
-|        DIV       |         / operator.        |
-|        MOD       |         % operator.        |
-|     INCREMENT    |    ++ operator (Adds 1).   |
-|     DECREMENT    | -- operator (Subtracts 1). |
-|    GREATERTHAN   |         > operator.        |
-| GREATERTHANEQUAL |        >= operator.        |
-|     LESSTHAN     |         < operator.        |
-|   LESSTHANEQUAL  |        <= operator.        |
-|        NOT       |        NOT operator        |
-|        AND       |        AND operator.       |
-|        OR        |        OR operator.        |
-|        IF        |       If statements.       |
-|       ELSE       |      Else statements.      |
-|       ENDIF      |    Closes if statements.   |
-|       EQUAL      |    Compares 2 variables.   |
-|      CONCAT      |    Concatenates strings.   |
-|        SAY       |      Prints to screen.     |
-|       INPUT      |      Gets user input.      |
-|       WHILE      |      While statements.     |
-|     ENDWHILE     |  Closes while statements.  |
+|    Instruction   |          Description          |
+|:----------------:|:-----------------------------:|
+|      DECLARE     |      Declares variables.      |
+|        ADD       |          + operator.          |
+|        SUB       |          - operator.          |
+|       MULT       |          * operator.          |
+|        DIV       |          / operator.          |
+|        MOD       |          % operator.          |
+|     INCREMENT    |     ++ operator (Adds 1).     |
+|     DECREMENT    |   -- operator (Subtracts 1).  |
+|    GREATERTHAN   |          > operator.          |
+| GREATERTHANEQUAL |          >= operator.         |
+|     LESSTHAN     |          < operator.          |
+|   LESSTHANEQUAL  |          <= operator.         |
+|        NOT       |          NOT operator         |
+|        AND       |         AND operator.         |
+|        OR        |          OR operator.         |
+|        IF        |         If statements.        |
+|       ELSE       |        Else statements.       |
+|       ENDIF      |     Closes if statements.     |
+|       EQUAL      |          == operator.         |
+|     NOTEQUAL     |          != operator.         |
+|      CONCAT      |     Concatenates strings.     |
+|      LENGTH      |  Gets the length of a string. |
+|      GETCHAR     | Gets the nth char of a string |
+|        SAY       |       Prints to screen.       |
+|       INPUT      |        Gets user input.       |
+|       WHILE      |       While statements.       |
+|     ENDWHILE     |    Closes while statements.   |
 
 ## Language Features
 
@@ -83,9 +87,21 @@ declare age 20
 say "My name is $(name) and I am $(age) years old."
 ```
 
+### New Lines in Strings
+
+To represent new lines, use the `\n` symbol:
+
+```
+say "Hi!\nThis is in a new line!"
+```
+
 ## Example Programs
 
 Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
+
+In the example below, we are checking whether or not a string inputed by the user is a palindrome:
+
+![Example Program](https://user-images.githubusercontent.com/69170322/183494031-69d39191-e8e0-4b40-82a5-e17d762e7462.png)
 
 ## Download ISlash
 
