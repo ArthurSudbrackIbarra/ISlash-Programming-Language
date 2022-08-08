@@ -3,6 +3,17 @@
 **ISlash** is a dynamically typed, interpreted programming language with **no real use** that I created for fun, which runs on top of [Golang](https://go.dev/). The language somewhat resembles Assembly but it is simpler to understand and more high-level.
 
 My main goal when creating ISlash was learning Golang (Go), as I had never used that language before. The name 'ISlash' is a pun with my last name 'Ibarra', because 'barra' means 'slash' in portuguese, which is my native language.
+
+## Table of Contents
+
+* [Data Types](#data-types)
+* [Instructions](#instructions)
+* [Language Features](#language-features)
+    * [Comments](#comments)
+    * [String Interpolation](#string-interpolation)
+* [Example Programs](#example-programs)
+* [Download ISlash](#download-islash)
+* [Uninstall ISlash](#uninstall-islash)
  
 ## Data Types
 
@@ -76,7 +87,7 @@ say "My name is $(name) and I am $(age) years old."
 
 Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
 
-## How to Use
+## Download ISlash
 
 To test the ISlash language, follow the steps being described below:
 
@@ -119,7 +130,7 @@ islash even-or-odd.islash
 
 **NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .islash files or create new ones in your host machine and then run them from inside the container. 
 
-## How to Delete
+## Uninstall ISlash
 
 To completely delete all the resources that islash created in your machine, use the following commands:
 
