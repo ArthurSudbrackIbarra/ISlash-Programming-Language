@@ -1,4 +1,4 @@
-# The ISlash Programming Language
+<h1 align="center">The ISlash Programming Language</h1>
 
 **ISlash** is a dynamically typed, interpreted programming language with **no real use** that I created for fun, which runs on top of [Golang](https://go.dev/). The language somewhat resembles Assembly but it is simpler to understand and more high-level.
 
@@ -72,7 +72,7 @@ declare age 20
 say "My name is $(name) and I am $(age) years old."
 ```
 
-# Example Programs
+## Example Programs
 
 Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
 
