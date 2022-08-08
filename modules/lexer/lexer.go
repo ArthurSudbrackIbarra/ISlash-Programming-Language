@@ -57,6 +57,26 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 3 {
 				log.Fatalf("Invalid MOD statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.INCREMENT:
+			if len(parameters) != 1 {
+				log.Fatalf("Invalid INCREMENT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+			}
+		case token.DECREMENT:
+			if len(parameters) != 1 {
+				log.Fatalf("Invalid DECREMENT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+			}
+		case token.NOT:
+			if len(parameters) != 2 {
+				log.Fatalf("Invalid NOT statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.AND:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid AND statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.OR:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid OR statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		case token.CONCAT:
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid CONCAT statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)

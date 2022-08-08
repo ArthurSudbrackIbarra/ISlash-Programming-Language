@@ -7,6 +7,8 @@ const (
 	MULT         string = "MULT"
 	DIV          string = "DIV"
 	MOD          string = "MOD"
+	INCREMENT    string = "INCREMENT"
+	DECREMENT    string = "DECREMENT"
 	GREATER      string = "GREATER"
 	GREATEREQUAL string = "GREATEREQUAL"
 	LESSER       string = "LESSER"
