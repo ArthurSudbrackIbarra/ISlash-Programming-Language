@@ -33,32 +33,35 @@ In ISlash, although there is not a boolean data type, numbers can be used to rep
 
 Instructions are **not case sensitive**.
 
-|    Instruction   |         Description        |
-|:----------------:|:--------------------------:|
-|      DECLARE     |     Declares variables.    |
-|        ADD       |         + operator.        |
-|        SUB       |         - operator.        |
-|       MULT       |         * operator.        |
-|        DIV       |         / operator.        |
-|        MOD       |         % operator.        |
-|     INCREMENT    |    ++ operator (Adds 1).   |
-|     DECREMENT    | -- operator (Subtracts 1). |
-|    GREATERTHAN   |         > operator.        |
-| GREATERTHANEQUAL |        >= operator.        |
-|     LESSTHAN     |         < operator.        |
-|   LESSTHANEQUAL  |        <= operator.        |
-|        NOT       |        NOT operator        |
-|        AND       |        AND operator.       |
-|        OR        |        OR operator.        |
-|        IF        |       If statements.       |
-|       ELSE       |      Else statements.      |
-|       ENDIF      |    Closes if statements.   |
-|       EQUAL      |    Compares 2 variables.   |
-|      CONCAT      |    Concatenates strings.   |
-|        SAY       |      Prints to screen.     |
-|       INPUT      |      Gets user input.      |
-|       WHILE      |      While statements.     |
-|     ENDWHILE     |  Closes while statements.  |
+|    Instruction   |          Description          |
+|:----------------:|:-----------------------------:|
+|      DECLARE     |      Declares variables.      |
+|        ADD       |          + operator.          |
+|        SUB       |          - operator.          |
+|       MULT       |          * operator.          |
+|        DIV       |          / operator.          |
+|        MOD       |          % operator.          |
+|     INCREMENT    |     ++ operator (Adds 1).     |
+|     DECREMENT    |   -- operator (Subtracts 1).  |
+|    GREATERTHAN   |          > operator.          |
+| GREATERTHANEQUAL |          >= operator.         |
+|     LESSTHAN     |          < operator.          |
+|   LESSTHANEQUAL  |          <= operator.         |
+|        NOT       |          NOT operator         |
+|        AND       |         AND operator.         |
+|        OR        |          OR operator.         |
+|        IF        |         If statements.        |
+|       ELSE       |        Else statements.       |
+|       ENDIF      |     Closes if statements.     |
+|       EQUAL      |          == operator.         |
+|     NOTEQUAL     |          != operator.         |
+|      CONCAT      |     Concatenates strings.     |
+|      LENGTH      |  Gets the length of a string. |
+|      GETCHAR     | Gets the nth char of a string |
+|        SAY       |       Prints to screen.       |
+|       INPUT      |        Gets user input.       |
+|       WHILE      |       While statements.       |
+|     ENDWHILE     |    Closes while statements.   |
 
 ## Language Features
 

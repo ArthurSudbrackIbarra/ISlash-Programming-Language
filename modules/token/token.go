@@ -20,6 +20,7 @@ const (
 	ELSE             string = "ELSE"
 	ENDIF            string = "ENDIF"
 	EQUAL            string = "EQUAL"
+	NOTEQUAL         string = "NOTEQUAL"
 	CONCAT           string = "CONCAT"
 	GETCHAR          string = "GETCHAR" // TBD...
 	LENGTH           string = "LENGTH"  // TBD...
