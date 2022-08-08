@@ -132,7 +132,7 @@ islash even-or-odd.islash
 
 ## Uninstall ISlash
 
-To completely delete all the resources that islash created in your machine, use the following commands:
+To completely delete all the resources that ISlash created in your machine, use the following commands:
 
 1. Stop the container.
 
