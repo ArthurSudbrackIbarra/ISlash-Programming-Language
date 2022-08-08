@@ -1,5 +1,5 @@
-# Modify 'number' to the value you wish. 29 in this example.
-declare number 29
+# Modify 'number' to the value you wish. 31 in this example.
+declare number 31
 
 # Variable to store how many dividers the number has.
 declare dividersCount 1
@@ -8,23 +8,23 @@ declare dividersCount 1
 declare divider 2
 
 # This will be our counter.
+# counter = number
 declare counter number
 
 # While counter > 0
 while counter
     # remainer = number % divider
     mod number divider remainer
-    # if remainer >= 1
-    if remainer
-        # Do nothing.
-    else
+    # remainerIsZero = !remainer
+    not remainer remainerIsZero
+    if remainerIsZero
         # dividersCount = dividersCount + 1
-        add dividersCount 1 dividersCount
+        increment dividersCount
     endif
     # divider = divider + 1
-    add divider 1 divider
+    increment divider
     # counter = counter - 1
-    sub counter 1 counter
+    decrement counter
 endwhile
 
 # isPrime = (dividersCount == 2) ?

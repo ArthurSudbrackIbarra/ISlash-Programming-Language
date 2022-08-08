@@ -1,7 +1,8 @@
 # Modify 'n' to the value you wish.
-declare n 50
+declare n 20
 
 # This will be our counter.
+# counter = n
 declare counter n
 
 # Variable to store the sum of the numbers.
@@ -12,7 +13,7 @@ while counter
     # sum = sum + counter
     add sum counter sum
     # counter = counter - 1
-    sub counter 1 counter
+    decrement counter
 endwhile
 
-say "The sum of the first $(n) numbers is: $(sum)."
+say "The sum of the first $(n) integer numbers is: $(sum)."

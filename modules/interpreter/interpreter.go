@@ -84,16 +84,7 @@ func (interpreter *Interpreter) interpolateString(str string) string {
 	return interpolated
 }
 
-func (interpreter *Interpreter) findNextIndex(startIndex int, tokensList []*token.Token, tokenType string) int {
-	for i := startIndex + 1; i < len(tokensList); i++ {
-		if tokensList[i].GetType() == tokenType {
-			return i
-		}
-	}
-	return -1
-}
-
-func (interpreter *Interpreter) findMatchingEndwhileIndex(currentIndex int, tokensList []*token.Token) int {
+func (interpreter *Interpreter) findMatchingEndWhileIndex(currentIndex int, tokensList []*token.Token) int {
 	whileStatementsCount := 0
 	currentWhileStatementOrder := 0
 	for i := 0; i < len(tokensList); i++ {
@@ -104,14 +95,26 @@ func (interpreter *Interpreter) findMatchingEndwhileIndex(currentIndex int, toke
 			whileStatementsCount += 1
 		}
 	}
-	endwhileToFindOrder := math.Abs(float64(currentWhileStatementOrder) - float64(whileStatementsCount))
+	endWhileToFindOrder := math.Abs(float64(currentWhileStatementOrder) - float64(whileStatementsCount))
 	endwhilesFound := 0
 	for i := 0; i < len(tokensList); i++ {
 		if tokensList[i].GetType() == token.ENDWHILE {
 			endwhilesFound += 1
-			if endwhilesFound == int(endwhileToFindOrder) {
+			if endwhilesFound == int(endWhileToFindOrder) {
 				return i
 			}
+		}
+	}
+	return -1
+}
+
+func (interpreter *Interpreter) findNextConditionBlockIndex(currentIndex int, tokensList []*token.Token) int {
+	for i := currentIndex + 1; i < len(tokensList); i++ {
+		if tokensList[i].GetType() == token.ENDIF {
+			return i
+		}
+		if tokensList[i].GetType() == token.ELSE {
+			return i
 		}
 	}
 	return -1
@@ -463,7 +466,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			}
 		case token.NOT:
 			notTarget := currentToken.GetParameter(0)
-			variableName := currentToken.GetParameter(0)
+			variableName := currentToken.GetParameter(1)
 			if interpreter.isStringVar(variableName) {
 				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
 			}
@@ -562,12 +565,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			}
 			if parsedCondition < 1 {
 				interpreter.conditionStack.Push(1)
-				i = interpreter.findNextIndex(i, tokensList, token.ELSE) - 1
+				i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
 				if i == -1 {
-					i = interpreter.findNextIndex(i, tokensList, token.ENDIF) - 1
-					if i == -1 {
-						log.Fatalf("Missing ENDIF statement for IF. Line %d", currentToken.GetLine())
-					}
+					log.Fatalf("Invalid IF block. Line %d", currentToken.GetLine())
 				}
 			} else {
 				interpreter.conditionStack.Push(0)
@@ -575,9 +575,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 		case token.ELSE:
 			shouldExecute := interpreter.conditionStack.Top()
 			if shouldExecute != 1 {
-				i = interpreter.findNextIndex(i, tokensList, token.ENDIF) - 1
+				i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
 				if i == -1 {
-					log.Fatalf("Missing ENDIF statement for ELSE. Line %d", currentToken.GetLine())
+					log.Fatalf("Missing ENDIF statement. Line %d", currentToken.GetLine())
 				}
 			}
 		case token.ENDIF:
@@ -618,7 +618,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				if value >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findMatchingEndwhileIndex(i, tokensList)
+					i = interpreter.findMatchingEndWhileIndex(i, tokensList)
 					if i == -1 {
 						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
@@ -627,7 +627,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				if interpreter.numberVarTable[condition] >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findMatchingEndwhileIndex(i, tokensList)
+					i = interpreter.findMatchingEndWhileIndex(i, tokensList)
 					if i == -1 {
 						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
