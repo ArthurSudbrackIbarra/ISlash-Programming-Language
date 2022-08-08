@@ -86,6 +86,14 @@ declare age 20
 say "My name is $(name) and I am $(age) years old."
 ```
 
+### New Lines in Strings
+
+To represent new lines, use the `\n` symbol:
+
+```
+say "Hi!\nThis is in a new line!"
+```
+
 ## Example Programs
 
 Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
