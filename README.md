@@ -99,6 +99,8 @@ say "Hi!\nThis is in a new line!"
 
 Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
 
+In the example below, we are checking whether or not a string inputed by the user is a palindrome:
+
 ![Example Program](https://user-images.githubusercontent.com/69170322/183477121-43e932a8-8a7a-44ac-bacf-6150498acf5c.png)
 
 ## Download ISlash
