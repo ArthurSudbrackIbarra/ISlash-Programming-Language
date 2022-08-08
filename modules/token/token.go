@@ -9,10 +9,10 @@ const (
 	MOD              string = "MOD"
 	INCREMENT        string = "INCREMENT"
 	DECREMENT        string = "DECREMENT"
-	GREATERTHAN      string = "GREATER"
-	GREATERTHANEQUAL string = "GREATEREQUAL"
-	LESSTHAN         string = "LESSER"
-	LESSTHANEQUAL    string = "LESSEREQUAL"
+	GREATERTHAN      string = "GREATERTHAN"
+	GREATERTHANEQUAL string = "GREATERTHANEQUAL"
+	LESSTHAN         string = "LESSTHAN"
+	LESSTHANEQUAL    string = "LESSTHANEQUAL"
 	NOT              string = "NOT"
 	AND              string = "AND"
 	OR               string = "OR"
@@ -21,6 +21,8 @@ const (
 	ENDIF            string = "ENDIF"
 	EQUAL            string = "EQUAL"
 	CONCAT           string = "CONCAT"
+	GETCHAR          string = "GETCHAR" // TBD...
+	LENGTH           string = "LENGTH"  // TBD...
 	SAY              string = "SAY"
 	INPUT            string = "INPUT"
 	WHILE            string = "WHILE"

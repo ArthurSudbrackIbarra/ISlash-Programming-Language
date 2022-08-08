@@ -130,9 +130,6 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 		case token.DECLARE:
 			variableName := currentToken.GetParameter(0)
 			assignValue := currentToken.GetParameter(1)
-			if interpreter.isVariableDefined(variableName) {
-				log.Fatalf("Error: Variable '%s' has already been declared. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, _ := isRawNumber(variableName); isRawNumber {
 				log.Fatalf("Error: Variable name cannot be a number. Line %d.", currentToken.GetLine())
 			}
