@@ -101,7 +101,7 @@ Example programs using the ISlash language can be found inside the [programs fol
 
 In the example below, we are checking whether or not a string inputed by the user is a palindrome:
 
-![Example Program](https://user-images.githubusercontent.com/69170322/183477121-43e932a8-8a7a-44ac-bacf-6150498acf5c.png)
+![Example Program](https://user-images.githubusercontent.com/69170322/183494031-69d39191-e8e0-4b40-82a5-e17d762e7462.png)
 
 ## Download ISlash
 
