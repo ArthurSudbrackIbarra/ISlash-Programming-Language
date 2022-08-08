@@ -1,2 +1,3 @@
 input name "Enter your name: "
-say name
+
+say "Nice to meet you, $(name)!"
