@@ -1,0 +1,2 @@
+input name "Enter your name: "
+say name

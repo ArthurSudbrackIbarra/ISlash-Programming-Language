@@ -16,7 +16,7 @@ func main() {
 		}
 		sourceCodePath := filepath.Join(cwd, os.Args[1])
 	*/
-	sourceCodePath := "programs/sum-of-first-n-numbers.islash"
+	sourceCodePath := "programs/user-input.islash"
 	tokensList := lexer.MountTokens(sourceCodePath)
 	interpreter := interpreter.NewInterpreter()
 	interpreter.Interpret(tokensList)

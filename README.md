@@ -22,29 +22,32 @@ In ISlash, although there is not a boolean data type, numbers can be used to rep
 
 Instructions are **not case sensitive**.
 
-|  Instruction |        Description       |
-|:------------:|:------------------------:|
-|    DECLARE   |    Declares variables.   |
-|      ADD     |        + operator.       |
-|      SUB     |        - operator.       |
-|     MULT     |        * operator.       |
-|      DIV     |        / operator.       |
-|      MOD     |        % operator.       |
-|    GREATER   |        > operator.       |
-| GREATEREQUAL |       >= operator.       |
-|    LESSER    |        < operator.       |
-|  LESSEREQUAL |       <= operator.       |
-|      NOT     |  NOT operator. (TBD...)  |
-|      AND     |  AND operator. (TBD...)  |
-|      OR      |   OR operator. (TBD...)  |
-|      IF      |      If statements.      |
-|     ELSE     |     Else statements.     |
-|     ENDIF    |   Closes if statements.  |
-|     EQUAL    |   Compares 2 variables.  |
-|    CONCAT    |   Concatenates strings.  |
-|      SAY     |     Prints to screen.    |
-|     WHILE    |     While statements.    |
-|   ENDWHILE   | Closes while statements. |
+|    Instruction   |         Description        |
+|:----------------:|:--------------------------:|
+|      DECLARE     |     Declares variables.    |
+|        ADD       |         + operator.        |
+|        SUB       |         - operator.        |
+|       MULT       |         * operator.        |
+|        DIV       |         / operator.        |
+|        MOD       |         % operator.        |
+|     INCREMENT    |    ++ operator (Adds 1).   |
+|     DECREMENT    | -- operator (Subtracts 1). |
+|    GREATERTHAN   |         > operator.        |
+| GREATERTHANEQUAL |        >= operator.        |
+|     LESSTHAN     |         < operator.        |
+|   LESSTHANEQUAL  |        <= operator.        |
+|        NOT       |        NOT operator        |
+|        AND       |        AND operator.       |
+|        OR        |        OR operator.        |
+|        IF        |       If statements.       |
+|       ELSE       |      Else statements.      |
+|       ENDIF      |    Closes if statements.   |
+|       EQUAL      |    Compares 2 variables.   |
+|      CONCAT      |    Concatenates strings.   |
+|        SAY       |      Prints to screen.     |
+|       INPUT      |      Gets user input.      |
+|       WHILE      |      While statements.     |
+|     ENDWHILE     |  Closes while statements.  |
 
 ## Language Features
 

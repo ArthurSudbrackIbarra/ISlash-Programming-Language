@@ -279,7 +279,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Invalid parameter '%s', not a number variable. Line %d.", variableName, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] -= 1
-		case token.GREATER:
+		case token.GREATERTHAN:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
 			secondValue := currentToken.GetParameter(1)
@@ -307,7 +307,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
-		case token.GREATEREQUAL:
+		case token.GREATERTHANEQUAL:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
 			secondValue := currentToken.GetParameter(1)
@@ -335,7 +335,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
-		case token.LESSER:
+		case token.LESSTHAN:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
 			secondValue := currentToken.GetParameter(1)
@@ -363,7 +363,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
-		case token.LESSEREQUAL:
+		case token.LESSTHANEQUAL:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
 			secondValue := currentToken.GetParameter(1)
@@ -611,6 +611,26 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				fmt.Println(interpreter.stringVarTable[output])
 			} else {
 				log.Fatalf("Error: Referenced nonexistent variable '%s'. Line %d.", output, currentToken.GetLine())
+			}
+		case token.INPUT:
+			variableName := currentToken.GetParameter(0)
+			text := currentToken.GetParameter(1)
+			if isRawNumber, _ := isRawNumber(variableName); isRawNumber {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", variableName, currentToken.GetLine())
+			}
+			if isRawString, _ := isRawString(variableName); isRawString {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", variableName, currentToken.GetLine())
+			}
+			if isRawString, value := isRawString(text); isRawString {
+				text = interpreter.interpolateString(value)
+			}
+			fmt.Print(text)
+			var input string
+			fmt.Scan(&input)
+			if isRawNumber, value := isRawNumber(input); isRawNumber {
+				interpreter.numberVarTable[variableName] = value
+			} else {
+				interpreter.stringVarTable[variableName] = input
 			}
 		case token.WHILE:
 			condition := currentToken.GetParameter(0)
