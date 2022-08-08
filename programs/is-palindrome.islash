@@ -24,7 +24,7 @@ while limit
     notequal char1 char2 charsAreNotEqual
 
     if charsAreNotEqual
-        # isPalidrome = false
+        # isPalidrome will be 0, which means false.
         decrement isPalidrome
     endif
 
