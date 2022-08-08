@@ -99,6 +99,8 @@ say "Hi!\nThis is in a new line!"
 
 Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
 
+![Example Program](https://user-images.githubusercontent.com/69170322/183477121-43e932a8-8a7a-44ac-bacf-6150498acf5c.png)
+
 ## Download ISlash
 
 To test the ISlash language, follow the steps being described below:

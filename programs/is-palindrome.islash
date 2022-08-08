@@ -38,12 +38,3 @@ if isPalidrome
 else
     say "The string '$(str)' is NOT a palindrome!"
 endif
-
-
-
-
-
-
-
-
-
