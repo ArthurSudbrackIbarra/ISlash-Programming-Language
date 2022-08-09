@@ -32,14 +32,6 @@ func isRawString(value string) (bool, string) {
 	return true, strings.ReplaceAll(value, "\"", "")
 }
 
-func isRawNumberArray(value string) (bool, []float64) {
-	return true, make([]float64, 0)
-}
-
-func isRawStringArray(value string) (bool, []string) {
-	return true, make([]string, 0)
-}
-
 /*
 	End - Helper functions
 */
@@ -90,6 +82,44 @@ func (interpreter *Interpreter) isStringArrayVar(key string) bool {
 		return true
 	}
 	return false
+}
+
+func (interpreter *Interpreter) isRawNumberArray(value string) (bool, []float64) {
+	if !strings.HasPrefix(value, "[") || !strings.HasSuffix(value, "]") {
+		return false, nil
+	}
+	value = value[1 : len(value)-1]
+	splittedStr := strings.Split(value, ",")
+	numberArray := make([]float64, 0)
+	for _, element := range splittedStr {
+		if isRawNumber, number := isRawNumber(element); isRawNumber {
+			numberArray = append(numberArray, number)
+		} else if interpreter.isNumberVar(element) {
+			numberArray = append(numberArray, interpreter.numberVarTable[element])
+		} else {
+			return false, nil
+		}
+	}
+	return true, numberArray
+}
+
+func (interpreter *Interpreter) isRawStringArray(value string) (bool, []string) {
+	if !strings.HasPrefix(value, "[") || !strings.HasSuffix(value, "]") {
+		return false, nil
+	}
+	value = value[1 : len(value)-1]
+	splittedStr := strings.Split(value, ",")
+	strArray := make([]string, 0)
+	for _, element := range splittedStr {
+		if isRawString, str := isRawString(element); isRawString {
+			strArray = append(strArray, str)
+		} else if interpreter.isStringVar(element) {
+			strArray = append(strArray, interpreter.stringVarTable[element])
+		} else {
+			return false, nil
+		}
+	}
+	return true, strArray
 }
 
 func (interpreter *Interpreter) isVariableDefined(key string) bool {
@@ -169,6 +199,10 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				interpreter.numberVarTable[variableName] = interpreter.numberVarTable[assignValue]
 			} else if interpreter.isStringVar(assignValue) {
 				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[assignValue]
+			} else if isRawNumberArray, value := interpreter.isRawNumberArray(assignValue); isRawNumberArray {
+				interpreter.numberArrayVarTable[variableName] = value
+			} else if isRawStringArray, value := interpreter.isRawStringArray(assignValue); isRawStringArray {
+				interpreter.stringArrayVarTable[variableName] = value
 			} else {
 				log.Fatalf("Error: Invalid declaration of varible '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
@@ -749,6 +783,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				fmt.Println(interpreter.numberVarTable[output])
 			} else if interpreter.isStringVar(output) {
 				fmt.Println(interpreter.stringVarTable[output])
+			} else if isRawNumberArray, value := interpreter.isRawNumberArray(output); isRawNumberArray {
+				fmt.Println(value)
+			} else if isRawStringArray, value := interpreter.isRawStringArray(output); isRawStringArray {
+				fmt.Println(value)
+			} else if interpreter.isNumberArrayVar(output) {
+				fmt.Println(interpreter.numberArrayVarTable[output])
+			} else if interpreter.isStringArrayVar(output) {
+				fmt.Println(interpreter.stringArrayVarTable[output])
 			} else {
 				log.Fatalf("Error: Referenced nonexistent variable '%s'. Line %d.", output, currentToken.GetLine())
 			}
