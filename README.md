@@ -13,7 +13,8 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
     * [String Interpolation](#string-interpolation)
     * [New Lines in Strings](#new-lines-in-strings)
 * [Example Programs](#example-programs)
-* [Download ISlash](#download-islash)
+* [Try ISlash](#try-islash)
+* [Language Support in VSCode](#language-support-in-vscode)
 * [Uninstall ISlash](#uninstall-islash)
  
 ## Data Types
@@ -99,13 +100,14 @@ say "Hi!\nThis is in a new line!"
 
 Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
 
-In the example below, we are checking whether or not a string inputed by the user is a palindrome:
+In the example below, we are calculating the sum of the first 20 integer numbers.
 
-![Example Program](https://user-images.githubusercontent.com/69170322/183494031-69d39191-e8e0-4b40-82a5-e17d762e7462.png)
+![Example Program](https://user-images.githubusercontent.com/69170322/183554138-31cde33d-26c6-4efc-b169-c21e0aa62aa3.png)
 
-## Download ISlash
 
-To test the ISlash language, follow the steps being described below:
+## Try ISlash
+
+To try the ISlash language, follow the steps being described below:
 
 1. Download [Docker](https://www.docker.com/products/docker-desktop/).
 
@@ -145,6 +147,10 @@ islash myProgram.isl
 ![Running Programs](https://user-images.githubusercontent.com/69170322/183551455-e2b7d46f-7115-4a69-a03a-eafb5b67a323.png)
 
 **NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .islash files or create new ones in your host machine and then run them from inside the container. 
+
+## Language Support in VSCode
+
+The ISlash language support Visual Studio Code extension will be released soon...
 
 ## Uninstall ISlash
 
