@@ -23,11 +23,11 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
  
 ## Data Types
 
-| Data Type | Description                                                                                                   |
-|-----------|---------------------------------------------------------------------------------------------------------------|
-| string    | Strings are declared with double quotes. Ex: "Hello!"                                                         |
-| number    | Numbers may or may not have decimal places. Ex: 1, 2.3                                                        |
-| array     | Arrays are declared with square brackets. Ex: [1,2,3], ["Hi","Hello"]. Do **not** put spaces between commas.  |
+| Data Type |                                                  Description                                                  |
+|:---------:|:-------------------------------------------------------------------------------------------------------------:|
+|   string  |                             Strings are declared with double quotes. Ex: "Hello!"                             |
+|   number  |                             Numbers may or may not have decimal places. Ex: 1, 2.3                            |
+|   array   | Arrays are declared with square brackets. Ex: [1,2,3], ["Hi","Hello"]. Do **not** put spaces between commas.  |
 
 In ISlash, although there is not a boolean data type, numbers can be used to represent boolean values:
 
