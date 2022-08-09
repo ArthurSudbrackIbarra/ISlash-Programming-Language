@@ -139,10 +139,10 @@ docker exec -it islash-container /bin/bash
 islash <PATH_TO_MY_PROGRAM>
 
 # Example:
-islash even-or-odd.islash
+islash myProgram.isl
 ```
 
-![Running Programs](https://user-images.githubusercontent.com/69170322/183312708-8dfb28cc-7c13-418f-9f92-bb55927b13ab.png)
+![Running Programs](https://user-images.githubusercontent.com/69170322/183551455-e2b7d46f-7115-4a69-a03a-eafb5b67a323.png)
 
 **NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .islash files or create new ones in your host machine and then run them from inside the container. 
 
