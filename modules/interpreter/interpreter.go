@@ -44,6 +44,7 @@ type Interpreter struct {
 	conditionStack      *Stack
 	whileStack          *Stack
 	foreachStack        *Stack
+	varsToDelete        *Stack
 }
 
 func NewInterpreter() *Interpreter {
@@ -55,6 +56,7 @@ func NewInterpreter() *Interpreter {
 		conditionStack:      NewEmptyStack(),
 		whileStack:          NewEmptyStack(),
 		foreachStack:        NewEmptyStack(),
+		varsToDelete:        NewEmptyStack(),
 	}
 }
 
@@ -178,6 +180,19 @@ func (interpreter *Interpreter) findNextConditionBlockIndex(currentIndex int, to
 		}
 	}
 	return -1
+}
+
+func (interpreter *Interpreter) deleteVars() {
+	for true {
+		if interpreter.varsToDelete.IsEmpty() {
+			break
+		}
+		varName := interpreter.varsToDelete.Pop().(string)
+		delete(interpreter.numberVarTable, varName)
+		delete(interpreter.stringVarTable, varName)
+		delete(interpreter.numberArrayVarTable, varName)
+		delete(interpreter.stringArrayVarTable, varName)
+	}
 }
 
 func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
@@ -951,6 +966,8 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					interpreter.numberVarTable[element] = interpreter.numberArrayVarTable[array][currentIndex]
 					if nextIndex < len(interpreter.numberArrayVarTable[array]) {
 						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					} else {
+						interpreter.varsToDelete.Push(element)
 					}
 				}
 			} else if interpreter.isStringArrayVar(array) {
@@ -958,6 +975,8 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					interpreter.stringVarTable[element] = interpreter.stringArrayVarTable[array][currentIndex]
 					if nextIndex < len(interpreter.stringArrayVarTable[array]) {
 						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					} else {
+						interpreter.varsToDelete.Push(element)
 					}
 				}
 			} else {
@@ -967,6 +986,8 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			goToIndex, notEmpty := interpreter.foreachStack.Top().([]int)
 			if notEmpty {
 				i = goToIndex[0] - 1
+			} else {
+				interpreter.deleteVars()
 			}
 		}
 	}
