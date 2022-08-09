@@ -732,17 +732,25 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Referenced nonexistent variable '%s'. Line %d.", concatValue, currentToken.GetLine())
 			}
 		case token.LENGTH:
-			str := currentToken.GetParameter(0)
+			target := currentToken.GetParameter(0)
 			variableName := currentToken.GetParameter(1)
 			if interpreter.isStringVar(variableName) {
 				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
 			}
-			if isRawString, value := isRawString(str); isRawString {
+			if isRawString, value := isRawString(target); isRawString {
 				interpreter.numberVarTable[variableName] = float64(len(interpreter.handleString(value)))
-			} else if interpreter.isStringVar(str) {
-				interpreter.numberVarTable[variableName] = float64(len(interpreter.stringVarTable[str]))
+			} else if interpreter.isStringVar(target) {
+				interpreter.numberVarTable[variableName] = float64(len(interpreter.stringVarTable[target]))
+			} else if isRawNumberArray, value := interpreter.isRawNumberArray(target); isRawNumberArray {
+				interpreter.numberVarTable[variableName] = float64(len(value))
+			} else if isRawStringArray, value := interpreter.isRawStringArray(target); isRawStringArray {
+				interpreter.numberVarTable[variableName] = float64(len(value))
+			} else if interpreter.isNumberArrayVar(target) {
+				interpreter.numberVarTable[variableName] = float64(len(interpreter.numberArrayVarTable[target]))
+			} else if interpreter.isStringArrayVar(target) {
+				interpreter.numberVarTable[variableName] = float64(len(interpreter.stringArrayVarTable[target]))
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", str, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
 			}
 		case token.GETCHAR:
 			str := currentToken.GetParameter(0)
