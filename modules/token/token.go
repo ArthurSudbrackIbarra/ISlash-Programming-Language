@@ -29,6 +29,9 @@ const (
 	WHILE            string = "WHILE"
 	ENDWHILE         string = "ENDWHILE"
 	BREAK            string = "BREAK"
+	FOREACH          string = "FOREACH"
+	GET              string = "GET"
+	APPEND           string = "APPEND"
 )
 
 type Token struct {

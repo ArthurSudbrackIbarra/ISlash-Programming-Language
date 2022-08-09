@@ -841,6 +841,28 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			if indexToGoBack != -1 {
 				i = indexToGoBack - 1
 			}
+		case token.APPEND:
+			element := currentToken.GetParameter(0)
+			array := currentToken.GetParameter(1)
+			if interpreter.isNumberArrayVar(array) {
+				if isRawNumber, value := isRawNumber(element); isRawNumber {
+					interpreter.numberArrayVarTable[array] = append(interpreter.numberArrayVarTable[array], value)
+				} else if interpreter.isNumberVar(element) {
+					interpreter.numberArrayVarTable[array] = append(interpreter.numberArrayVarTable[array], interpreter.numberVarTable[element])
+				} else {
+					log.Fatalf("Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
+				}
+			} else if interpreter.isStringArrayVar(array) {
+				if isRawString, value := isRawString(element); isRawString {
+					interpreter.stringArrayVarTable[array] = append(interpreter.stringArrayVarTable[array], value)
+				} else if interpreter.isStringVar(element) {
+					interpreter.stringArrayVarTable[array] = append(interpreter.stringArrayVarTable[array], interpreter.stringVarTable[element])
+				} else {
+					log.Fatalf("Invalid parameter '%s', not a string. Line %d.", element, currentToken.GetLine())
+				}
+			} else {
+				log.Fatalf("Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+			}
 		}
 	}
 }
