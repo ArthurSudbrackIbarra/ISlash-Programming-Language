@@ -157,6 +157,10 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid FOREACH statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.ENDFOREACH:
+			if len(parameters) != 0 {
+				log.Fatalf("Invalid ENDFOREACH statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		default:
 			log.Fatalf("Invalid instruction '%s'.", tokenType)
 		}

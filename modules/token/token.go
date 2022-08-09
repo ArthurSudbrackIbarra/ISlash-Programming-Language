@@ -30,6 +30,7 @@ const (
 	ENDWHILE         string = "ENDWHILE"
 	BREAK            string = "BREAK"
 	FOREACH          string = "FOREACH"
+	ENDFOREACH       string = "ENDFOREACH"
 	GET              string = "GET"
 	APPEND           string = "APPEND"
 )
