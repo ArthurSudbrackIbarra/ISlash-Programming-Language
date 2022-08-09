@@ -842,8 +842,8 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				i = indexToGoBack - 1
 			}
 		case token.APPEND:
-			element := currentToken.GetParameter(0)
-			array := currentToken.GetParameter(1)
+			array := currentToken.GetParameter(0)
+			element := currentToken.GetParameter(1)
 			if interpreter.isNumberArrayVar(array) {
 				if isRawNumber, value := isRawNumber(element); isRawNumber {
 					interpreter.numberArrayVarTable[array] = append(interpreter.numberArrayVarTable[array], value)
@@ -862,6 +862,57 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				}
 			} else {
 				log.Fatalf("Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+			}
+		case token.GET:
+			array := currentToken.GetParameter(0)
+			index := currentToken.GetParameter(1)
+			parsedIndex := -1.0
+			variableName := currentToken.GetParameter(2)
+			if isRawNumber, value := isRawNumber(index); isRawNumber {
+				parsedIndex = value
+			} else if interpreter.isNumberVar(index) {
+				parsedIndex = interpreter.numberVarTable[index]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", index, currentToken.GetLine())
+			}
+			if isRawNumberArray, value := interpreter.isRawNumberArray(array); isRawNumberArray {
+				if interpreter.isStringVar(variableName) {
+					log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
+				}
+				if int(parsedIndex) < len(value) {
+					interpreter.numberVarTable[variableName] = value[int(parsedIndex)]
+				} else {
+					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
+				}
+			} else if isRawStringArray, value := interpreter.isRawStringArray(array); isRawStringArray {
+				if interpreter.isNumberVar(variableName) {
+					log.Fatalf("Error: Invalid parameter '%s', already a number variable. Line %d.", variableName, currentToken.GetLine())
+				}
+				if int(parsedIndex) < len(value) {
+					interpreter.stringVarTable[variableName] = value[int(parsedIndex)]
+				} else {
+					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
+				}
+			} else if interpreter.isNumberArrayVar(array) {
+				if interpreter.isStringVar(variableName) {
+					log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
+				}
+				if int(parsedIndex) < len(interpreter.numberArrayVarTable[array]) {
+					interpreter.numberVarTable[variableName] = interpreter.numberArrayVarTable[array][int(parsedIndex)]
+				} else {
+					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
+				}
+			} else if interpreter.isStringArrayVar(array) {
+				if interpreter.isNumberVar(variableName) {
+					log.Fatalf("Error: Invalid parameter '%s', already a number variable. Line %d.", variableName, currentToken.GetLine())
+				}
+				if int(parsedIndex) < len(interpreter.stringArrayVarTable[array]) {
+					interpreter.stringVarTable[variableName] = interpreter.stringArrayVarTable[array][int(parsedIndex)]
+				} else {
+					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
+				}
+			} else {
+				log.Fatalf("Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
 			}
 		}
 	}
