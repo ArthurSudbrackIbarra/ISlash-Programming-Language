@@ -4,7 +4,7 @@ import "sync"
 
 // Stack struct which contains a list of Items
 type Stack struct {
-	items []int
+	items []interface{}
 	mutex sync.Mutex
 }
 
@@ -16,21 +16,21 @@ func NewEmptyStack() *Stack {
 }
 
 // NewStack() returns a new instance of Stack with list of specified elements
-func NewStack(items []int) *Stack {
+func NewStack(items []interface{}) *Stack {
 	return &Stack{
 		items: items,
 	}
 }
 
 // Push() adds new item to top of existing/empty stack
-func (stack *Stack) Push(item int) {
+func (stack *Stack) Push(item interface{}) {
 	stack.mutex.Lock()
 	defer stack.mutex.Unlock()
 	stack.items = append(stack.items, item)
 }
 
 // Pop() removes most recent item(top) from stack
-func (stack *Stack) Pop() int {
+func (stack *Stack) Pop() interface{} {
 	stack.mutex.Lock()
 	defer stack.mutex.Unlock()
 	if len(stack.items) == 0 {
@@ -49,7 +49,7 @@ func (stack *Stack) IsEmpty() bool {
 }
 
 // Top() returns the last inserted item in stack without removing it.
-func (stack *Stack) Top() int {
+func (stack *Stack) Top() interface{} {
 	stack.mutex.Lock()
 	defer stack.mutex.Unlock()
 	if len(stack.items) == 0 {

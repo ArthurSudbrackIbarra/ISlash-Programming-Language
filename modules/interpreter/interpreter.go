@@ -43,6 +43,7 @@ type Interpreter struct {
 	stringArrayVarTable map[string][]string
 	conditionStack      *Stack
 	whileStack          *Stack
+	foreachStack        *Stack
 }
 
 func NewInterpreter() *Interpreter {
@@ -53,6 +54,7 @@ func NewInterpreter() *Interpreter {
 		stringArrayVarTable: make(map[string][]string),
 		conditionStack:      NewEmptyStack(),
 		whileStack:          NewEmptyStack(),
+		foreachStack:        NewEmptyStack(),
 	}
 }
 
@@ -123,7 +125,7 @@ func (interpreter *Interpreter) isRawStringArray(value string) (bool, []string) 
 }
 
 func (interpreter *Interpreter) isVariableDefined(key string) bool {
-	return interpreter.isNumberVar(key) || interpreter.isStringVar(key)
+	return interpreter.isNumberVar(key) || interpreter.isStringVar(key) || interpreter.isNumberArrayVar(key) || interpreter.isStringArrayVar(key)
 }
 
 const (
@@ -142,11 +144,11 @@ func (interpreter *Interpreter) handleString(str string) string {
 	return strings.ReplaceAll(interpolated, `\n`, "\n")
 }
 
-func (interpreter *Interpreter) findMatchingEndWhileIndex(currentIndex int, tokensList []*token.Token) int {
+func (interpreter *Interpreter) findCloseLoopIndex(currentIndex int, tokensList []*token.Token, loopTypeBegin string, loopTypeEnd string) int {
 	whileStatementsCount := 0
 	currentWhileStatementOrder := 0
 	for i := 0; i < len(tokensList); i++ {
-		if tokensList[i].GetType() == token.WHILE {
+		if tokensList[i].GetType() == loopTypeBegin {
 			if i == currentIndex {
 				currentWhileStatementOrder = whileStatementsCount
 			}
@@ -156,7 +158,7 @@ func (interpreter *Interpreter) findMatchingEndWhileIndex(currentIndex int, toke
 	endWhileToFindOrder := math.Abs(float64(currentWhileStatementOrder) - float64(whileStatementsCount))
 	endwhilesFound := 0
 	for i := 0; i < len(tokensList); i++ {
-		if tokensList[i].GetType() == token.ENDWHILE {
+		if tokensList[i].GetType() == loopTypeEnd {
 			endwhilesFound += 1
 			if endwhilesFound == int(endWhileToFindOrder) {
 				return i
@@ -450,7 +452,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
-		case token.EQUAL:
+		case token.EQUAL: // TODO: ARRAYS
 			firstValue := currentToken.GetParameter(0)
 			secondValue := currentToken.GetParameter(1)
 			variableName := currentToken.GetParameter(2)
@@ -523,7 +525,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					interpreter.numberVarTable[variableName] = 0
 				}
 			}
-		case token.NOTEQUAL:
+		case token.NOTEQUAL: // TODO: ARRAYS
 			firstValue := currentToken.GetParameter(0)
 			secondValue := currentToken.GetParameter(1)
 			variableName := currentToken.GetParameter(2)
@@ -829,7 +831,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				if value >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findMatchingEndWhileIndex(i, tokensList)
+					i = interpreter.findCloseLoopIndex(i, tokensList, token.WHILE, token.ENDWHILE)
 					if i == -1 {
 						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
@@ -838,7 +840,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				if interpreter.numberVarTable[condition] >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findMatchingEndWhileIndex(i, tokensList)
+					i = interpreter.findCloseLoopIndex(i, tokensList, token.WHILE, token.ENDWHILE)
 					if i == -1 {
 						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
@@ -847,7 +849,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 		case token.ENDWHILE:
 			indexToGoBack := interpreter.whileStack.Pop()
 			if indexToGoBack != -1 {
-				i = indexToGoBack - 1
+				i = indexToGoBack.(int) - 1
 			}
 		case token.APPEND:
 			array := currentToken.GetParameter(0)
@@ -921,6 +923,47 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				}
 			} else {
 				log.Fatalf("Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
+			}
+		case token.FOREACH:
+			element := currentToken.GetParameter(0)
+			array := currentToken.GetParameter(1)
+			if !interpreter.isVariableDefined(element) {
+				interpreter.foreachStack.Push([]int{i, 0})
+			}
+			currentIndex := interpreter.foreachStack.Pop().([]int)[1]
+			if currentIndex == -1 {
+				i = interpreter.findCloseLoopIndex(i, tokensList, token.FOREACH, token.ENDFOREACH)
+				if i == -1 {
+					log.Fatalf("Error: ENDFOREACH not found for FOREACH in line %d.", currentToken.GetLine())
+				}
+			}
+			if isRawNumberArray, value := interpreter.isRawNumberArray(array); isRawNumberArray {
+				if currentIndex < len(value) {
+					interpreter.numberVarTable[element] = value[currentIndex]
+					interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+				}
+			} else if isRawStringArray, value := interpreter.isRawStringArray(array); isRawStringArray {
+				if currentIndex < len(value) {
+					interpreter.stringVarTable[element] = value[currentIndex]
+					interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+				}
+			} else if interpreter.isNumberArrayVar(array) {
+				if currentIndex < len(interpreter.numberArrayVarTable[array]) {
+					interpreter.numberVarTable[element] = interpreter.numberArrayVarTable[array][currentIndex]
+					interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+				}
+			} else if interpreter.isStringArrayVar(array) {
+				if currentIndex < len(interpreter.stringArrayVarTable[array]) {
+					interpreter.stringVarTable[element] = interpreter.stringArrayVarTable[array][currentIndex]
+					interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+				}
+			} else {
+				log.Fatalf("Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
+			}
+		case token.ENDFOREACH:
+			goToIndex, ok := interpreter.foreachStack.Top().([]int)
+			if ok {
+				i = goToIndex[0] - 1
 			}
 		}
 	}
