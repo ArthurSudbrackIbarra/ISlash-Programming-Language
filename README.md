@@ -1,7 +1,7 @@
 <h1 align="center">The ISlash Programming Language</h1>
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/ArthurSudbrackIbarra/ISlash-VSCode-Syntax-Highlight/main/icons/islash.svg?token=GHSAT0AAAAAABV3DK3RJYACD4IOSRIIALN4YXR2IDA" width=180px/>
+    <img src="https://raw.githubusercontent.com/ArthurSudbrackIbarra/ISlash-VSCode-Language-Support/main/icons/islash.svg" width=180px/>
 </p>
 
 **ISlash** is a dynamically typed, interpreted programming language with **no real use** that I created for fun, which runs on top of [Golang](https://go.dev/). The language somewhat resembles Assembly but it is simpler to understand and more high-level.
