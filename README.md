@@ -23,10 +23,11 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
  
 ## Data Types
 
-| Data Type |                       Description                      |
-|:---------:|:------------------------------------------------------:|
-|   string  |  Strings are declared with double quotes. Ex: "Hello!" |
-|   number  | Numbers may or may not have decimal places. Ex: 1, 2.3 |
+| Data Type | Description                                                                                                   |
+|-----------|---------------------------------------------------------------------------------------------------------------|
+| string    | Strings are declared with double quotes. Ex: "Hello!"                                                         |
+| number    | Numbers may or may not have decimal places. Ex: 1, 2.3                                                        |
+| array     | Arrays are declared with square brackets. Ex: [1,2,3], ["Hi","Hello"]. Do **not** put spaces between commas.  |
 
 In ISlash, although there is not a boolean data type, numbers can be used to represent boolean values:
 
@@ -39,35 +40,40 @@ In ISlash, although there is not a boolean data type, numbers can be used to rep
 
 Instructions are **not case sensitive**.
 
-|    Instruction   |          Description          |
-|:----------------:|:-----------------------------:|
-|      DECLARE     |      Declares variables.      |
-|        ADD       |          + operator.          |
-|        SUB       |          - operator.          |
-|       MULT       |          * operator.          |
-|        DIV       |          / operator.          |
-|        MOD       |          % operator.          |
-|     INCREMENT    |     ++ operator (Adds 1).     |
-|     DECREMENT    |   -- operator (Subtracts 1).  |
-|    GREATERTHAN   |          > operator.          |
-| GREATERTHANEQUAL |          >= operator.         |
-|     LESSTHAN     |          < operator.          |
-|   LESSTHANEQUAL  |          <= operator.         |
-|        NOT       |          NOT operator         |
-|        AND       |         AND operator.         |
-|        OR        |          OR operator.         |
-|        IF        |         If statements.        |
-|       ELSE       |        Else statements.       |
-|       ENDIF      |     Closes if statements.     |
-|       EQUAL      |          == operator.         |
-|     NOTEQUAL     |          != operator.         |
-|      CONCAT      |     Concatenates strings.     |
-|      LENGTH      |  Gets the length of a string. |
-|      GETCHAR     | Gets the nth char of a string |
-|        SAY       |       Prints to screen.       |
-|       INPUT      |        Gets user input.       |
-|       WHILE      |       While statements.       |
-|     ENDWHILE     |    Closes while statements.   |
+|    Instruction   |                Description               |
+|:----------------:|:----------------------------------------:|
+|      DECLARE     |            Declares variables.           |
+|        ADD       |                + operator.               |
+|        SUB       |                - operator.               |
+|       MULT       |                * operator.               |
+|        DIV       |                / operator.               |
+|        MOD       |                % operator.               |
+|     INCREMENT    |           ++ operator (Adds 1).          |
+|     DECREMENT    |        -- operator (Subtracts 1).        |
+|    GREATERTHAN   |                > operator.               |
+| GREATERTHANEQUAL |               >= operator.               |
+|     LESSTHAN     |                < operator.               |
+|   LESSTHANEQUAL  |               <= operator.               |
+|        NOT       |               NOT operator               |
+|        AND       |               AND operator.              |
+|        OR        |               OR operator.               |
+|        IF        |              If statements.              |
+|       ELSE       |             Else statements.             |
+|       ENDIF      |           Closes if statements.          |
+|       EQUAL      |               == operator.               |
+|     NOTEQUAL     |               != operator.               |
+|      CONCAT      |           Concatenates strings.          |
+|      LENGTH      | Gets the length of a string or an array. |
+|      GETCHAR     |      Gets the nth char of a string.      |
+|        SAY       |             Prints to screen.            |
+|       INPUT      |             Gets user input.             |
+|       WHILE      |             While statements.            |
+|     ENDWHILE     |         Closes while statements.         |
+|      FOREACH     |        Use to iterate over arrays.       |
+|    ENDFOREACH    |          Closes foreach blocks.          |
+|       BREAK      |           (Not implemented yet)          |
+|      APPEND      |      Appends an element to an array.     |
+|        GET       |     Gets the nth element of an array.    |
 
 ## Language Features
 
@@ -150,7 +156,7 @@ islash myProgram.isl
 
 ![Running Programs](https://user-images.githubusercontent.com/69170322/183551455-e2b7d46f-7115-4a69-a03a-eafb5b67a323.png)
 
-**NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .islash files or create new ones in your host machine and then run them from inside the container. 
+**NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .isl files or create new ones in your host machine and then run them from inside the container. 
 
 ## Language Support in VSCode
 
