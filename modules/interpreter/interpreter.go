@@ -1,10 +1,12 @@
 package interpreter
 
 import (
+	"bufio"
 	"fmt"
 	"islash/modules/token"
 	"log"
 	"math"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -737,8 +739,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				text = interpreter.handleString(value)
 			}
 			fmt.Print(text)
-			var input string
-			fmt.Scan(&input)
+			scanner := bufio.NewScanner(os.Stdin)
+			scanner.Scan()
+			input := scanner.Text()
 			if isRawNumber, value := isRawNumber(input); isRawNumber {
 				interpreter.numberVarTable[variableName] = value
 			} else {

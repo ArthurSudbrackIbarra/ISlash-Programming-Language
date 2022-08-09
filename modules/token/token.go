@@ -22,12 +22,13 @@ const (
 	EQUAL            string = "EQUAL"
 	NOTEQUAL         string = "NOTEQUAL"
 	CONCAT           string = "CONCAT"
-	GETCHAR          string = "GETCHAR" // TBD...
-	LENGTH           string = "LENGTH"  // TBD...
+	GETCHAR          string = "GETCHAR"
+	LENGTH           string = "LENGTH"
 	SAY              string = "SAY"
 	INPUT            string = "INPUT"
 	WHILE            string = "WHILE"
 	ENDWHILE         string = "ENDWHILE"
+	BREAK            string = "BREAK" // TBD...
 )
 
 type Token struct {
