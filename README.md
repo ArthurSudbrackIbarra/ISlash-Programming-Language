@@ -1,5 +1,9 @@
 <h1 align="center">The ISlash Programming Language</h1>
 
+<p align="center">
+    <img src="https://raw.githubusercontent.com/ArthurSudbrackIbarra/ISlash-VSCode-Syntax-Highlight/main/icons/islash.svg?token=GHSAT0AAAAAABV3DK3R6XKUJEH3XBS6BWNAYXR2ABQ" width=200px/>
+</p>
+
 **ISlash** is a dynamically typed, interpreted programming language with **no real use** that I created for fun, which runs on top of [Golang](https://go.dev/). The language somewhat resembles Assembly but it is simpler to understand and more high-level.
 
 My main goal when creating ISlash was learning Golang (Go), as I had never used that language before. The name 'ISlash' is a pun with my last name 'Ibarra', because 'barra' means 'slash' in portuguese, which is my native language.
