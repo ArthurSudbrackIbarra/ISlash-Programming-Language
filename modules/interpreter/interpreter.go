@@ -931,38 +931,41 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				interpreter.foreachStack.Push([]int{i, 0})
 			}
 			currentIndex := interpreter.foreachStack.Pop().([]int)[1]
-			if currentIndex == -1 {
-				i = interpreter.findCloseLoopIndex(i, tokensList, token.FOREACH, token.ENDFOREACH)
-				if i == -1 {
-					log.Fatalf("Error: ENDFOREACH not found for FOREACH in line %d.", currentToken.GetLine())
-				}
-			}
+			nextIndex := currentIndex + 1
 			if isRawNumberArray, value := interpreter.isRawNumberArray(array); isRawNumberArray {
 				if currentIndex < len(value) {
 					interpreter.numberVarTable[element] = value[currentIndex]
-					interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					if nextIndex < len(value) {
+						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					}
 				}
 			} else if isRawStringArray, value := interpreter.isRawStringArray(array); isRawStringArray {
 				if currentIndex < len(value) {
 					interpreter.stringVarTable[element] = value[currentIndex]
-					interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					if nextIndex < len(value) {
+						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					}
 				}
 			} else if interpreter.isNumberArrayVar(array) {
 				if currentIndex < len(interpreter.numberArrayVarTable[array]) {
 					interpreter.numberVarTable[element] = interpreter.numberArrayVarTable[array][currentIndex]
-					interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					if nextIndex < len(interpreter.numberArrayVarTable[array]) {
+						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					}
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				if currentIndex < len(interpreter.stringArrayVarTable[array]) {
 					interpreter.stringVarTable[element] = interpreter.stringArrayVarTable[array][currentIndex]
-					interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					if nextIndex < len(interpreter.stringArrayVarTable[array]) {
+						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+					}
 				}
 			} else {
 				log.Fatalf("Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
 			}
 		case token.ENDFOREACH:
-			goToIndex, ok := interpreter.foreachStack.Top().([]int)
-			if ok {
+			goToIndex, notEmpty := interpreter.foreachStack.Top().([]int)
+			if notEmpty {
 				i = goToIndex[0] - 1
 			}
 		}
