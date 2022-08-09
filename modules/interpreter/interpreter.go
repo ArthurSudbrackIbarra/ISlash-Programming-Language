@@ -32,23 +32,35 @@ func isRawString(value string) (bool, string) {
 	return true, strings.ReplaceAll(value, "\"", "")
 }
 
+func isRawNumberArray(value string) (bool, []float64) {
+	return true, make([]float64, 0)
+}
+
+func isRawStringArray(value string) (bool, []string) {
+	return true, make([]string, 0)
+}
+
 /*
 	End - Helper functions
 */
 
 type Interpreter struct {
-	numberVarTable map[string]float64
-	stringVarTable map[string]string
-	conditionStack *Stack
-	whileStack     *Stack
+	numberVarTable      map[string]float64
+	stringVarTable      map[string]string
+	numberArrayVarTable map[string][]float64
+	stringArrayVarTable map[string][]string
+	conditionStack      *Stack
+	whileStack          *Stack
 }
 
 func NewInterpreter() *Interpreter {
 	return &Interpreter{
-		numberVarTable: make(map[string]float64),
-		stringVarTable: make(map[string]string),
-		conditionStack: NewEmptyStack(),
-		whileStack:     NewEmptyStack(),
+		numberVarTable:      make(map[string]float64),
+		stringVarTable:      make(map[string]string),
+		numberArrayVarTable: make(map[string][]float64),
+		stringArrayVarTable: make(map[string][]string),
+		conditionStack:      NewEmptyStack(),
+		whileStack:          NewEmptyStack(),
 	}
 }
 
@@ -61,6 +73,20 @@ func (interpreter *Interpreter) isNumberVar(key string) bool {
 
 func (interpreter *Interpreter) isStringVar(key string) bool {
 	if _, contains := interpreter.stringVarTable[key]; contains {
+		return true
+	}
+	return false
+}
+
+func (interpreter *Interpreter) isNumberArrayVar(key string) bool {
+	if _, contains := interpreter.numberArrayVarTable[key]; contains {
+		return true
+	}
+	return false
+}
+
+func (interpreter *Interpreter) isStringArrayVar(key string) bool {
+	if _, contains := interpreter.stringArrayVarTable[key]; contains {
 		return true
 	}
 	return false

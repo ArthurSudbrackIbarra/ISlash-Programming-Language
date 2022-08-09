@@ -28,7 +28,7 @@ const (
 	INPUT            string = "INPUT"
 	WHILE            string = "WHILE"
 	ENDWHILE         string = "ENDWHILE"
-	BREAK            string = "BREAK" // TBD...
+	BREAK            string = "BREAK"
 )
 
 type Token struct {
