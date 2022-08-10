@@ -20,6 +20,7 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 * [Try ISlash](#try-islash)
 * [Language Support in VSCode](#language-support-in-vscode)
 * [Uninstall ISlash](#uninstall-islash)
+* [Known Issues](#known-issues)
  
 ## Data Types
 
@@ -183,3 +184,15 @@ docker rm islash-container
 ```sh
 docker rmi islash/islash-programming-language:v1
 ```
+
+## Known Issues
+
+The issues listed below are known by me and **will be fixed soon**:
+
+1. Nested foreach loops are not working.
+
+2. Element variable names in foreach instruction must not be equal to any other variable name defined previously, or else the program might not work as intended.
+
+3. It is currently possible to create variables with the same name but different types, which will cause unexpected behaviors.
+
+4. It is currently not possible to compare arrays with the 'equal' or 'notequal' instructions.
