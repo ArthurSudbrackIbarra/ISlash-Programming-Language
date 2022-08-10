@@ -89,12 +89,15 @@ func (interpreter *Interpreter) isStringArrayVar(key string) bool {
 }
 
 func (interpreter *Interpreter) isRawNumberArray(value string) (bool, []float64) {
+	numberArray := make([]float64, 0)
+	if value == "[]number" {
+		return true, numberArray
+	}
 	if !strings.HasPrefix(value, "[") || !strings.HasSuffix(value, "]") {
 		return false, nil
 	}
 	value = value[1 : len(value)-1]
 	splittedStr := strings.Split(value, ",")
-	numberArray := make([]float64, 0)
 	for _, element := range splittedStr {
 		if isRawNumber, number := isRawNumber(element); isRawNumber {
 			numberArray = append(numberArray, number)
@@ -108,12 +111,15 @@ func (interpreter *Interpreter) isRawNumberArray(value string) (bool, []float64)
 }
 
 func (interpreter *Interpreter) isRawStringArray(value string) (bool, []string) {
+	strArray := make([]string, 0)
+	if value == "[]string" {
+		return true, strArray
+	}
 	if !strings.HasPrefix(value, "[") || !strings.HasSuffix(value, "]") {
 		return false, nil
 	}
 	value = value[1 : len(value)-1]
 	splittedStr := strings.Split(value, ",")
-	strArray := make([]string, 0)
 	for _, element := range splittedStr {
 		if isRawString, str := isRawString(element); isRawString {
 			strArray = append(strArray, str)
