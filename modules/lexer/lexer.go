@@ -33,7 +33,7 @@ func MountTokens(filePath string) []*token.Token {
 			parameters = splittedInstruction[1:]
 		}
 		switch tokenType {
-		case token.DECLARE:
+		case token.SET:
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid DECLARE statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
@@ -89,21 +89,21 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid LENGTH statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
-		case token.GREATERTHAN:
+		case token.GREATER:
 			if len(parameters) != 3 {
 				log.Fatalf("Invalid GREATER statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
-		case token.GREATERTHANEQUAL:
+		case token.GREATEREQUAL:
 			if len(parameters) != 3 {
 				log.Fatalf("Invalid GREATEREQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
-		case token.LESSTHAN:
+		case token.LESS:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid LESSER statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Invalid LESS statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
-		case token.LESSTHANEQUAL:
+		case token.LESSEQUAL:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid LESSEREQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Invalid LESSEQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.EQUAL:
 			if len(parameters) != 3 {
@@ -149,9 +149,9 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid APPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
-		case token.GET:
+		case token.ACCESSINDEX:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid GET statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Invalid ACCESSINDEX statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.FOREACH:
 			if len(parameters) != 2 {
@@ -162,7 +162,7 @@ func MountTokens(filePath string) []*token.Token {
 				log.Fatalf("Invalid ENDFOREACH statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		default:
-			log.Fatalf("Invalid instruction '%s'.", tokenType)
+			log.Fatalf("Invalid instruction '%s'. Line %d.", tokenType, line)
 		}
 		tokensList = append(tokensList, token.NewToken(line, tokenType, parameters))
 	}

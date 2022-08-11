@@ -1,5 +1,5 @@
 # Modify 'number' to the value you wish. 10 in this example.
-declare number 10
+set number 10
 
 # remainer = number % 2
 mod number 2 remainer

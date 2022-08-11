@@ -1,6 +1,6 @@
 say "---------------------------------------------"
 
-declare numbers []number
+set numbers []number
 
 input limit "How many numbers do you want to multiply? "
 input multiplier "Multiply by which number? "

@@ -43,7 +43,8 @@ type Interpreter struct {
 	stringArrayVarTable map[string][]string
 	conditionStack      *Stack
 	whileStack          *Stack
-	foreachStack        *Stack
+	foreachIndexesStack *Stack
+	foreachNamesStack   *Stack
 	varsToDelete        *Stack
 }
 
@@ -55,7 +56,8 @@ func NewInterpreter() *Interpreter {
 		stringArrayVarTable: make(map[string][]string),
 		conditionStack:      NewEmptyStack(),
 		whileStack:          NewEmptyStack(),
-		foreachStack:        NewEmptyStack(),
+		foreachIndexesStack: NewEmptyStack(),
+		foreachNamesStack:   NewEmptyStack(),
 		varsToDelete:        NewEmptyStack(),
 	}
 }
@@ -188,6 +190,29 @@ func (interpreter *Interpreter) findNextConditionBlockIndex(currentIndex int, to
 	return -1
 }
 
+func (interpreter *Interpreter) deleteVarIfSameName(varName string, varType string) {
+	for key := range interpreter.numberVarTable {
+		if key == varName && varType != "number" {
+			delete(interpreter.numberVarTable, key)
+		}
+	}
+	for key := range interpreter.stringVarTable {
+		if key == varName && varType != "string" {
+			delete(interpreter.stringVarTable, key)
+		}
+	}
+	for key := range interpreter.numberArrayVarTable {
+		if key == varName && varType != "numberarray" {
+			delete(interpreter.numberArrayVarTable, key)
+		}
+	}
+	for key := range interpreter.stringArrayVarTable {
+		if key == varName && varType != "stringarray" {
+			delete(interpreter.stringArrayVarTable, key)
+		}
+	}
+}
+
 func (interpreter *Interpreter) deleteVars() {
 	for true {
 		if interpreter.varsToDelete.IsEmpty() {
@@ -208,7 +233,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 		}
 		currentToken := tokensList[i]
 		switch currentToken.GetType() {
-		case token.DECLARE:
+		case token.SET:
 			variableName := currentToken.GetParameter(0)
 			assignValue := currentToken.GetParameter(1)
 			if isRawNumber, _ := isRawNumber(variableName); isRawNumber {
@@ -216,16 +241,28 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			}
 			if isRawNumber, value := isRawNumber(assignValue); isRawNumber {
 				interpreter.numberVarTable[variableName] = value
+				interpreter.deleteVarIfSameName(variableName, "number")
 			} else if isRawString, value := isRawString(assignValue); isRawString {
 				interpreter.stringVarTable[variableName] = interpreter.handleString(value)
+				interpreter.deleteVarIfSameName(variableName, "string")
 			} else if interpreter.isNumberVar(assignValue) {
 				interpreter.numberVarTable[variableName] = interpreter.numberVarTable[assignValue]
+				interpreter.deleteVarIfSameName(variableName, "number")
 			} else if interpreter.isStringVar(assignValue) {
 				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[assignValue]
+				interpreter.deleteVarIfSameName(variableName, "string")
 			} else if isRawNumberArray, value := interpreter.isRawNumberArray(assignValue); isRawNumberArray {
 				interpreter.numberArrayVarTable[variableName] = value
+				interpreter.deleteVarIfSameName(variableName, "numberarray")
 			} else if isRawStringArray, value := interpreter.isRawStringArray(assignValue); isRawStringArray {
 				interpreter.stringArrayVarTable[variableName] = value
+				interpreter.deleteVarIfSameName(variableName, "stringarray")
+			} else if interpreter.isNumberArrayVar(assignValue) {
+				interpreter.numberArrayVarTable[variableName] = interpreter.numberArrayVarTable[assignValue]
+				interpreter.deleteVarIfSameName(variableName, "numberarray")
+			} else if interpreter.isStringArrayVar(assignValue) {
+				interpreter.stringArrayVarTable[variableName] = interpreter.stringArrayVarTable[assignValue]
+				interpreter.deleteVarIfSameName(variableName, "stringarray")
 			} else {
 				log.Fatalf("Error: Invalid declaration of varible '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
@@ -361,7 +398,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Invalid parameter '%s', not a number variable. Line %d.", variableName, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] -= 1
-		case token.GREATERTHAN:
+		case token.GREATER:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
 			secondValue := currentToken.GetParameter(1)
@@ -389,7 +426,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
-		case token.GREATERTHANEQUAL:
+		case token.GREATEREQUAL:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
 			secondValue := currentToken.GetParameter(1)
@@ -417,7 +454,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
-		case token.LESSTHAN:
+		case token.LESS:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
 			secondValue := currentToken.GetParameter(1)
@@ -445,7 +482,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
-		case token.LESSTHANEQUAL:
+		case token.LESSEQUAL:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
 			secondValue := currentToken.GetParameter(1)
@@ -894,7 +931,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
-		case token.GET:
+		case token.ACCESSINDEX:
 			array := currentToken.GetParameter(0)
 			index := currentToken.GetParameter(1)
 			parsedIndex := -1.0
@@ -948,48 +985,55 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 		case token.FOREACH:
 			element := currentToken.GetParameter(0)
 			array := currentToken.GetParameter(1)
-			if !interpreter.isVariableDefined(element) {
-				interpreter.foreachStack.Push([]int{i, 0})
+			if !interpreter.foreachNamesStack.Contains(element) {
+				interpreter.foreachIndexesStack.Push([]int{i, 0})
+				interpreter.foreachNamesStack.Push(element)
 			}
-			currentIndex := interpreter.foreachStack.Pop().([]int)[1]
+			currentIndex := interpreter.foreachIndexesStack.Pop().([]int)[1]
 			nextIndex := currentIndex + 1
 			if isRawNumberArray, value := interpreter.isRawNumberArray(array); isRawNumberArray {
 				if currentIndex < len(value) {
 					interpreter.numberVarTable[element] = value[currentIndex]
 					if nextIndex < len(value) {
-						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+						interpreter.foreachIndexesStack.Push([]int{i, currentIndex + 1})
+					} else {
+						interpreter.foreachNamesStack.Pop()
 					}
 				}
 			} else if isRawStringArray, value := interpreter.isRawStringArray(array); isRawStringArray {
 				if currentIndex < len(value) {
 					interpreter.stringVarTable[element] = value[currentIndex]
 					if nextIndex < len(value) {
-						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+						interpreter.foreachIndexesStack.Push([]int{i, currentIndex + 1})
+					} else {
+						interpreter.foreachNamesStack.Pop()
 					}
 				}
 			} else if interpreter.isNumberArrayVar(array) {
 				if currentIndex < len(interpreter.numberArrayVarTable[array]) {
 					interpreter.numberVarTable[element] = interpreter.numberArrayVarTable[array][currentIndex]
 					if nextIndex < len(interpreter.numberArrayVarTable[array]) {
-						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+						interpreter.foreachIndexesStack.Push([]int{i, currentIndex + 1})
 					} else {
 						interpreter.varsToDelete.Push(element)
+						interpreter.foreachNamesStack.Pop()
 					}
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				if currentIndex < len(interpreter.stringArrayVarTable[array]) {
 					interpreter.stringVarTable[element] = interpreter.stringArrayVarTable[array][currentIndex]
 					if nextIndex < len(interpreter.stringArrayVarTable[array]) {
-						interpreter.foreachStack.Push([]int{i, currentIndex + 1})
+						interpreter.foreachIndexesStack.Push([]int{i, currentIndex + 1})
 					} else {
 						interpreter.varsToDelete.Push(element)
+						interpreter.foreachNamesStack.Pop()
 					}
 				}
 			} else {
 				log.Fatalf("Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
 			}
 		case token.ENDFOREACH:
-			goToIndex, notEmpty := interpreter.foreachStack.Top().([]int)
+			goToIndex, notEmpty := interpreter.foreachIndexesStack.Top().([]int)
 			if notEmpty {
 				i = goToIndex[0] - 1
 			} else {

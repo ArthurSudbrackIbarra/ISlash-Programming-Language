@@ -10,25 +10,34 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 
 ## Table of Contents
 
+* [Example Programs](#example-programs)
 * [Data Types](#data-types)
 * [Instructions](#instructions)
 * [Language Features](#language-features)
     * [Comments](#comments)
     * [String Interpolation](#string-interpolation)
     * [New Lines in Strings](#new-lines-in-strings)
-* [Example Programs](#example-programs)
+* [Things to Notice](#things-to-notice)
 * [Try ISlash](#try-islash)
 * [Language Support in VSCode](#language-support-in-vscode)
 * [Uninstall ISlash](#uninstall-islash)
 * [Known Issues](#known-issues)
- 
+
+## Example Programs
+
+Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
+
+In the example below, we are calculating the sum of *X* numbers inputed by the user.
+
+![Example Program](https://user-images.githubusercontent.com/69170322/184058971-f64d1b1f-2f5c-4ce1-89d5-8e4bdc8f3f83.png)
+
 ## Data Types
 
-| Data Type |                                                  Description                                                  |
-|:---------:|:-------------------------------------------------------------------------------------------------------------:|
-|   string  |                             Strings are declared with double quotes. Ex: "Hello!"                             |
-|   number  |                             Numbers may or may not have decimal places. Ex: 1, 2.3                            |
-|   array   | Arrays are declared with square brackets. Ex: [1,2,3], ["Hi","Hello"]. Do **not** put spaces between commas.  |
+| Data Type | Description                                                                                                  |
+|-----------|--------------------------------------------------------------------------------------------------------------|
+| string    | Strings are declared with double quotes. Ex: "Hello!"                                                        |
+| number    | Numbers may or may not have decimal places. Ex: 1, 2.3                                                       |
+| array     | Arrays are declared with square brackets. Ex: [1,2,3], ["Hi","Hello"]. Do **not** put spaces between commas. |
 
 In ISlash, although there is not a boolean data type, numbers can be used to represent boolean values:
 
@@ -41,40 +50,40 @@ In ISlash, although there is not a boolean data type, numbers can be used to rep
 
 Instructions are **not case sensitive**.
 
-|    Instruction   |                Description               |
-|:----------------:|:----------------------------------------:|
-|      DECLARE     |            Declares variables.           |
-|        ADD       |                + operator.               |
-|        SUB       |                - operator.               |
-|       MULT       |                * operator.               |
-|        DIV       |                / operator.               |
-|        MOD       |                % operator.               |
-|     INCREMENT    |           ++ operator (Adds 1).          |
-|     DECREMENT    |        -- operator (Subtracts 1).        |
-|    GREATERTHAN   |                > operator.               |
-| GREATERTHANEQUAL |               >= operator.               |
-|     LESSTHAN     |                < operator.               |
-|   LESSTHANEQUAL  |               <= operator.               |
-|        NOT       |               NOT operator               |
-|        AND       |               AND operator.              |
-|        OR        |               OR operator.               |
-|        IF        |              If statements.              |
-|       ELSE       |             Else statements.             |
-|       ENDIF      |           Closes if statements.          |
-|       EQUAL      |               == operator.               |
-|     NOTEQUAL     |               != operator.               |
-|      CONCAT      |           Concatenates strings.          |
-|      LENGTH      | Gets the length of a string or an array. |
-|      GETCHAR     |      Gets the nth char of a string.      |
-|        SAY       |             Prints to screen.            |
-|       INPUT      |             Gets user input.             |
-|       WHILE      |             While statements.            |
-|     ENDWHILE     |         Closes while statements.         |
-|      FOREACH     |        Use to iterate over arrays.       |
-|    ENDFOREACH    |          Closes foreach blocks.          |
-|       BREAK      |           (Not implemented yet)          |
-|      APPEND      |      Appends an element to an array.     |
-|        GET       |     Gets the nth element of an array.    |
+|  Instruction |                Description               |
+|:------------:|:----------------------------------------:|
+|      SET     |         Sets/declares variables.         |
+|      ADD     |                + operator.               |
+|      SUB     |                - operator.               |
+|     MULT     |                * operator.               |
+|      DIV     |                / operator.               |
+|      MOD     |                % operator.               |
+|   INCREMENT  |           ++ operator (Adds 1).          |
+|   DECREMENT  |        -- operator (Subtracts 1).        |
+|    GREATER   |                > operator.               |
+| GREATEREQUAL |               >= operator.               |
+|     LESS     |                < operator.               |
+|   LESSEQUAL  |               <= operator.               |
+|      NOT     |               NOT operator               |
+|      AND     |               AND operator.              |
+|      OR      |               OR operator.               |
+|      IF      |              If statements.              |
+|     ELSE     |             Else statements.             |
+|     ENDIF    |             Closes if blocks.            |
+|     EQUAL    |               == operator.               |
+|   NOTEQUAL   |               != operator.               |
+|    CONCAT    |           Concatenates strings.          |
+|    LENGTH    | Gets the length of a string or an array. |
+|    GETCHAR   |      Gets the nth char of a string.      |
+|      SAY     |             Prints to screen.            |
+|     INPUT    |             Gets user input.             |
+|     WHILE    |             While statements.            |
+|   ENDWHILE   |           Closes while blocks.           |
+|    FOREACH   |        Use to iterate over arrays.       |
+|  ENDFOREACH  |          Closes foreach blocks.          |
+|     BREAK    |           (Not implemented yet)          |
+|    APPEND    |      Appends an element to an array.     |
+|  ACCESSINDEX |     Gets the nth element of an array.    |
 
 ## Language Features
 
@@ -107,14 +116,39 @@ To represent new lines, use the `\n` symbol:
 say "Hi!\nThis is in a new line!"
 ```
 
-## Example Programs
+## Things to Notice
 
-Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
+Here are some important things to notice about the ISlash language:
 
-In the example below, we are calculating the sum of the first 20 integer numbers.
+### 1. Variables
 
-![Example Program](https://user-images.githubusercontent.com/69170322/183554138-31cde33d-26c6-4efc-b169-c21e0aa62aa3.png)
+1. All variables are global and can be accessed from anywhere, as there are no scopes. If you create a variable inside an *if* block, you **will** be able to reference it outside of the *if* block. The only **exception** to this rule are *foreach* element variables, which only exists inside the *foreach* block.
 
+Example:
+
+```
+foreach element [1,2,3]
+    # element exists here!
+endforeach
+# element does not exist here!
+```
+
+2. The **SET** command will create new variables if they don't exist yet. If they do, the previous value will be overrided.
+
+### 2. Arrays
+
+1. Even though ISlash is a dynamically typed language, arrays **cannot** contain values of different types. Because of that, when creating an **empty array**, you must specify if it will contain numbers or strings.
+
+Example:
+
+```
+set array [1,2,3] # OK!
+set array ["Hello", "Bye"] # OK!
+set array []number # OK!
+set array []string # OK!
+
+set array [] # NOT OK!
+```
 
 ## Try ISlash
 
@@ -189,10 +223,4 @@ docker rmi islash/islash-programming-language:v1
 
 The issues listed below are known by me and **will be fixed soon**:
 
-1. Nested foreach loops are not working.
-
-2. Element variable names in foreach instruction must not be equal to any other variable name defined previously, or else the program might not work as intended.
-
-3. It is currently possible to create variables with the same name but different types, which will cause unexpected behaviors.
-
-4. It is currently not possible to compare arrays with the 'equal' or 'notequal' instructions.
+* It is currently not possible to compare arrays with the 'equal' or 'notequal' instructions.
