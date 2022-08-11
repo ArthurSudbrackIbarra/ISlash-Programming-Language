@@ -1039,6 +1039,23 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.deleteVars()
 			}
+		case token.RANGEARRAY:
+			arrayRange := currentToken.GetParameter(0)
+			parsedArrayRange := -1.0
+			variableName := currentToken.GetParameter(1)
+			if isRawNumber, value := isRawNumber(arrayRange); isRawNumber {
+				parsedArrayRange = value
+			} else if interpreter.isNumberVar(arrayRange) {
+				parsedArrayRange = interpreter.numberVarTable[arrayRange]
+			} else {
+				log.Fatalf("Invalid parameter '%s'. Line %d.", arrayRange, currentToken.GetLine())
+			}
+			interpreter.deleteVarIfSameName(variableName, "numberarray")
+			array := make([]float64, int(parsedArrayRange))
+			for i := 0; i < len(array); i++ {
+				array[i] = float64(i)
+			}
+			interpreter.numberArrayVarTable[variableName] = array
 		}
 	}
 }

@@ -57,6 +57,10 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 3 {
 				log.Fatalf("Invalid MOD statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.ROOT:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid ROOT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		case token.INCREMENT:
 			if len(parameters) != 1 {
 				log.Fatalf("Invalid INCREMENT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
@@ -160,6 +164,10 @@ func MountTokens(filePath string) []*token.Token {
 		case token.ENDFOREACH:
 			if len(parameters) != 0 {
 				log.Fatalf("Invalid ENDFOREACH statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.RANGEARRAY:
+			if len(parameters) != 2 {
+				log.Fatalf("Invalid RANGEARRAY statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		default:
 			log.Fatalf("Invalid instruction '%s'. Line %d.", tokenType, line)

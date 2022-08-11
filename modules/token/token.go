@@ -7,6 +7,7 @@ const (
 	MULT         string = "MULT"
 	DIV          string = "DIV"
 	MOD          string = "MOD"
+	ROOT         string = "ROOT"
 	INCREMENT    string = "INCREMENT"
 	DECREMENT    string = "DECREMENT"
 	GREATER      string = "GREATER"
@@ -33,6 +34,7 @@ const (
 	ENDFOREACH   string = "ENDFOREACH"
 	ACCESSINDEX  string = "ACCESSINDEX"
 	APPEND       string = "APPEND"
+	RANGEARRAY   string = "RANGEARRAY"
 )
 
 type Token struct {
