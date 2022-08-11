@@ -71,3 +71,15 @@ func (stack *Stack) Clear() {
 	defer stack.mutex.Unlock()
 	stack.items = nil
 }
+
+// Contains() returns whether the stack contains the specified item or not (boolean result)
+func (stack *Stack) Contains(item interface{}) bool {
+	stack.mutex.Lock()
+	defer stack.mutex.Unlock()
+	for _, stackItem := range stack.items {
+		if stackItem == item {
+			return true
+		}
+	}
+	return false
+}

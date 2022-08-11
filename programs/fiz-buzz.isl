@@ -1,8 +1,8 @@
 input n "Enter a value for n: "
 
-declare index 1
+set index 1
 
-lessthanequal index n indexIsLessThanOrEqualN
+lessequal index n indexIsLessThanOrEqualN
 
 while indexIsLessThanOrEqualN
     mod index 3 remainer3
@@ -11,7 +11,7 @@ while indexIsLessThanOrEqualN
     not remainer3 divisibleBy3
     not remainer5 divisibleBy5
 
-    declare output ""
+    set output ""
 
     if divisibleBy3
         concat output "Fizz"
@@ -25,5 +25,5 @@ while indexIsLessThanOrEqualN
     say "----------------"
 
     increment index
-    lessthanequal index n indexIsLessThanOrEqualN
+    lessequal index n indexIsLessThanOrEqualN
 endwhile

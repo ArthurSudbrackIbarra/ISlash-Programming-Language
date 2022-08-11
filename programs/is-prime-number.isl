@@ -1,15 +1,15 @@
 # Modify 'number' to the value you wish. 31 in this example.
-declare number 31
+set number 31
 
 # Variable to store how many dividers the number has.
-declare dividersCount 1
+set dividersCount 1
 
 # Variable to store the dividers that will be tested.
-declare divider 2
+set divider 2
 
 # This will be our counter.
 # counter = number
-declare counter number
+set counter number
 
 # While counter > 0
 while counter
