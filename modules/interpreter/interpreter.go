@@ -931,7 +931,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
-		case token.GET:
+		case token.ACCESSINDEX:
 			array := currentToken.GetParameter(0)
 			index := currentToken.GetParameter(1)
 			parsedIndex := -1.0

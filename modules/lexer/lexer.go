@@ -149,9 +149,9 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid APPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
-		case token.GET:
+		case token.ACCESSINDEX:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid GET statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Invalid ACCESSINDEX statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.FOREACH:
 			if len(parameters) != 2 {

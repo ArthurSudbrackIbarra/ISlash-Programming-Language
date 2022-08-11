@@ -31,7 +31,7 @@ const (
 	BREAK        string = "BREAK"
 	FOREACH      string = "FOREACH"
 	ENDFOREACH   string = "ENDFOREACH"
-	GET          string = "GET"
+	ACCESSINDEX  string = "ACCESSINDEX"
 	APPEND       string = "APPEND"
 )
 
