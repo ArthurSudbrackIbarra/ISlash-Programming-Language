@@ -932,6 +932,27 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
 		case token.PREPPEND:
+			array := currentToken.GetParameter(0)
+			element := currentToken.GetParameter(1)
+			if interpreter.isNumberArrayVar(array) {
+				if isRawNumber, value := isRawNumber(element); isRawNumber {
+					interpreter.numberArrayVarTable[array] = append([]float64{value}, interpreter.numberArrayVarTable[array]...)
+				} else if interpreter.isNumberVar(element) {
+					interpreter.numberArrayVarTable[array] = append([]float64{interpreter.numberVarTable[element]}, interpreter.numberArrayVarTable[array]...)
+				} else {
+					log.Fatalf("Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
+				}
+			} else if interpreter.isStringArrayVar(array) {
+				if isRawString, value := isRawString(element); isRawString {
+					interpreter.stringArrayVarTable[array] = append([]string{value}, interpreter.stringArrayVarTable[array]...)
+				} else if interpreter.isStringVar(element) {
+					interpreter.stringArrayVarTable[array] = append([]string{interpreter.stringVarTable[element]}, interpreter.stringArrayVarTable[array]...)
+				} else {
+					log.Fatalf("Invalid parameter '%s', not a string. Line %d.", element, currentToken.GetLine())
+				}
+			} else {
+				log.Fatalf("Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+			}
 		case token.REMOVEFIRST:
 		case token.REMOVELAST:
 		case token.SETINDEX:
