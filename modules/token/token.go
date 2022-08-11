@@ -7,8 +7,8 @@ const (
 	MULT         string = "MULT"
 	DIV          string = "DIV"
 	MOD          string = "MOD"
-	POWER        string = "POWER" // TBD
-	ROOT         string = "ROOT"  // TBD
+	POWER        string = "POWER"
+	ROOT         string = "ROOT"
 	INCREMENT    string = "INCREMENT"
 	DECREMENT    string = "DECREMENT"
 	GREATER      string = "GREATER"
@@ -35,11 +35,11 @@ const (
 	ENDFOREACH   string = "ENDFOREACH"
 	ACCESSINDEX  string = "ACCESSINDEX"
 	APPEND       string = "APPEND"
-	PREPPEND     string = "PREPPEND"    // TBD
-	REMOVEFIRST  string = "REMOVEFIRST" // TBD
-	REMOVELAST   string = "REMOVELAST"  // TBD
-	SWAP         string = "SWAP"        // TBD
-	SETINDEX     string = "SETINDEX"    // TBD
+	PREPEND      string = "PREPEND"
+	REMOVEFIRST  string = "REMOVEFIRST"
+	REMOVELAST   string = "REMOVELAST"
+	SWAP         string = "SWAP"
+	SETINDEX     string = "SETINDEX"
 	RANGEARRAY   string = "RANGEARRAY"
 )
 

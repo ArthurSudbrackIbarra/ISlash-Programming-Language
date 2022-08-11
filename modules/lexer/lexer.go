@@ -157,9 +157,9 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid APPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
-		case token.PREPPEND:
+		case token.PREPEND:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid PREPPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Invalid PREPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.REMOVEFIRST:
 			if len(parameters) != 2 {
@@ -168,6 +168,10 @@ func MountTokens(filePath string) []*token.Token {
 		case token.REMOVELAST:
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid REMOVELAST statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.SETINDEX:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid SETINDEX statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.SWAP:
 			if len(parameters) != 3 {
