@@ -57,6 +57,10 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 3 {
 				log.Fatalf("Invalid MOD statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.POWER:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid POWER statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		case token.ROOT:
 			if len(parameters) != 3 {
 				log.Fatalf("Invalid ROOT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)

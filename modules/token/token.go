@@ -7,6 +7,7 @@ const (
 	MULT         string = "MULT"
 	DIV          string = "DIV"
 	MOD          string = "MOD"
+	POWER        string = "POWER"
 	ROOT         string = "ROOT"
 	INCREMENT    string = "INCREMENT"
 	DECREMENT    string = "DECREMENT"

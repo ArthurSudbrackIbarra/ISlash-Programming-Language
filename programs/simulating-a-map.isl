@@ -5,14 +5,12 @@ set grades [8.5,9,7,10]
 
 input inputedName "Enter a name: "
 
-set index 0
 length names namesLength
-less index namesLength continue
+rangearray namesLength indexes
 
 set found 0
 
-# While index < length of 'names'.
-while continue
+foreach index indexes
     accessindex names index name
     equal name inputedName namesMatch
     if namesMatch
@@ -21,9 +19,7 @@ while continue
         say "Name: $(name), Surname: $(surname), Grade: $(grade)"
         increment found
     endif
-    increment index
-    less index namesLength continue
-endwhile
+endforeach
 
 if found
     say "$(found) record(s) were found for the name $(inputedName)."
