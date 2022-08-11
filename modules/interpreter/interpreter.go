@@ -931,6 +931,11 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
+		case token.PREPPEND:
+		case token.REMOVEFIRST:
+		case token.REMOVELAST:
+		case token.SETINDEX:
+		case token.SWAP:
 		case token.ACCESSINDEX:
 			array := currentToken.GetParameter(0)
 			index := currentToken.GetParameter(1)
@@ -992,6 +997,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			currentIndex := interpreter.foreachIndexesStack.Pop().([]int)[1]
 			nextIndex := currentIndex + 1
 			if isRawNumberArray, value := interpreter.isRawNumberArray(array); isRawNumberArray {
+				if currentIndex == 0 {
+					interpreter.deleteVarIfSameName(element, "number")
+				}
 				if currentIndex < len(value) {
 					interpreter.numberVarTable[element] = value[currentIndex]
 					if nextIndex < len(value) {
@@ -1001,6 +1009,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					}
 				}
 			} else if isRawStringArray, value := interpreter.isRawStringArray(array); isRawStringArray {
+				if currentIndex == 0 {
+					interpreter.deleteVarIfSameName(element, "string")
+				}
 				if currentIndex < len(value) {
 					interpreter.stringVarTable[element] = value[currentIndex]
 					if nextIndex < len(value) {
@@ -1010,6 +1021,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					}
 				}
 			} else if interpreter.isNumberArrayVar(array) {
+				if currentIndex == 0 {
+					interpreter.deleteVarIfSameName(element, "number")
+				}
 				if currentIndex < len(interpreter.numberArrayVarTable[array]) {
 					interpreter.numberVarTable[element] = interpreter.numberArrayVarTable[array][currentIndex]
 					if nextIndex < len(interpreter.numberArrayVarTable[array]) {
@@ -1020,6 +1034,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					}
 				}
 			} else if interpreter.isStringArrayVar(array) {
+				if currentIndex == 0 {
+					interpreter.deleteVarIfSameName(element, "string")
+				}
 				if currentIndex < len(interpreter.stringArrayVarTable[array]) {
 					interpreter.stringVarTable[element] = interpreter.stringArrayVarTable[array][currentIndex]
 					if nextIndex < len(interpreter.stringArrayVarTable[array]) {
