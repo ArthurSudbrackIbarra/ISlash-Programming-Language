@@ -32,8 +32,8 @@ In the example below, we are multiplying numbers inputed by the user.
 
 ## Data Types
 
-| Data Type | Description                                                                                                  |
-|:---------:|:------------------------------------------------------------------------------------------------------------:|
+|   Type    | Description                                                                                                  |
+|:---------:|--------------------------------------------------------------------------------------------------------------|
 |   string  | Strings are declared with double quotes. Ex: "Hello!"                                                        |
 |   number  | Numbers may or may not have decimal places. Ex: 1, 2.3                                                       |
 |   array   | Arrays are declared with square brackets. Ex: [1,2,3], ["Hi","Hello"]. Do **not** put spaces between commas. |
