@@ -3,11 +3,13 @@ package interpreter
 import (
 	"bufio"
 	"fmt"
+	"islash/modules/io"
 	"islash/modules/token"
 	"log"
 	"math"
 	"math/rand"
 	"os"
+	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
@@ -1355,7 +1357,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					}
 				}
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
 			}
 		case token.ENDFOREACH:
 			goToIndex, notEmpty := interpreter.foreachIndexesStack.Top().([]int)
@@ -1373,7 +1375,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else if interpreter.isNumberVar(arrayRange) {
 				parsedArrayRange = interpreter.numberVarTable[arrayRange]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", arrayRange, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", arrayRange, currentToken.GetLine())
 			}
 			interpreter.deleteVarIfSameName(variableName, "numberarray")
 			array := make([]float64, int(parsedArrayRange))
@@ -1392,19 +1394,113 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else if interpreter.isNumberVar(min) {
 				parsedMin = interpreter.numberVarTable[min]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", min, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", min, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(max); isRawNumber {
 				parsedMax = value
 			} else if interpreter.isNumberVar(max) {
 				parsedMax = interpreter.numberVarTable[max]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", max, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", max, currentToken.GetLine())
 			}
 			rand.Seed(time.Now().UnixNano())
 			random := float64(rand.Intn(int(parsedMax-parsedMin+1))) + parsedMin
 			interpreter.numberVarTable[variableName] = random
 			interpreter.deleteVarIfSameName(variableName, "number")
+		case token.READFILE:
+			filePath := currentToken.GetParameter(0)
+			variableName := currentToken.GetParameter(1)
+			parsedFilePath := ""
+			if isRawString, value := isRawString(filePath); isRawString {
+				parsedFilePath = value
+			} else if interpreter.isStringVar(filePath) {
+				parsedFilePath = interpreter.stringVarTable[filePath]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
+			}
+			cwd, err := os.Getwd()
+			parsedFilePath = filepath.Join(cwd, parsedFilePath)
+			if err != nil {
+				log.Fatal("Error: Could not get current working directory.")
+			}
+			fileContent := io.GetFileContent(parsedFilePath)
+			interpreter.stringVarTable[variableName] = fileContent
+			interpreter.deleteVarIfSameName(variableName, "string")
+		case token.READFILELINES:
+			filePath := currentToken.GetParameter(0)
+			variableName := currentToken.GetParameter(1)
+			parsedFilePath := ""
+			if isRawString, value := isRawString(filePath); isRawString {
+				parsedFilePath = value
+			} else if interpreter.isStringVar(filePath) {
+				parsedFilePath = interpreter.stringVarTable[filePath]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
+			}
+			cwd, err := os.Getwd()
+			parsedFilePath = filepath.Join(cwd, parsedFilePath)
+			if err != nil {
+				log.Fatal("Error: Could not get current working directory.")
+			}
+			fileContent := io.GetFileLinesNoTrim(parsedFilePath)
+			interpreter.stringArrayVarTable[variableName] = fileContent
+			interpreter.deleteVarIfSameName(variableName, "stringarray")
+		case token.WRITEFILE:
+			filePath := currentToken.GetParameter(0)
+			parsedFilePath := ""
+			fileContent := currentToken.GetParameter(1)
+			parsedFileContent := ""
+			if isRawString, value := isRawString(filePath); isRawString {
+				parsedFilePath = value
+			} else if interpreter.isStringVar(filePath) {
+				parsedFilePath = interpreter.stringVarTable[filePath]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
+			}
+			if isRawString, value := isRawString(fileContent); isRawString {
+				parsedFileContent = value
+			} else if interpreter.isStringVar(fileContent) {
+				parsedFileContent = interpreter.stringVarTable[fileContent]
+			} else if isRawNumber, value := isRawNumber(fileContent); isRawNumber {
+				parsedFileContent = strconv.FormatFloat(value, 'f', -1, 64)
+			} else if interpreter.isNumberVar(fileContent) {
+				parsedFileContent = strconv.FormatFloat(interpreter.numberVarTable[fileContent], 'f', -1, 64)
+			} else if interpreter.isNumberArrayVar(fileContent) {
+				for _, value := range interpreter.numberArrayVarTable[fileContent] {
+					parsedFileContent += strconv.FormatFloat(value, 'f', -1, 64) + " "
+				}
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", fileContent, currentToken.GetLine())
+			}
+			cwd, err := os.Getwd()
+			parsedFilePath = filepath.Join(cwd, parsedFilePath)
+			if err != nil {
+				log.Fatal("Error: Could not get current working directory.")
+			}
+			io.WriteToFile(parsedFilePath, parsedFileContent)
+		case token.SPLIT:
+			target := currentToken.GetParameter(0)
+			pattern := currentToken.GetParameter(1)
+			variableName := currentToken.GetParameter(2)
+			parsedTarget := ""
+			parsedPattern := ""
+			if isRawString, value := isRawString(target); isRawString {
+				parsedTarget = value
+			} else if interpreter.isStringVar(target) {
+				parsedTarget = interpreter.stringVarTable[target]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
+			}
+			if isRawString, value := isRawString(pattern); isRawString {
+				parsedPattern = value
+			} else if interpreter.isStringVar(pattern) {
+				parsedPattern = interpreter.stringVarTable[pattern]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", pattern, currentToken.GetLine())
+			}
+			splitted := strings.Split(parsedTarget, parsedPattern)
+			interpreter.stringArrayVarTable[variableName] = splitted
+			interpreter.deleteVarIfSameName(variableName, "stringarray")
 		}
 	}
 }

@@ -1,5 +1,4 @@
-# Declaring the unsorted array:
-set array [10,3,5,1,7,9,0,2,13,99,30,23]
+set array [10,3,5,1,7,9,0,2,13,99,30,23,-17,3,-20]
 
 say "Array before sort: $(array)"
 

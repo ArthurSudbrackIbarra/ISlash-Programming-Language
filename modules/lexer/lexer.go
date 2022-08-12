@@ -195,7 +195,23 @@ func MountTokens(filePath string) []*token.Token {
 			}
 		case token.RANGEARRAY:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid RANGEARRAY statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Invalid RANGEARRAY statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.READFILE:
+			if len(parameters) != 2 {
+				log.Fatalf("Invalid READFILE statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.READFILELINES:
+			if len(parameters) != 2 {
+				log.Fatalf("Invalid READFILELINES statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.WRITEFILE:
+			if len(parameters) != 2 {
+				log.Fatalf("Invalid WRITEFILE statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.SPLIT:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid SPLIT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		default:
 			log.Fatalf("Invalid instruction '%s'. Line %d.", tokenType, line)
