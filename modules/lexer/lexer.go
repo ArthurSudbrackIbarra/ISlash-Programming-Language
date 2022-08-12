@@ -149,6 +149,10 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 0 {
 				log.Fatalf("Invalid ENDWHILE statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.RANDOM:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid RANDOM statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		case token.BREAK:
 			if len(parameters) != 0 {
 				log.Fatalf("Invalid BREAK statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)

@@ -1,6 +1,8 @@
 # Declaring the unsorted array:
 set array [10,3,5,1,7,9,0,2,13,99,30,23]
 
+say "Array before sort: $(array)"
+
 length array iLimit
 
 length array yLimit
@@ -21,7 +23,6 @@ while iContinue
         if firstIsGreater
             swap array y yPlusOne
         endif
-        say array
         increment y
         less y yLimit yContinue
     endwhile
@@ -31,4 +32,4 @@ while iContinue
     less i iLimit iContinue
 endwhile
 
-say array
+say "Array after sort: $(array)"

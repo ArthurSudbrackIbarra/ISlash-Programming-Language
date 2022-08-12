@@ -18,6 +18,7 @@ const (
 	NOT          string = "NOT"
 	AND          string = "AND"
 	OR           string = "OR"
+	RANDOM       string = "RANDOM"
 	IF           string = "IF"
 	ELSE         string = "ELSE"
 	ENDIF        string = "ENDIF"

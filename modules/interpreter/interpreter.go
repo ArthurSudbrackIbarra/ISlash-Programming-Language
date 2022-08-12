@@ -6,10 +6,12 @@ import (
 	"islash/modules/token"
 	"log"
 	"math"
+	"math/rand"
 	"os"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 /*
@@ -30,6 +32,30 @@ func isRawString(value string) (bool, string) {
 		return false, ""
 	}
 	return true, strings.ReplaceAll(value, "\"", "")
+}
+
+func numberArraysAreEqual(array1 []float64, array2 []float64) bool {
+	if len(array1) != len(array2) {
+		return false
+	}
+	for i, element := range array1 {
+		if element != array2[i] {
+			return false
+		}
+	}
+	return true
+}
+
+func stringArraysAreEqual(array1 []string, array2 []string) bool {
+	if len(array1) != len(array2) {
+		return false
+	}
+	for i, element := range array1 {
+		if element != array2[i] {
+			return false
+		}
+	}
+	return true
 }
 
 /*
@@ -138,6 +164,19 @@ func (interpreter *Interpreter) isVariableDefined(key string) bool {
 	return interpreter.isNumberVar(key) || interpreter.isStringVar(key) || interpreter.isNumberArrayVar(key) || interpreter.isStringArrayVar(key)
 }
 
+func (interpreter *Interpreter) getVariableType(key string) string {
+	if interpreter.isNumberVar(key) {
+		return "number"
+	} else if interpreter.isStringVar(key) {
+		return "string"
+	} else if interpreter.isNumberArrayVar(key) {
+		return "numberarray"
+	} else if interpreter.isStringArrayVar(key) {
+		return "stringarray"
+	}
+	return "undefined"
+}
+
 const (
 	INTERPOLATION_LEFT  string = "$("
 	INTERPOLATION_RIGHT string = ")"
@@ -150,6 +189,12 @@ func (interpreter *Interpreter) handleString(str string) string {
 	}
 	for key, element := range interpreter.stringVarTable {
 		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_LEFT+key+INTERPOLATION_RIGHT, element)
+	}
+	for key, element := range interpreter.numberArrayVarTable {
+		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_LEFT+key+INTERPOLATION_RIGHT, strings.Join(strings.Fields(fmt.Sprint(element)), " "))
+	}
+	for key, element := range interpreter.stringArrayVarTable {
+		interpolated = strings.ReplaceAll(interpolated, INTERPOLATION_LEFT+key+INTERPOLATION_RIGHT, strings.Join(strings.Fields(fmt.Sprint(element)), " "))
 	}
 	return strings.ReplaceAll(interpolated, `\n`, "\n")
 }
@@ -238,6 +283,8 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			assignValue := currentToken.GetParameter(1)
 			if isRawNumber, _ := isRawNumber(variableName); isRawNumber {
 				log.Fatalf("Error: Variable name cannot be a number. Line %d.", currentToken.GetLine())
+			} else if isRawString, _ := isRawString(variableName); isRawString {
+				log.Fatalf("Error: Variable name cannot be a string. Line %d.", currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(assignValue); isRawNumber {
 				interpreter.numberVarTable[variableName] = value
@@ -272,9 +319,6 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			addValue2 := currentToken.GetParameter(1)
 			parsedAddValue2 := -1.0
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
 				parsedAddValue1 = value
 			} else if interpreter.isNumberVar(addValue1) {
@@ -290,15 +334,13 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = parsedAddValue1 + parsedAddValue2
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.SUB:
 			addValue1 := currentToken.GetParameter(0)
 			parsedAddValue1 := -1.0
 			addValue2 := currentToken.GetParameter(1)
 			parsedAddValue2 := -1.0
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
 				parsedAddValue1 = value
 			} else if interpreter.isNumberVar(addValue1) {
@@ -314,15 +356,13 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = parsedAddValue1 - parsedAddValue2
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.MULT:
 			addValue1 := currentToken.GetParameter(0)
 			parsedAddValue1 := -1.0
 			addValue2 := currentToken.GetParameter(1)
 			parsedAddValue2 := -1.0
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
 				parsedAddValue1 = value
 			} else if interpreter.isNumberVar(addValue1) {
@@ -338,15 +378,13 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = parsedAddValue1 * parsedAddValue2
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.DIV:
 			addValue1 := currentToken.GetParameter(0)
 			parsedAddValue1 := -1.0
 			addValue2 := currentToken.GetParameter(1)
 			parsedAddValue2 := -1.0
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
 				parsedAddValue1 = value
 			} else if interpreter.isNumberVar(addValue1) {
@@ -362,15 +400,13 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = parsedAddValue1 / parsedAddValue2
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.MOD:
 			addValue1 := currentToken.GetParameter(0)
 			parsedAddValue1 := -1.0
 			addValue2 := currentToken.GetParameter(1)
 			parsedAddValue2 := -1.0
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, value := isRawNumber(addValue1); isRawNumber {
 				parsedAddValue1 = value
 			} else if interpreter.isNumberVar(addValue1) {
@@ -386,6 +422,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = math.Mod(parsedAddValue1, parsedAddValue2)
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.POWER:
 			powerNumber := currentToken.GetParameter(0)
 			parsedPowerNumber := -1.0
@@ -462,14 +499,12 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
 			}
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if parsedFirstValue > parsedSecondValue {
 				interpreter.numberVarTable[variableName] = 1
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.GREATEREQUAL:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
@@ -490,14 +525,12 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
 			}
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if parsedFirstValue >= parsedSecondValue {
 				interpreter.numberVarTable[variableName] = 1
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.LESS:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
@@ -518,23 +551,18 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s', not a number or a number variable. Line %d.", firstValue, currentToken.GetLine())
 			}
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if parsedFirstValue < parsedSecondValue {
 				interpreter.numberVarTable[variableName] = 1
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.LESSEQUAL:
 			firstValue := currentToken.GetParameter(0)
 			parsedFirstValue := -1.0
 			secondValue := currentToken.GetParameter(1)
 			parsedSecondValue := -1.0
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, value := isRawNumber(firstValue); isRawNumber {
 				parsedFirstValue = value
 			} else if interpreter.isNumberVar(firstValue) {
@@ -554,24 +582,28 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
-		case token.EQUAL: // TODO: ARRAYS
+			interpreter.deleteVarIfSameName(variableName, "number")
+		case token.EQUAL:
 			firstValue := currentToken.GetParameter(0)
 			secondValue := currentToken.GetParameter(1)
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
-			if interpreter.isNumberVar(firstValue) && interpreter.isStringVar(secondValue) {
-				interpreter.numberVarTable[variableName] = 0
-				return
-			} else if interpreter.isNumberVar(secondValue) && interpreter.isStringVar(firstValue) {
-				interpreter.numberVarTable[variableName] = 0
-				return
+			var1Type := interpreter.getVariableType(firstValue)
+			var2Type := interpreter.getVariableType(secondValue)
+			if var1Type != "undefined" && var2Type != "undefined" {
+				if var1Type != var2Type {
+					interpreter.numberVarTable[variableName] = 0
+					interpreter.deleteVarIfSameName(variableName, "number")
+					return
+				}
 			}
 			isFirstValueRawNumber, numberValue1 := isRawNumber(firstValue)
 			isFirstValueRawString, stringValue1 := isRawString(firstValue)
 			isSecondValueRawNumber, numberValue2 := isRawNumber(secondValue)
 			isSecondValueRawString, stringValue2 := isRawString(secondValue)
+			isFirstRawNumberArray, numberArrayValue1 := interpreter.isRawNumberArray(firstValue)
+			isSecondRawNumberArray, numberArrayValue2 := interpreter.isRawNumberArray(secondValue)
+			isFirstRawStringArray, stringArrayValue1 := interpreter.isRawStringArray(firstValue)
+			isSecondRawStringArray, stringArrayValue2 := interpreter.isRawStringArray(secondValue)
 			if isFirstValueRawNumber && isSecondValueRawNumber {
 				if numberValue1 == numberValue2 {
 					interpreter.numberVarTable[variableName] = 1
@@ -620,6 +652,54 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				} else {
 					interpreter.numberVarTable[variableName] = 0
 				}
+			} else if isFirstRawNumberArray && isSecondRawNumberArray {
+				if numberArraysAreEqual(numberArrayValue1, numberArrayValue2) {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isFirstRawStringArray && isSecondRawStringArray {
+				if stringArraysAreEqual(stringArrayValue1, stringArrayValue2) {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isFirstRawNumberArray && interpreter.isNumberArrayVar(secondValue) {
+				if numberArraysAreEqual(numberArrayValue1, interpreter.numberArrayVarTable[secondValue]) {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isSecondRawNumberArray && interpreter.isNumberArrayVar(firstValue) {
+				if numberArraysAreEqual(numberArrayValue2, interpreter.numberArrayVarTable[firstValue]) {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isFirstRawStringArray && interpreter.isStringArrayVar(secondValue) {
+				if stringArraysAreEqual(stringArrayValue1, interpreter.stringArrayVarTable[secondValue]) {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if isSecondRawStringArray && interpreter.isStringArrayVar(firstValue) {
+				if stringArraysAreEqual(stringArrayValue2, interpreter.stringArrayVarTable[firstValue]) {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if interpreter.isNumberArrayVar(firstValue) && interpreter.isNumberArrayVar(secondValue) {
+				if numberArraysAreEqual(interpreter.numberArrayVarTable[firstValue], interpreter.numberArrayVarTable[secondValue]) {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
+			} else if interpreter.isStringArrayVar(firstValue) && interpreter.isStringArrayVar(secondValue) {
+				if stringArraysAreEqual(interpreter.stringArrayVarTable[firstValue], interpreter.stringArrayVarTable[secondValue]) {
+					interpreter.numberVarTable[variableName] = 1
+				} else {
+					interpreter.numberVarTable[variableName] = 0
+				}
 			} else {
 				if !interpreter.isVariableDefined(firstValue) || !interpreter.isVariableDefined(secondValue) {
 					log.Fatalf("Error: One or more variables are not defined. Line %d.", currentToken.GetLine())
@@ -627,24 +707,28 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					interpreter.numberVarTable[variableName] = 0
 				}
 			}
-		case token.NOTEQUAL: // TODO: ARRAYS
+			interpreter.deleteVarIfSameName(variableName, "number")
+		case token.NOTEQUAL:
 			firstValue := currentToken.GetParameter(0)
 			secondValue := currentToken.GetParameter(1)
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
-			if interpreter.isNumberVar(firstValue) && interpreter.isStringVar(secondValue) {
-				interpreter.numberVarTable[variableName] = 1
-				return
-			} else if interpreter.isNumberVar(secondValue) && interpreter.isStringVar(firstValue) {
-				interpreter.numberVarTable[variableName] = 1
-				return
+			var1Type := interpreter.getVariableType(firstValue)
+			var2Type := interpreter.getVariableType(secondValue)
+			if var1Type != "undefined" && var2Type != "undefined" {
+				if var1Type != var2Type {
+					interpreter.numberVarTable[variableName] = 0
+					interpreter.deleteVarIfSameName(variableName, "number")
+					return
+				}
 			}
 			isFirstValueRawNumber, numberValue1 := isRawNumber(firstValue)
 			isFirstValueRawString, stringValue1 := isRawString(firstValue)
 			isSecondValueRawNumber, numberValue2 := isRawNumber(secondValue)
 			isSecondValueRawString, stringValue2 := isRawString(secondValue)
+			isFirstRawNumberArray, numberArrayValue1 := interpreter.isRawNumberArray(firstValue)
+			isSecondRawNumberArray, numberArrayValue2 := interpreter.isRawNumberArray(secondValue)
+			isFirstRawStringArray, stringArrayValue1 := interpreter.isRawStringArray(firstValue)
+			isSecondRawStringArray, stringArrayValue2 := interpreter.isRawStringArray(secondValue)
 			if isFirstValueRawNumber && isSecondValueRawNumber {
 				if numberValue1 == numberValue2 {
 					interpreter.numberVarTable[variableName] = 0
@@ -693,6 +777,54 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				} else {
 					interpreter.numberVarTable[variableName] = 1
 				}
+			} else if isFirstRawNumberArray && isSecondRawNumberArray {
+				if numberArraysAreEqual(numberArrayValue1, numberArrayValue2) {
+					interpreter.numberVarTable[variableName] = 0
+				} else {
+					interpreter.numberVarTable[variableName] = 1
+				}
+			} else if isFirstRawStringArray && isSecondRawStringArray {
+				if stringArraysAreEqual(stringArrayValue1, stringArrayValue2) {
+					interpreter.numberVarTable[variableName] = 0
+				} else {
+					interpreter.numberVarTable[variableName] = 1
+				}
+			} else if isFirstRawNumberArray && interpreter.isNumberArrayVar(secondValue) {
+				if numberArraysAreEqual(numberArrayValue1, interpreter.numberArrayVarTable[secondValue]) {
+					interpreter.numberVarTable[variableName] = 0
+				} else {
+					interpreter.numberVarTable[variableName] = 1
+				}
+			} else if isSecondRawNumberArray && interpreter.isNumberArrayVar(firstValue) {
+				if numberArraysAreEqual(numberArrayValue2, interpreter.numberArrayVarTable[firstValue]) {
+					interpreter.numberVarTable[variableName] = 0
+				} else {
+					interpreter.numberVarTable[variableName] = 1
+				}
+			} else if isFirstRawStringArray && interpreter.isStringArrayVar(secondValue) {
+				if stringArraysAreEqual(stringArrayValue1, interpreter.stringArrayVarTable[secondValue]) {
+					interpreter.numberVarTable[variableName] = 0
+				} else {
+					interpreter.numberVarTable[variableName] = 1
+				}
+			} else if isSecondRawStringArray && interpreter.isStringArrayVar(firstValue) {
+				if stringArraysAreEqual(stringArrayValue2, interpreter.stringArrayVarTable[firstValue]) {
+					interpreter.numberVarTable[variableName] = 0
+				} else {
+					interpreter.numberVarTable[variableName] = 1
+				}
+			} else if interpreter.isNumberArrayVar(firstValue) && interpreter.isNumberArrayVar(secondValue) {
+				if numberArraysAreEqual(interpreter.numberArrayVarTable[firstValue], interpreter.numberArrayVarTable[secondValue]) {
+					interpreter.numberVarTable[variableName] = 0
+				} else {
+					interpreter.numberVarTable[variableName] = 1
+				}
+			} else if interpreter.isStringArrayVar(firstValue) && interpreter.isStringArrayVar(secondValue) {
+				if stringArraysAreEqual(interpreter.stringArrayVarTable[firstValue], interpreter.stringArrayVarTable[secondValue]) {
+					interpreter.numberVarTable[variableName] = 0
+				} else {
+					interpreter.numberVarTable[variableName] = 1
+				}
 			} else {
 				if !interpreter.isVariableDefined(firstValue) || !interpreter.isVariableDefined(secondValue) {
 					log.Fatalf("Error: One or more variables are not defined. Line %d.", currentToken.GetLine())
@@ -700,12 +832,10 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					interpreter.numberVarTable[variableName] = 1
 				}
 			}
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.NOT:
 			notTarget := currentToken.GetParameter(0)
 			variableName := currentToken.GetParameter(1)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, value := isRawNumber(notTarget); isRawNumber {
 				if value >= 1 {
 					interpreter.numberVarTable[variableName] = 0
@@ -721,15 +851,13 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Invalid parameter '%s'. Line %d.", notTarget, currentToken.GetLine())
 			}
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.AND:
 			andTarget1 := currentToken.GetParameter(0)
 			parsedTarget1 := -1.0
 			andTarget2 := currentToken.GetParameter(1)
 			parsedTarget2 := -1.0
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, value := isRawNumber(andTarget1); isRawNumber {
 				parsedTarget1 = value
 			} else if interpreter.isNumberVar(andTarget1) {
@@ -749,15 +877,13 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.OR:
 			orTarget1 := currentToken.GetParameter(0)
 			parsedTarget1 := -1.0
 			orTarget2 := currentToken.GetParameter(1)
 			parsedTarget2 := -1.0
 			variableName := currentToken.GetParameter(2)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawNumber, value := isRawNumber(orTarget1); isRawNumber {
 				parsedTarget1 = value
 			} else if interpreter.isNumberVar(orTarget1) {
@@ -777,6 +903,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				interpreter.numberVarTable[variableName] = 0
 			}
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.IF:
 			condition := currentToken.GetParameter(0)
 			parsedCondition := -1.0
@@ -838,9 +965,6 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 		case token.LENGTH:
 			target := currentToken.GetParameter(0)
 			variableName := currentToken.GetParameter(1)
-			if interpreter.isStringVar(variableName) {
-				log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-			}
 			if isRawString, value := isRawString(target); isRawString {
 				interpreter.numberVarTable[variableName] = float64(len(interpreter.handleString(value)))
 			} else if interpreter.isStringVar(target) {
@@ -856,6 +980,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
 			}
+			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.GETCHAR:
 			str := currentToken.GetParameter(0)
 			index := currentToken.GetParameter(1)
@@ -867,9 +992,6 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				parsedIndex = interpreter.numberVarTable[index]
 			} else {
 				log.Fatalf("Error: Invalid parameter '%s', must be a number or a number variable. Line %d.", index, currentToken.GetLine())
-			}
-			if interpreter.isNumberVar(variableName) {
-				log.Fatalf("Error: Invalid parameter '%s', already a number variable. Line %d.", variableName, currentToken.GetLine())
 			}
 			if isRawString, value := isRawString(str); isRawString {
 				handledStr := interpreter.handleString(value)
@@ -885,6 +1007,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", str, currentToken.GetLine())
 			}
+			interpreter.deleteVarIfSameName(variableName, "string")
 		case token.SAY:
 			output := currentToken.GetParameter(0)
 			if isRawNumber, value := isRawNumber(output); isRawNumber {
@@ -1055,7 +1178,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else if interpreter.isNumberVar(index) {
 				parsedIndex = interpreter.numberVarTable[index]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number. Line %d.", index, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", index, currentToken.GetLine())
 			}
 			if interpreter.isNumberArrayVar(array) {
 				parsedNewValue := -1.0
@@ -1142,41 +1265,33 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", index, currentToken.GetLine())
 			}
 			if isRawNumberArray, value := interpreter.isRawNumberArray(array); isRawNumberArray {
-				if interpreter.isStringVar(variableName) {
-					log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-				}
 				if int(parsedIndex) < len(value) {
 					interpreter.numberVarTable[variableName] = value[int(parsedIndex)]
 				} else {
 					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
 				}
+				interpreter.deleteVarIfSameName(variableName, "number")
 			} else if isRawStringArray, value := interpreter.isRawStringArray(array); isRawStringArray {
-				if interpreter.isNumberVar(variableName) {
-					log.Fatalf("Error: Invalid parameter '%s', already a number variable. Line %d.", variableName, currentToken.GetLine())
-				}
 				if int(parsedIndex) < len(value) {
 					interpreter.stringVarTable[variableName] = value[int(parsedIndex)]
 				} else {
 					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
 				}
+				interpreter.deleteVarIfSameName(variableName, "string")
 			} else if interpreter.isNumberArrayVar(array) {
-				if interpreter.isStringVar(variableName) {
-					log.Fatalf("Error: Invalid parameter '%s', already a string variable. Line %d.", variableName, currentToken.GetLine())
-				}
 				if int(parsedIndex) < len(interpreter.numberArrayVarTable[array]) {
 					interpreter.numberVarTable[variableName] = interpreter.numberArrayVarTable[array][int(parsedIndex)]
 				} else {
 					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
 				}
+				interpreter.deleteVarIfSameName(variableName, "number")
 			} else if interpreter.isStringArrayVar(array) {
-				if interpreter.isNumberVar(variableName) {
-					log.Fatalf("Error: Invalid parameter '%s', already a number variable. Line %d.", variableName, currentToken.GetLine())
-				}
 				if int(parsedIndex) < len(interpreter.stringArrayVarTable[array]) {
 					interpreter.stringVarTable[variableName] = interpreter.stringArrayVarTable[array][int(parsedIndex)]
 				} else {
 					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
 				}
+				interpreter.deleteVarIfSameName(variableName, "string")
 			} else {
 				log.Fatalf("Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
 			}
@@ -1266,6 +1381,30 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 				array[i] = float64(i)
 			}
 			interpreter.numberArrayVarTable[variableName] = array
+		case token.RANDOM:
+			min := currentToken.GetParameter(0)
+			parsedMin := -1.0
+			max := currentToken.GetParameter(1)
+			parsedMax := -1.0
+			variableName := currentToken.GetParameter(2)
+			if isRawNumber, value := isRawNumber(min); isRawNumber {
+				parsedMin = value
+			} else if interpreter.isNumberVar(min) {
+				parsedMin = interpreter.numberVarTable[min]
+			} else {
+				log.Fatalf("Invalid parameter '%s'. Line %d.", min, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(max); isRawNumber {
+				parsedMax = value
+			} else if interpreter.isNumberVar(max) {
+				parsedMax = interpreter.numberVarTable[max]
+			} else {
+				log.Fatalf("Invalid parameter '%s'. Line %d.", max, currentToken.GetLine())
+			}
+			rand.Seed(time.Now().UnixNano())
+			random := float64(rand.Intn(int(parsedMax-parsedMin+1))) + parsedMin
+			interpreter.numberVarTable[variableName] = random
+			interpreter.deleteVarIfSameName(variableName, "number")
 		}
 	}
 }
