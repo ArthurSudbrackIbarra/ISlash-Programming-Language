@@ -21,69 +21,76 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 * [Try ISlash](#try-islash)
 * [Language Support in VSCode](#language-support-in-vscode)
 * [Uninstall ISlash](#uninstall-islash)
-* [Known Issues](#known-issues)
 
 ## Example Programs
 
 Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
 
-In the example below, we are calculating the sum of *X* numbers inputed by the user.
+In the example below, we are multiplying numbers inputed by the user.
 
-![Example Program](https://user-images.githubusercontent.com/69170322/184058971-f64d1b1f-2f5c-4ce1-89d5-8e4bdc8f3f83.png)
+![Example Program](https://user-images.githubusercontent.com/69170322/184281568-9251885e-06d5-4089-a115-b09a803836cc.png)
 
 ## Data Types
 
 | Data Type | Description                                                                                                  |
-|-----------|--------------------------------------------------------------------------------------------------------------|
-| string    | Strings are declared with double quotes. Ex: "Hello!"                                                        |
-| number    | Numbers may or may not have decimal places. Ex: 1, 2.3                                                       |
-| array     | Arrays are declared with square brackets. Ex: [1,2,3], ["Hi","Hello"]. Do **not** put spaces between commas. |
+|:---------:|:------------------------------------------------------------------------------------------------------------:|
+|   string  | Strings are declared with double quotes. Ex: "Hello!"                                                        |
+|   number  | Numbers may or may not have decimal places. Ex: 1, 2.3                                                       |
+|   array   | Arrays are declared with square brackets. Ex: [1,2,3], ["Hi","Hello"]. Do **not** put spaces between commas. |
 
 In ISlash, although there is not a boolean data type, numbers can be used to represent boolean values:
 
 | Boolean Value | Numbers Range |
-|---------------|---------------|
-| true          | numbers ≥ 1   |
-| false         | numbers < 0   |
+|:-------------:|:-------------:|
+|      true     |  numbers ≥ 1  |
+|     false     |  numbers < 0  |
 
 ## Instructions
 
 Instructions are **not case sensitive**.
 
-|  Instruction |                Description               |
-|:------------:|:----------------------------------------:|
-|      SET     |         Sets/declares variables.         |
-|      ADD     |                + operator.               |
-|      SUB     |                - operator.               |
-|     MULT     |                * operator.               |
-|      DIV     |                / operator.               |
-|      MOD     |                % operator.               |
-|   INCREMENT  |           ++ operator (Adds 1).          |
-|   DECREMENT  |        -- operator (Subtracts 1).        |
-|    GREATER   |                > operator.               |
-| GREATEREQUAL |               >= operator.               |
-|     LESS     |                < operator.               |
-|   LESSEQUAL  |               <= operator.               |
-|      NOT     |               NOT operator               |
-|      AND     |               AND operator.              |
-|      OR      |               OR operator.               |
-|      IF      |              If statements.              |
-|     ELSE     |             Else statements.             |
-|     ENDIF    |             Closes if blocks.            |
-|     EQUAL    |               == operator.               |
-|   NOTEQUAL   |               != operator.               |
-|    CONCAT    |           Concatenates strings.          |
-|    LENGTH    | Gets the length of a string or an array. |
-|    GETCHAR   |      Gets the nth char of a string.      |
-|      SAY     |             Prints to screen.            |
-|     INPUT    |             Gets user input.             |
-|     WHILE    |             While statements.            |
-|   ENDWHILE   |           Closes while blocks.           |
-|    FOREACH   |        Use to iterate over arrays.       |
-|  ENDFOREACH  |          Closes foreach blocks.          |
-|     BREAK    |           (Not implemented yet)          |
-|    APPEND    |      Appends an element to an array.     |
-|  ACCESSINDEX |     Gets the nth element of an array.    |
+|  Instruction | Description                                      |
+|:------------:|--------------------------------------------------|
+|      SET     | Sets/declares variables.                         |
+|      ADD     | + operator.                                      |
+|      SUB     | - operator.                                      |
+|     MULT     | * operator.                                      |
+|      DIV     | / operator.                                      |
+|      MOD     | % operator.                                      |
+|     POWER    | ^ operator.                                      |
+|     ROOT     | Square roots, cubic roots...                     |
+|   INCREMENT  | ++ operator (Adds 1).                            |
+|   DECREMENT  | -- operator (Subtracts 1).                       |
+|    RANDOM    | Generates a random integer value within a range. |
+|    GREATER   | > operator.                                      |
+| GREATEREQUAL | >= operator.                                     |
+|     LESS     | < operator.                                      |
+|   LESSEQUAL  | <= operator.                                     |
+|      NOT     | NOT operator                                     |
+|      AND     | AND operator.                                    |
+|      OR      | OR operator.                                     |
+|      IF      | If statements.                                   |
+|     ELSE     | Else statements.                                 |
+|     ENDIF    | Closes if blocks.                                |
+|     EQUAL    | == operator.                                     |
+|   NOTEQUAL   | != operator.                                     |
+|    CONCAT    | Concatenates strings.                            |
+|    LENGTH    | Gets the length of a string or an array.         |
+|    GETCHAR   | Gets the nth char of a string.                   |
+|      SAY     | Prints to screen.                                |
+|     INPUT    | Gets user input.                                 |
+|     WHILE    | While statements.                                |
+|   ENDWHILE   | Closes while blocks.                             |
+|    FOREACH   | Use to iterate over arrays.                      |
+|  ENDFOREACH  | Closes foreach blocks.                           |
+|     BREAK    | (Not implemented yet).                           |
+|    APPEND    | Appends an element to an array.                  |
+|    PREPEND   | Preppends an element to an array.                |
+|  REMOVEFIRST | Removes the first element of an array.           |
+|  REMOVELAST  | Removes the last element of an array.            |
+|     SWAP     | Swaps arrays positions.                          |
+|  ACCESSINDEX | Gets the nth element of an array.                |
+|   SETINDEX   | Changes the element at an index.                 |
 
 ## Language Features
 
@@ -218,9 +225,3 @@ docker rm islash-container
 ```sh
 docker rmi islash/islash-programming-language:v1
 ```
-
-## Known Issues
-
-The issues listed below are known by me and **will be fixed soon**:
-
-* It is currently not possible to compare arrays with the 'equal' or 'notequal' instructions.

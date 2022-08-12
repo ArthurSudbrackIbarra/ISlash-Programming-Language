@@ -57,6 +57,14 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 3 {
 				log.Fatalf("Invalid MOD statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.POWER:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid POWER statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.ROOT:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid ROOT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		case token.INCREMENT:
 			if len(parameters) != 1 {
 				log.Fatalf("Invalid INCREMENT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
@@ -141,6 +149,10 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 0 {
 				log.Fatalf("Invalid ENDWHILE statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.RANDOM:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid RANDOM statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		case token.BREAK:
 			if len(parameters) != 0 {
 				log.Fatalf("Invalid BREAK statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
@@ -148,6 +160,26 @@ func MountTokens(filePath string) []*token.Token {
 		case token.APPEND:
 			if len(parameters) != 2 {
 				log.Fatalf("Invalid APPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.PREPEND:
+			if len(parameters) != 2 {
+				log.Fatalf("Invalid PREPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.REMOVEFIRST:
+			if len(parameters) != 2 {
+				log.Fatalf("Invalid REMOVEFIRST statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.REMOVELAST:
+			if len(parameters) != 2 {
+				log.Fatalf("Invalid REMOVELAST statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.SETINDEX:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid SETINDEX statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.SWAP:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid SWAP statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.ACCESSINDEX:
 			if len(parameters) != 3 {
@@ -160,6 +192,10 @@ func MountTokens(filePath string) []*token.Token {
 		case token.ENDFOREACH:
 			if len(parameters) != 0 {
 				log.Fatalf("Invalid ENDFOREACH statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.RANGEARRAY:
+			if len(parameters) != 2 {
+				log.Fatalf("Invalid RANGEARRAY statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		default:
 			log.Fatalf("Invalid instruction '%s'. Line %d.", tokenType, line)

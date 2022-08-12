@@ -7,6 +7,8 @@ const (
 	MULT         string = "MULT"
 	DIV          string = "DIV"
 	MOD          string = "MOD"
+	POWER        string = "POWER"
+	ROOT         string = "ROOT"
 	INCREMENT    string = "INCREMENT"
 	DECREMENT    string = "DECREMENT"
 	GREATER      string = "GREATER"
@@ -16,6 +18,7 @@ const (
 	NOT          string = "NOT"
 	AND          string = "AND"
 	OR           string = "OR"
+	RANDOM       string = "RANDOM"
 	IF           string = "IF"
 	ELSE         string = "ELSE"
 	ENDIF        string = "ENDIF"
@@ -33,6 +36,12 @@ const (
 	ENDFOREACH   string = "ENDFOREACH"
 	ACCESSINDEX  string = "ACCESSINDEX"
 	APPEND       string = "APPEND"
+	PREPEND      string = "PREPEND"
+	REMOVEFIRST  string = "REMOVEFIRST"
+	REMOVELAST   string = "REMOVELAST"
+	SWAP         string = "SWAP"
+	SETINDEX     string = "SETINDEX"
+	RANGEARRAY   string = "RANGEARRAY"
 )
 
 type Token struct {
