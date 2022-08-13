@@ -11,6 +11,7 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 ## Table of Contents
 
 * [Example Programs](#example-programs)
+* [Language Support in VSCode](#language-support-in-vscode)
 * [Data Types](#data-types)
 * [Instructions](#instructions)
 * [Language Features](#language-features)
@@ -19,7 +20,6 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
     * [New Lines in Strings](#new-lines-in-strings)
 * [Things to Notice](#things-to-notice)
 * [Try ISlash](#try-islash)
-* [Language Support in VSCode](#language-support-in-vscode)
 * [Uninstall ISlash](#uninstall-islash)
 
 ## Example Programs
@@ -29,6 +29,10 @@ Example programs using the ISlash language can be found inside the [programs fol
 In the example below, we are multiplying numbers inputed by the user.
 
 ![Example Program](https://user-images.githubusercontent.com/69170322/184281568-9251885e-06d5-4089-a115-b09a803836cc.png)
+
+## Language Support in VSCode
+
+Download the [ISlash Language Support](https://marketplace.visualstudio.com/items?itemName=ArthurSudbrackIbarra.islash-language-support) Visual Studio Code extension to get syntax highlighting, code snippets, hovering tips and language icon.
 
 ## Data Types
 
@@ -206,10 +210,6 @@ islash myProgram.isl
 ![Running Programs](https://user-images.githubusercontent.com/69170322/183551455-e2b7d46f-7115-4a69-a03a-eafb5b67a323.png)
 
 **NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .isl files or create new ones in your host machine and then run them from inside the container. 
-
-## Language Support in VSCode
-
-The ISlash language support Visual Studio Code extension will be released soon...
 
 ## Uninstall ISlash
 
