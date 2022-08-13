@@ -3,11 +3,14 @@ package interpreter
 import (
 	"bufio"
 	"fmt"
+	"islash/modules/io"
 	"islash/modules/token"
 	"log"
 	"math"
 	"math/rand"
 	"os"
+	"path/filepath"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -58,6 +61,24 @@ func stringArraysAreEqual(array1 []string, array2 []string) bool {
 	return true
 }
 
+func containsNumberArray(array []float64, element float64) bool {
+	for _, arrayElement := range array {
+		if arrayElement == element {
+			return true
+		}
+	}
+	return false
+}
+
+func containsStrArray(array []string, element string) bool {
+	for _, arrayElement := range array {
+		if arrayElement == element {
+			return true
+		}
+	}
+	return false
+}
+
 /*
 	End - Helper functions
 */
@@ -71,6 +92,7 @@ type Interpreter struct {
 	whileStack          *Stack
 	foreachIndexesStack *Stack
 	foreachNamesStack   *Stack
+	lastForeachEnded    bool
 	varsToDelete        *Stack
 }
 
@@ -84,6 +106,7 @@ func NewInterpreter() *Interpreter {
 		whileStack:          NewEmptyStack(),
 		foreachIndexesStack: NewEmptyStack(),
 		foreachNamesStack:   NewEmptyStack(),
+		lastForeachEnded:    false,
 		varsToDelete:        NewEmptyStack(),
 	}
 }
@@ -259,7 +282,7 @@ func (interpreter *Interpreter) deleteVarIfSameName(varName string, varType stri
 }
 
 func (interpreter *Interpreter) deleteVars() {
-	for true {
+	for {
 		if interpreter.varsToDelete.IsEmpty() {
 			break
 		}
@@ -271,7 +294,7 @@ func (interpreter *Interpreter) deleteVars() {
 	}
 }
 
-func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
+func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeDir string) {
 	for i := 0; i < len(tokensList); i++ {
 		if i >= len(tokensList) {
 			break
@@ -962,6 +985,97 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else {
 				log.Fatalf("Error: Referenced nonexistent variable '%s'. Line %d.", concatValue, currentToken.GetLine())
 			}
+		case token.UPPER:
+			str := currentToken.GetParameter(0)
+			parsedStr := ""
+			variableName := currentToken.GetParameter(1)
+			if isRawString, value := isRawString(str); isRawString {
+				parsedStr = interpreter.handleString(value)
+			} else if interpreter.isStringVar(str) {
+				parsedStr = interpreter.stringVarTable[str]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a raw string or string variable. Line %d.", str, currentToken.GetLine())
+			}
+			interpreter.stringVarTable[variableName] = strings.ToUpper(parsedStr)
+			interpreter.deleteVarIfSameName(variableName, "string")
+		case token.LOWER:
+			str := currentToken.GetParameter(0)
+			parsedStr := ""
+			variableName := currentToken.GetParameter(1)
+			if isRawString, value := isRawString(str); isRawString {
+				parsedStr = interpreter.handleString(value)
+			} else if interpreter.isStringVar(str) {
+				parsedStr = interpreter.stringVarTable[str]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a raw string or string variable. Line %d.", str, currentToken.GetLine())
+			}
+			interpreter.stringVarTable[variableName] = strings.ToLower(parsedStr)
+			interpreter.deleteVarIfSameName(variableName, "string")
+		case token.CONTAINS:
+			var target interface{}
+			target = currentToken.GetParameter(0)
+			var toFind interface{}
+			toFind = currentToken.GetParameter(1)
+			variableName := currentToken.GetParameter(2)
+			if isRawString, value := isRawString(target.(string)); isRawString {
+				target = interpreter.handleString(value)
+			} else if interpreter.isStringVar(target.(string)) {
+				target = interpreter.stringVarTable[target.(string)]
+			} else if isRawNumberArray, value := interpreter.isRawNumberArray(target.(string)); isRawNumberArray {
+				target = value
+			} else if interpreter.isNumberArrayVar(target.(string)) {
+				target = interpreter.numberArrayVarTable[target.(string)]
+			} else if isRawStringArray, value := interpreter.isRawStringArray(target.(string)); isRawStringArray {
+				target = value
+			} else if interpreter.isStringArrayVar(target.(string)) {
+				target = interpreter.stringArrayVarTable[target.(string)]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a string or an array. Line %d.", target, currentToken.GetLine())
+			}
+			if isRawString, value := isRawString(toFind.(string)); isRawString {
+				toFind = interpreter.handleString(value)
+			} else if interpreter.isStringVar(toFind.(string)) {
+				toFind = interpreter.stringVarTable[toFind.(string)]
+			} else if isRawNumber, value := isRawNumber(toFind.(string)); isRawNumber {
+				toFind = value
+			} else if interpreter.isNumberVar(toFind.(string)) {
+				toFind = interpreter.numberVarTable[toFind.(string)]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a string or a number. Line %d.", toFind, currentToken.GetLine())
+			}
+			if reflect.TypeOf(target).String() == "string" {
+				if reflect.TypeOf(toFind).String() == "string" {
+					if strings.Contains(target.(string), toFind.(string)) {
+						interpreter.numberVarTable[variableName] = 1
+					} else {
+						interpreter.numberVarTable[variableName] = 0
+					}
+				} else {
+					log.Fatalf("Error: Invalid parameter '%s', not a string. Line %d.", toFind, currentToken.GetLine())
+				}
+			} else if reflect.TypeOf(target).String() == "[]float64" {
+				if reflect.TypeOf(toFind).String() == "float64" {
+					if containsNumberArray(target.([]float64), toFind.(float64)) {
+						interpreter.numberVarTable[variableName] = 1
+					} else {
+						interpreter.numberVarTable[variableName] = 0
+					}
+				} else {
+					log.Fatalf("Error: Invalid parameter '%s', not a number. Line %d.", toFind, currentToken.GetLine())
+				}
+			} else if reflect.TypeOf(target).String() == "[]string" {
+				if reflect.TypeOf(toFind).String() == "string" {
+					if containsStrArray(target.([]string), toFind.(string)) {
+						interpreter.numberVarTable[variableName] = 1
+					} else {
+						interpreter.numberVarTable[variableName] = 0
+					}
+				} else {
+					log.Fatalf("Error: Invalid parameter '%s', not a string. Line %d.", toFind, currentToken.GetLine())
+				}
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s', not a string or an array. Line %d.", target, currentToken.GetLine())
+			}
 		case token.LENGTH:
 			target := currentToken.GetParameter(0)
 			variableName := currentToken.GetParameter(1)
@@ -1301,6 +1415,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			if !interpreter.foreachNamesStack.Contains(element) {
 				interpreter.foreachIndexesStack.Push([]int{i, 0})
 				interpreter.foreachNamesStack.Push(element)
+				interpreter.lastForeachEnded = false
 			}
 			currentIndex := interpreter.foreachIndexesStack.Pop().([]int)[1]
 			nextIndex := currentIndex + 1
@@ -1313,7 +1428,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					if nextIndex < len(value) {
 						interpreter.foreachIndexesStack.Push([]int{i, currentIndex + 1})
 					} else {
-						interpreter.foreachNamesStack.Pop()
+						interpreter.lastForeachEnded = true
 					}
 				}
 			} else if isRawStringArray, value := interpreter.isRawStringArray(array); isRawStringArray {
@@ -1325,7 +1440,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 					if nextIndex < len(value) {
 						interpreter.foreachIndexesStack.Push([]int{i, currentIndex + 1})
 					} else {
-						interpreter.foreachNamesStack.Pop()
+						interpreter.lastForeachEnded = true
 					}
 				}
 			} else if interpreter.isNumberArrayVar(array) {
@@ -1338,7 +1453,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 						interpreter.foreachIndexesStack.Push([]int{i, currentIndex + 1})
 					} else {
 						interpreter.varsToDelete.Push(element)
-						interpreter.foreachNamesStack.Pop()
+						interpreter.lastForeachEnded = true
 					}
 				}
 			} else if interpreter.isStringArrayVar(array) {
@@ -1351,17 +1466,19 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 						interpreter.foreachIndexesStack.Push([]int{i, currentIndex + 1})
 					} else {
 						interpreter.varsToDelete.Push(element)
-						interpreter.foreachNamesStack.Pop()
+						interpreter.lastForeachEnded = true
 					}
 				}
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
 			}
 		case token.ENDFOREACH:
 			goToIndex, notEmpty := interpreter.foreachIndexesStack.Top().([]int)
-			if notEmpty {
+			if notEmpty && !interpreter.lastForeachEnded {
 				i = goToIndex[0] - 1
 			} else {
+				interpreter.lastForeachEnded = false
+				interpreter.foreachNamesStack.Pop()
 				interpreter.deleteVars()
 			}
 		case token.RANGEARRAY:
@@ -1373,7 +1490,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else if interpreter.isNumberVar(arrayRange) {
 				parsedArrayRange = interpreter.numberVarTable[arrayRange]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", arrayRange, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", arrayRange, currentToken.GetLine())
 			}
 			interpreter.deleteVarIfSameName(variableName, "numberarray")
 			array := make([]float64, int(parsedArrayRange))
@@ -1392,19 +1509,101 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token) {
 			} else if interpreter.isNumberVar(min) {
 				parsedMin = interpreter.numberVarTable[min]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", min, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", min, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(max); isRawNumber {
 				parsedMax = value
 			} else if interpreter.isNumberVar(max) {
 				parsedMax = interpreter.numberVarTable[max]
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", max, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", max, currentToken.GetLine())
 			}
 			rand.Seed(time.Now().UnixNano())
 			random := float64(rand.Intn(int(parsedMax-parsedMin+1))) + parsedMin
 			interpreter.numberVarTable[variableName] = random
 			interpreter.deleteVarIfSameName(variableName, "number")
+		case token.READFILE:
+			filePath := currentToken.GetParameter(0)
+			variableName := currentToken.GetParameter(1)
+			parsedFilePath := ""
+			if isRawString, value := isRawString(filePath); isRawString {
+				parsedFilePath = value
+			} else if interpreter.isStringVar(filePath) {
+				parsedFilePath = interpreter.stringVarTable[filePath]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
+			}
+			parsedFilePath = filepath.Join(sourceCodeDir, parsedFilePath)
+			fileContent := io.GetFileContent(parsedFilePath)
+			interpreter.stringVarTable[variableName] = fileContent
+			interpreter.deleteVarIfSameName(variableName, "string")
+		case token.READFILELINES:
+			filePath := currentToken.GetParameter(0)
+			variableName := currentToken.GetParameter(1)
+			parsedFilePath := ""
+			if isRawString, value := isRawString(filePath); isRawString {
+				parsedFilePath = value
+			} else if interpreter.isStringVar(filePath) {
+				parsedFilePath = interpreter.stringVarTable[filePath]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
+			}
+			parsedFilePath = filepath.Join(sourceCodeDir, parsedFilePath)
+			fileContent := io.GetFileLinesNoTrim(parsedFilePath)
+			interpreter.stringArrayVarTable[variableName] = fileContent
+			interpreter.deleteVarIfSameName(variableName, "stringarray")
+		case token.WRITEFILE:
+			filePath := currentToken.GetParameter(0)
+			parsedFilePath := ""
+			fileContent := currentToken.GetParameter(1)
+			parsedFileContent := ""
+			if isRawString, value := isRawString(filePath); isRawString {
+				parsedFilePath = value
+			} else if interpreter.isStringVar(filePath) {
+				parsedFilePath = interpreter.stringVarTable[filePath]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
+			}
+			if isRawString, value := isRawString(fileContent); isRawString {
+				parsedFileContent = value
+			} else if interpreter.isStringVar(fileContent) {
+				parsedFileContent = interpreter.stringVarTable[fileContent]
+			} else if isRawNumber, value := isRawNumber(fileContent); isRawNumber {
+				parsedFileContent = strconv.FormatFloat(value, 'f', -1, 64)
+			} else if interpreter.isNumberVar(fileContent) {
+				parsedFileContent = strconv.FormatFloat(interpreter.numberVarTable[fileContent], 'f', -1, 64)
+			} else if interpreter.isNumberArrayVar(fileContent) {
+				for _, value := range interpreter.numberArrayVarTable[fileContent] {
+					parsedFileContent += strconv.FormatFloat(value, 'f', -1, 64) + " "
+				}
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", fileContent, currentToken.GetLine())
+			}
+			parsedFilePath = filepath.Join(sourceCodeDir, parsedFilePath)
+			io.WriteToFile(parsedFilePath, parsedFileContent)
+		case token.SPLIT:
+			target := currentToken.GetParameter(0)
+			pattern := currentToken.GetParameter(1)
+			variableName := currentToken.GetParameter(2)
+			parsedTarget := ""
+			parsedPattern := ""
+			if isRawString, value := isRawString(target); isRawString {
+				parsedTarget = value
+			} else if interpreter.isStringVar(target) {
+				parsedTarget = interpreter.stringVarTable[target]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
+			}
+			if isRawString, value := isRawString(pattern); isRawString {
+				parsedPattern = value
+			} else if interpreter.isStringVar(pattern) {
+				parsedPattern = interpreter.stringVarTable[pattern]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", pattern, currentToken.GetLine())
+			}
+			splitted := strings.Split(parsedTarget, parsedPattern)
+			interpreter.stringArrayVarTable[variableName] = splitted
+			interpreter.deleteVarIfSameName(variableName, "stringarray")
 		}
 	}
 }
