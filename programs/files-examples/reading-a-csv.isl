@@ -1,5 +1,5 @@
 # CSV file path.
-set csvPath "resources/csv/names.csv"
+set csvPath "../resources/csv/names.csv"
 
 # Reading files and storing content as string[] in csvContent.
 readfilelines csvPath csvLines

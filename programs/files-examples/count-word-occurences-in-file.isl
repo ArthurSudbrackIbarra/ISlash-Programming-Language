@@ -1,7 +1,7 @@
 set wordToFind "WATERMELONS"
 set occurences 0
 
-set filePath "resources/text/sentence.txt"
+set filePath "../resources/text/sentence.txt"
 readfilelines filePath fileLines
 
 foreach line fileLines
