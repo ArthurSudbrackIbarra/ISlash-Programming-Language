@@ -37,30 +37,6 @@ func isRawString(value string) (bool, string) {
 	return true, strings.ReplaceAll(value, "\"", "")
 }
 
-func numberArraysAreEqual(array1 []float64, array2 []float64) bool {
-	if len(array1) != len(array2) {
-		return false
-	}
-	for i, element := range array1 {
-		if element != array2[i] {
-			return false
-		}
-	}
-	return true
-}
-
-func stringArraysAreEqual(array1 []string, array2 []string) bool {
-	if len(array1) != len(array2) {
-		return false
-	}
-	for i, element := range array1 {
-		if element != array2[i] {
-			return false
-		}
-	}
-	return true
-}
-
 func containsNumberArray(array []float64, element float64) bool {
 	for _, arrayElement := range array {
 		if arrayElement == element {
@@ -181,23 +157,6 @@ func (interpreter *Interpreter) isRawStringArray(value string) (bool, []string) 
 		}
 	}
 	return true, strArray
-}
-
-func (interpreter *Interpreter) isVariableDefined(key string) bool {
-	return interpreter.isNumberVar(key) || interpreter.isStringVar(key) || interpreter.isNumberArrayVar(key) || interpreter.isStringArrayVar(key)
-}
-
-func (interpreter *Interpreter) getVariableType(key string) string {
-	if interpreter.isNumberVar(key) {
-		return "number"
-	} else if interpreter.isStringVar(key) {
-		return "string"
-	} else if interpreter.isNumberArrayVar(key) {
-		return "numberarray"
-	} else if interpreter.isStringArrayVar(key) {
-		return "stringarray"
-	}
-	return "undefined"
 }
 
 const (
@@ -650,7 +609,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else {
 				log.Fatalf("Error Invalid parameter '%s', variable not defined. Line %d.", secondValue, currentToken.GetLine())
 			}
-			if firstValue == secondValue {
+			if reflect.DeepEqual(firstValue, secondValue) {
 				interpreter.numberVarTable[variableName] = 1
 			} else {
 				interpreter.numberVarTable[variableName] = 0
@@ -700,7 +659,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else {
 				log.Fatalf("Error Invalid parameter '%s', variable not defined. Line %d.", secondValue, currentToken.GetLine())
 			}
-			if firstValue != secondValue {
+			if !reflect.DeepEqual(firstValue, secondValue) {
 				interpreter.numberVarTable[variableName] = 1
 			} else {
 				interpreter.numberVarTable[variableName] = 0
