@@ -607,253 +607,103 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			}
 			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.EQUAL:
-			firstValue := currentToken.GetParameter(0)
-			secondValue := currentToken.GetParameter(1)
+			var firstValue interface{}
+			firstValue = currentToken.GetParameter(0)
+			var secondValue interface{}
+			secondValue = currentToken.GetParameter(1)
 			variableName := currentToken.GetParameter(2)
-			var1Type := interpreter.getVariableType(firstValue)
-			var2Type := interpreter.getVariableType(secondValue)
-			if var1Type != "undefined" && var2Type != "undefined" {
-				if var1Type != var2Type {
-					interpreter.numberVarTable[variableName] = 0
-					interpreter.deleteVarIfSameName(variableName, "number")
-					return
-				}
-			}
-			isFirstValueRawNumber, numberValue1 := isRawNumber(firstValue)
-			isFirstValueRawString, stringValue1 := isRawString(firstValue)
-			isSecondValueRawNumber, numberValue2 := isRawNumber(secondValue)
-			isSecondValueRawString, stringValue2 := isRawString(secondValue)
-			isFirstRawNumberArray, numberArrayValue1 := interpreter.isRawNumberArray(firstValue)
-			isSecondRawNumberArray, numberArrayValue2 := interpreter.isRawNumberArray(secondValue)
-			isFirstRawStringArray, stringArrayValue1 := interpreter.isRawStringArray(firstValue)
-			isSecondRawStringArray, stringArrayValue2 := interpreter.isRawStringArray(secondValue)
-			if isFirstValueRawNumber && isSecondValueRawNumber {
-				if numberValue1 == numberValue2 {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isFirstValueRawString && isSecondValueRawString {
-				if stringValue1 == stringValue2 {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isFirstValueRawNumber && interpreter.isNumberVar(secondValue) {
-				if numberValue1 == interpreter.numberVarTable[secondValue] {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isSecondValueRawNumber && interpreter.isNumberVar(firstValue) {
-				if numberValue2 == interpreter.numberVarTable[firstValue] {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isFirstValueRawString && interpreter.isStringVar(secondValue) {
-				if stringValue1 == interpreter.stringVarTable[secondValue] {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isSecondValueRawString && interpreter.isStringVar(firstValue) {
-				if stringValue2 == interpreter.stringVarTable[firstValue] {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if interpreter.isNumberVar(firstValue) && interpreter.isNumberVar(secondValue) {
-				if interpreter.numberVarTable[firstValue] == interpreter.numberVarTable[secondValue] {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if interpreter.isStringVar(firstValue) && interpreter.isStringVar(secondValue) {
-				if interpreter.stringVarTable[firstValue] == interpreter.stringVarTable[secondValue] {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isFirstRawNumberArray && isSecondRawNumberArray {
-				if numberArraysAreEqual(numberArrayValue1, numberArrayValue2) {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isFirstRawStringArray && isSecondRawStringArray {
-				if stringArraysAreEqual(stringArrayValue1, stringArrayValue2) {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isFirstRawNumberArray && interpreter.isNumberArrayVar(secondValue) {
-				if numberArraysAreEqual(numberArrayValue1, interpreter.numberArrayVarTable[secondValue]) {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isSecondRawNumberArray && interpreter.isNumberArrayVar(firstValue) {
-				if numberArraysAreEqual(numberArrayValue2, interpreter.numberArrayVarTable[firstValue]) {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isFirstRawStringArray && interpreter.isStringArrayVar(secondValue) {
-				if stringArraysAreEqual(stringArrayValue1, interpreter.stringArrayVarTable[secondValue]) {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if isSecondRawStringArray && interpreter.isStringArrayVar(firstValue) {
-				if stringArraysAreEqual(stringArrayValue2, interpreter.stringArrayVarTable[firstValue]) {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if interpreter.isNumberArrayVar(firstValue) && interpreter.isNumberArrayVar(secondValue) {
-				if numberArraysAreEqual(interpreter.numberArrayVarTable[firstValue], interpreter.numberArrayVarTable[secondValue]) {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
-			} else if interpreter.isStringArrayVar(firstValue) && interpreter.isStringArrayVar(secondValue) {
-				if stringArraysAreEqual(interpreter.stringArrayVarTable[firstValue], interpreter.stringArrayVarTable[secondValue]) {
-					interpreter.numberVarTable[variableName] = 1
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
+			if isRawNumber, value := isRawNumber(firstValue.(string)); isRawNumber {
+				firstValue = value
+			} else if interpreter.isNumberVar(firstValue.(string)) {
+				firstValue = interpreter.numberVarTable[firstValue.(string)]
+			} else if isRawString, value := isRawString(firstValue.(string)); isRawString {
+				firstValue = value
+			} else if interpreter.isStringVar(firstValue.(string)) {
+				firstValue = interpreter.stringVarTable[firstValue.(string)]
+			} else if isNumberArrayVar, value := interpreter.isRawNumberArray(firstValue.(string)); isNumberArrayVar {
+				firstValue = value
+			} else if interpreter.isNumberArrayVar(firstValue.(string)) {
+				firstValue = interpreter.numberArrayVarTable[firstValue.(string)]
+			} else if isStringArrayVar, value := interpreter.isRawStringArray(firstValue.(string)); isStringArrayVar {
+				firstValue = value
+			} else if interpreter.isStringArrayVar(firstValue.(string)) {
+				firstValue = interpreter.stringArrayVarTable[firstValue.(string)]
 			} else {
-				if !interpreter.isVariableDefined(firstValue) || !interpreter.isVariableDefined(secondValue) {
-					log.Fatalf("Error: One or more variables are not defined. Line %d.", currentToken.GetLine())
-				} else {
-					interpreter.numberVarTable[variableName] = 0
-				}
+				log.Fatalf("Error Invalid parameter '%s', variable not defined. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(secondValue.(string)); isRawNumber {
+				secondValue = value
+			} else if interpreter.isNumberVar(secondValue.(string)) {
+				secondValue = interpreter.numberVarTable[secondValue.(string)]
+			} else if isRawString, value := isRawString(secondValue.(string)); isRawString {
+				secondValue = value
+			} else if interpreter.isStringVar(secondValue.(string)) {
+				secondValue = interpreter.stringVarTable[secondValue.(string)]
+			} else if isNumberArrayVar, value := interpreter.isRawNumberArray(secondValue.(string)); isNumberArrayVar {
+				secondValue = value
+			} else if interpreter.isNumberArrayVar(secondValue.(string)) {
+				secondValue = interpreter.numberArrayVarTable[secondValue.(string)]
+			} else if isStringArrayVar, value := interpreter.isRawStringArray(secondValue.(string)); isStringArrayVar {
+				secondValue = value
+			} else if interpreter.isStringArrayVar(secondValue.(string)) {
+				secondValue = interpreter.stringArrayVarTable[secondValue.(string)]
+			} else {
+				log.Fatalf("Error Invalid parameter '%s', variable not defined. Line %d.", secondValue, currentToken.GetLine())
+			}
+			if firstValue == secondValue {
+				interpreter.numberVarTable[variableName] = 1
+			} else {
+				interpreter.numberVarTable[variableName] = 0
 			}
 			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.NOTEQUAL:
-			firstValue := currentToken.GetParameter(0)
-			secondValue := currentToken.GetParameter(1)
+			var firstValue interface{}
+			firstValue = currentToken.GetParameter(0)
+			var secondValue interface{}
+			secondValue = currentToken.GetParameter(1)
 			variableName := currentToken.GetParameter(2)
-			var1Type := interpreter.getVariableType(firstValue)
-			var2Type := interpreter.getVariableType(secondValue)
-			if var1Type != "undefined" && var2Type != "undefined" {
-				if var1Type != var2Type {
-					interpreter.numberVarTable[variableName] = 0
-					interpreter.deleteVarIfSameName(variableName, "number")
-					return
-				}
-			}
-			isFirstValueRawNumber, numberValue1 := isRawNumber(firstValue)
-			isFirstValueRawString, stringValue1 := isRawString(firstValue)
-			isSecondValueRawNumber, numberValue2 := isRawNumber(secondValue)
-			isSecondValueRawString, stringValue2 := isRawString(secondValue)
-			isFirstRawNumberArray, numberArrayValue1 := interpreter.isRawNumberArray(firstValue)
-			isSecondRawNumberArray, numberArrayValue2 := interpreter.isRawNumberArray(secondValue)
-			isFirstRawStringArray, stringArrayValue1 := interpreter.isRawStringArray(firstValue)
-			isSecondRawStringArray, stringArrayValue2 := interpreter.isRawStringArray(secondValue)
-			if isFirstValueRawNumber && isSecondValueRawNumber {
-				if numberValue1 == numberValue2 {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isFirstValueRawString && isSecondValueRawString {
-				if stringValue1 == stringValue2 {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isFirstValueRawNumber && interpreter.isNumberVar(secondValue) {
-				if numberValue1 == interpreter.numberVarTable[secondValue] {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isSecondValueRawNumber && interpreter.isNumberVar(firstValue) {
-				if numberValue2 == interpreter.numberVarTable[firstValue] {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isFirstValueRawString && interpreter.isStringVar(secondValue) {
-				if stringValue1 == interpreter.stringVarTable[secondValue] {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isSecondValueRawString && interpreter.isStringVar(firstValue) {
-				if stringValue2 == interpreter.stringVarTable[firstValue] {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if interpreter.isNumberVar(firstValue) && interpreter.isNumberVar(secondValue) {
-				if interpreter.numberVarTable[firstValue] == interpreter.numberVarTable[secondValue] {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if interpreter.isStringVar(firstValue) && interpreter.isStringVar(secondValue) {
-				if interpreter.stringVarTable[firstValue] == interpreter.stringVarTable[secondValue] {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isFirstRawNumberArray && isSecondRawNumberArray {
-				if numberArraysAreEqual(numberArrayValue1, numberArrayValue2) {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isFirstRawStringArray && isSecondRawStringArray {
-				if stringArraysAreEqual(stringArrayValue1, stringArrayValue2) {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isFirstRawNumberArray && interpreter.isNumberArrayVar(secondValue) {
-				if numberArraysAreEqual(numberArrayValue1, interpreter.numberArrayVarTable[secondValue]) {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isSecondRawNumberArray && interpreter.isNumberArrayVar(firstValue) {
-				if numberArraysAreEqual(numberArrayValue2, interpreter.numberArrayVarTable[firstValue]) {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isFirstRawStringArray && interpreter.isStringArrayVar(secondValue) {
-				if stringArraysAreEqual(stringArrayValue1, interpreter.stringArrayVarTable[secondValue]) {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if isSecondRawStringArray && interpreter.isStringArrayVar(firstValue) {
-				if stringArraysAreEqual(stringArrayValue2, interpreter.stringArrayVarTable[firstValue]) {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if interpreter.isNumberArrayVar(firstValue) && interpreter.isNumberArrayVar(secondValue) {
-				if numberArraysAreEqual(interpreter.numberArrayVarTable[firstValue], interpreter.numberArrayVarTable[secondValue]) {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
-			} else if interpreter.isStringArrayVar(firstValue) && interpreter.isStringArrayVar(secondValue) {
-				if stringArraysAreEqual(interpreter.stringArrayVarTable[firstValue], interpreter.stringArrayVarTable[secondValue]) {
-					interpreter.numberVarTable[variableName] = 0
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
+			if isRawNumber, value := isRawNumber(firstValue.(string)); isRawNumber {
+				firstValue = value
+			} else if interpreter.isNumberVar(firstValue.(string)) {
+				firstValue = interpreter.numberVarTable[firstValue.(string)]
+			} else if isRawString, value := isRawString(firstValue.(string)); isRawString {
+				firstValue = value
+			} else if interpreter.isStringVar(firstValue.(string)) {
+				firstValue = interpreter.stringVarTable[firstValue.(string)]
+			} else if isNumberArrayVar, value := interpreter.isRawNumberArray(firstValue.(string)); isNumberArrayVar {
+				firstValue = value
+			} else if interpreter.isNumberArrayVar(firstValue.(string)) {
+				firstValue = interpreter.numberArrayVarTable[firstValue.(string)]
+			} else if isStringArrayVar, value := interpreter.isRawStringArray(firstValue.(string)); isStringArrayVar {
+				firstValue = value
+			} else if interpreter.isStringArrayVar(firstValue.(string)) {
+				firstValue = interpreter.stringArrayVarTable[firstValue.(string)]
 			} else {
-				if !interpreter.isVariableDefined(firstValue) || !interpreter.isVariableDefined(secondValue) {
-					log.Fatalf("Error: One or more variables are not defined. Line %d.", currentToken.GetLine())
-				} else {
-					interpreter.numberVarTable[variableName] = 1
-				}
+				log.Fatalf("Error Invalid parameter '%s', variable not defined. Line %d.", firstValue, currentToken.GetLine())
+			}
+			if isRawNumber, value := isRawNumber(secondValue.(string)); isRawNumber {
+				secondValue = value
+			} else if interpreter.isNumberVar(secondValue.(string)) {
+				secondValue = interpreter.numberVarTable[secondValue.(string)]
+			} else if isRawString, value := isRawString(secondValue.(string)); isRawString {
+				secondValue = value
+			} else if interpreter.isStringVar(secondValue.(string)) {
+				secondValue = interpreter.stringVarTable[secondValue.(string)]
+			} else if isNumberArrayVar, value := interpreter.isRawNumberArray(secondValue.(string)); isNumberArrayVar {
+				secondValue = value
+			} else if interpreter.isNumberArrayVar(secondValue.(string)) {
+				secondValue = interpreter.numberArrayVarTable[secondValue.(string)]
+			} else if isStringArrayVar, value := interpreter.isRawStringArray(secondValue.(string)); isStringArrayVar {
+				secondValue = value
+			} else if interpreter.isStringArrayVar(secondValue.(string)) {
+				secondValue = interpreter.stringArrayVarTable[secondValue.(string)]
+			} else {
+				log.Fatalf("Error Invalid parameter '%s', variable not defined. Line %d.", secondValue, currentToken.GetLine())
+			}
+			if firstValue != secondValue {
+				interpreter.numberVarTable[variableName] = 1
+			} else {
+				interpreter.numberVarTable[variableName] = 0
 			}
 			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.NOT:
