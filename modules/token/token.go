@@ -27,6 +27,9 @@ const (
 	CONCAT        string = "CONCAT"
 	GETCHAR       string = "GETCHAR"
 	LENGTH        string = "LENGTH"
+	UPPER         string = "UPPER"    //
+	LOWER         string = "LOWER"    //
+	CONTAINS      string = "CONTAINS" //
 	SAY           string = "SAY"
 	INPUT         string = "INPUT"
 	WHILE         string = "WHILE"
@@ -42,10 +45,10 @@ const (
 	SWAP          string = "SWAP"
 	SETINDEX      string = "SETINDEX"
 	RANGEARRAY    string = "RANGEARRAY"
-	READFILE      string = "READFILE"
-	READFILELINES string = "READFILELINES"
-	WRITEFILE     string = "WRITEFILE"
-	SPLIT         string = "SPLIT"
+	READFILE      string = "READFILE"      //
+	READFILELINES string = "READFILELINES" //
+	WRITEFILE     string = "WRITEFILE"     //
+	SPLIT         string = "SPLIT"         //
 )
 
 type Token struct {
