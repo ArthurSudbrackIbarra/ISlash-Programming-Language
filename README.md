@@ -49,48 +49,55 @@ In ISlash, although there is not a boolean data type, numbers can be used to rep
 
 Instructions are **not case sensitive**.
 
-|  Instruction | Description                                      |
-|:------------:|--------------------------------------------------|
-|      SET     | Sets/declares variables.                         |
-|      ADD     | + operator.                                      |
-|      SUB     | - operator.                                      |
-|     MULT     | * operator.                                      |
-|      DIV     | / operator.                                      |
-|      MOD     | % operator.                                      |
-|     POWER    | ^ operator.                                      |
-|     ROOT     | Square roots, cubic roots...                     |
-|   INCREMENT  | ++ operator (Adds 1).                            |
-|   DECREMENT  | -- operator (Subtracts 1).                       |
-|    RANDOM    | Generates a random integer value within a range. |
-|    GREATER   | > operator.                                      |
-| GREATEREQUAL | >= operator.                                     |
-|     LESS     | < operator.                                      |
-|   LESSEQUAL  | <= operator.                                     |
-|      NOT     | NOT operator                                     |
-|      AND     | AND operator.                                    |
-|      OR      | OR operator.                                     |
-|      IF      | If statements.                                   |
-|     ELSE     | Else statements.                                 |
-|     ENDIF    | Closes if blocks.                                |
-|     EQUAL    | == operator.                                     |
-|   NOTEQUAL   | != operator.                                     |
-|    CONCAT    | Concatenates strings.                            |
-|    LENGTH    | Gets the length of a string or an array.         |
-|    GETCHAR   | Gets the nth char of a string.                   |
-|      SAY     | Prints to screen.                                |
-|     INPUT    | Gets user input.                                 |
-|     WHILE    | While statements.                                |
-|   ENDWHILE   | Closes while blocks.                             |
-|    FOREACH   | Use to iterate over arrays.                      |
-|  ENDFOREACH  | Closes foreach blocks.                           |
-|     BREAK    | (Not implemented yet).                           |
-|    APPEND    | Appends an element to an array.                  |
-|    PREPEND   | Preppends an element to an array.                |
-|  REMOVEFIRST | Removes the first element of an array.           |
-|  REMOVELAST  | Removes the last element of an array.            |
-|     SWAP     | Swaps arrays positions.                          |
-|  ACCESSINDEX | Gets the nth element of an array.                |
-|   SETINDEX   | Changes the element at an index.                 |
+| Instruction   | Description                                                                 |
+|:-------------:|-----------------------------------------------------------------------------|
+| SET           | Sets/declares variables.                                                    |
+| ADD           | + operator.                                                                 |
+| SUB           | - operator.                                                                 |
+| MULT          | * operator.                                                                 |
+| DIV           | / operator.                                                                 |
+| MOD           | % operator.                                                                 |
+| POWER         | ^ operator.                                                                 |
+| ROOT          | Square roots, cubic roots...                                                |
+| INCREMENT     | ++ operator (Adds 1).                                                       |
+| DECREMENT     | -- operator (Subtracts 1).                                                  |
+| RANDOM        | Generates a random integer value within a range.                            |
+| GREATER       | > operator.                                                                 |
+| GREATEREQUAL  | >= operator.                                                                |
+| LESS          | < operator.                                                                 |
+| LESSEQUAL     | <= operator.                                                                |
+| NOT           | NOT operator                                                                |
+| AND           | AND operator.                                                               |
+| OR            | OR operator.                                                                |
+| IF            | If statements.                                                              |
+| ELSE          | Else statements.                                                            |
+| ENDIF         | Closes if blocks.                                                           |
+| EQUAL         | == operator.                                                                |
+| NOTEQUAL      | != operator.                                                                |
+| CONCAT        | Concatenates strings.                                                       |
+| LENGTH        | Gets the length of a string or an array.                                    |
+| UPPER         | Turn strings into uppercase.                                                |
+| LOWER         | Turn strings into lowercase.                                                |
+| SPLIT         | Splits a string using a pattern, produces a string[] variable.              |
+| GETCHAR       | Gets the nth char of a string.                                              |
+| SAY           | Prints to screen.                                                           |
+| INPUT         | Gets user input.                                                            |
+| WHILE         | While statements.                                                           |
+| ENDWHILE      | Closes while blocks.                                                        |
+| FOREACH       | Use to iterate over arrays.                                                 |
+| ENDFOREACH    | Closes foreach blocks.                                                      |
+| BREAK         | (Not implemented yet).                                                      |
+| APPEND        | Appends an element to an array.                                             |
+| PREPEND       | Preppends an element to an array.                                           |
+| REMOVEFIRST   | Removes the first element of an array.                                      |
+| REMOVELAST    | Removes the last element of an array.                                       |
+| SWAP          | Swaps arrays positions.                                                     |
+| ACCESSINDEX   | Gets the nth element of an array.                                           |
+| SETINDEX      | Changes the element at an index.                                            |
+| CONTAINS      | Checks if a string contains a character or if an array contains an element. |
+| READFILE      | Reads a file, produces a string variable.                                   |
+| READFILELINES | Reads a file line by line, produces a string[] variable.                    |
+| WRITEFILE     | Writes to a file, overrides previous content.                               |
 
 ## Language Features
 
