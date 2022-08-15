@@ -121,15 +121,15 @@ say "Cool!"
 ISlash allows the interpolation of Strings using the `$()` symbol:
 
 ```
-declare name "Arthur"
-declare age 20
+set name "Arthur"
+set age 20
 say "My name is $(name) and I am $(age) years old."
 ```
 
 ### New Lines in Strings
 
 To represent new lines, use the `\n` symbol:
-
+s
 ```
 say "Hi!\nThis is in a new line!"
 ```

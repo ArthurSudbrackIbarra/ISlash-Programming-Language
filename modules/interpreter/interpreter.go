@@ -205,16 +205,21 @@ func (interpreter *Interpreter) findCloseLoopIndex(currentIndex int, tokensList 
 	return -1
 }
 
+// Finnish this later...
 func (interpreter *Interpreter) findNextConditionBlockIndex(currentIndex int, tokensList []*token.Token) int {
-	for i := currentIndex + 1; i < len(tokensList); i++ {
-		if tokensList[i].GetType() == token.ENDIF {
-			return i
-		}
-		if tokensList[i].GetType() == token.ELSE {
-			return i
+	levels := [][]int{}
+	currentLevel := -1
+	for i := 0; i < len(tokensList); i++ {
+		if tokensList[i].GetType() == token.IF {
+			levels = append(levels, []int{i})
+			currentLevel += 1
+		} else if tokensList[i].GetType() == token.ELSEIF || tokensList[i].GetType() == token.ELSE {
+			levels[currentLevel] = append(levels[currentLevel], i)
+		} else if tokensList[i].GetType() == token.ENDIF {
+			levels = levels[:currentLevel]
 		}
 	}
-	return -1
+	return 99999
 }
 
 func (interpreter *Interpreter) deleteVarIfSameName(varName string, varType string) {
