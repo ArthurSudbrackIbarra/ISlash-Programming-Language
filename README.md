@@ -242,4 +242,4 @@ docker rmi islash/islash-programming-language:v1
 These are some of the features that I might implement in the future:
 
 - Functions
-- Swich/Case
+- Switch/Case
