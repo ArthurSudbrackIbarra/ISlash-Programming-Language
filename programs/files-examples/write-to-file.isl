@@ -1,19 +1,18 @@
-set continue 1
-set contentToWrite ""
+var contentToWrite ""
 
-while continue
+while 1
     input str "Type a string or just press 'Enter' to stop: "
     length str strLength
     if strLength
         concat contentToWrite "$(str)\n"
     else
-        set continue 0
+        break
     endif
 endwhile
 
 input fileDir "Enter the directory to save the file: "
 input fileName "Enter the file name: "
-set filePath ""
+var filePath ""
 
 concat filePath fileDir
 concat filePath "/"

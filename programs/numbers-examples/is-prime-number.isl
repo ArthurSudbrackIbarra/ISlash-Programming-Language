@@ -1,15 +1,15 @@
 # Modify 'number' to the value you wish. 31 in this example.
-set number 31
+var number 31
 
 # Variable to store how many dividers the number has.
-set dividersCount 1
+var dividersCount 1
 
 # Variable to store the dividers that will be tested.
-set divider 2
+var divider 2
 
 # This will be our counter.
 # counter = number
-set counter number
+var counter number
 
 # While counter > 0
 while counter

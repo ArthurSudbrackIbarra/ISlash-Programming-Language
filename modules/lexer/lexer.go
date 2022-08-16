@@ -33,200 +33,212 @@ func MountTokens(filePath string) []*token.Token {
 			parameters = splittedInstruction[1:]
 		}
 		switch tokenType {
-		case token.SET:
+		case token.VAR:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid DECLARE statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid VAR statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.ADD:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid ADD statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid ADD statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.SUB:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid SUB statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid SUB statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.MULT:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid MULT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid MULT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.DIV:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid DIV statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid DIV statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.MOD:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid MOD statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid MOD statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.POWER:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid POWER statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid POWER statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.ROOT:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid ROOT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid ROOT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.INCREMENT:
 			if len(parameters) != 1 {
-				log.Fatalf("Invalid INCREMENT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid INCREMENT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
 			}
 		case token.DECREMENT:
 			if len(parameters) != 1 {
-				log.Fatalf("Invalid DECREMENT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid DECREMENT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
 			}
 		case token.NOT:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid NOT statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid NOT statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.AND:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid AND statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid AND statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.OR:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid OR statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid OR statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.CONCAT:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid CONCAT statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid CONCAT statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.UPPER:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid UPPER statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid UPPER statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.LOWER:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid LOWER statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid LOWER statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.CONTAINS:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid CONTAINS statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid CONTAINS statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
-		case token.GETCHAR:
+		case token.CHARAT:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid GETCHAR statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid CHARAT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.LENGTH:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid LENGTH statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid LENGTH statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.GREATER:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid GREATER statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid GREATER statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.GREATEREQUAL:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid GREATEREQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid GREATEREQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.LESS:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid LESS statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid LESS statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.LESSEQUAL:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid LESSEQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid LESSEQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.EQUAL:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid EQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid EQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.NOTEQUAL:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid NOTEQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid NOTEQUAL statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.IF:
 			if len(parameters) != 1 {
-				log.Fatalf("Invalid IF statement, expected 1 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid IF statement, expected 1 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.ELSEIF:
+			if len(parameters) != 1 {
+				log.Fatalf("Lexer error: Invalid ELSEIF statement, expected 1 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.ELSE:
 			if len(parameters) != 0 {
-				log.Fatalf("Invalid ELSE statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid ELSE statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.ENDIF:
 			if len(parameters) != 0 {
-				log.Fatalf("Invalid ENDIF statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid ENDIF statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.SAY:
 			if len(parameters) != 1 {
-				log.Fatalf("Invalid SAY statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid SAY statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
 			}
 		case token.INPUT:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid INPUT statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid INPUT statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.WHILE:
 			if len(parameters) != 1 {
-				log.Fatalf("Invalid WHILE statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid WHILE statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
 			}
 		case token.ENDWHILE:
 			if len(parameters) != 0 {
-				log.Fatalf("Invalid ENDWHILE statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid ENDWHILE statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.RANDOM:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid RANDOM statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid RANDOM statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.BREAK:
 			if len(parameters) != 0 {
-				log.Fatalf("Invalid BREAK statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid BREAK statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.APPEND:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid APPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid APPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.PREPEND:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid PREPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid PREPEND statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.REMOVEFIRST:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid REMOVEFIRST statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid REMOVEFIRST statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.REMOVELAST:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid REMOVELAST statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid REMOVELAST statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.SETINDEX:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid SETINDEX statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid SETINDEX statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.SWAP:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid SWAP statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid SWAP statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
-		case token.ACCESSINDEX:
+		case token.GET:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid ACCESSINDEX statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid GET statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.FOREACH:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid FOREACH statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid FOREACH statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.ENDFOREACH:
 			if len(parameters) != 0 {
-				log.Fatalf("Invalid ENDFOREACH statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid ENDFOREACH statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.RANGEARRAY:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid RANGEARRAY statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid RANGEARRAY statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.READFILE:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid READFILE statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid READFILE statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.READFILELINES:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid READFILELINES statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid READFILELINES statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.WRITEFILE:
 			if len(parameters) != 2 {
-				log.Fatalf("Invalid WRITEFILE statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid WRITEFILE statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.SPLIT:
 			if len(parameters) != 3 {
-				log.Fatalf("Invalid SPLIT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid SPLIT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
+		case token.EXIT:
+			if len(parameters) != 1 {
+				log.Fatalf("Lexer error: Invalid EXIT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+			}
+		case token.REPLACE:
+			if len(parameters) != 4 {
+				log.Fatalf("Lexer error: Invalid REPLACE statement, expected 4 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		default:
-			log.Fatalf("Invalid instruction '%s'. Line %d.", tokenType, line)
+			log.Fatalf("Lexer error: Invalid instruction '%s'. Line %d.", tokenType, line)
 		}
 		tokensList = append(tokensList, token.NewToken(line, tokenType, parameters))
 	}

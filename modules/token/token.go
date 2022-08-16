@@ -1,7 +1,7 @@
 package token
 
 const (
-	SET           string = "SET"
+	VAR           string = "VAR"
 	ADD           string = "ADD"
 	SUB           string = "SUB"
 	MULT          string = "MULT"
@@ -21,15 +21,16 @@ const (
 	RANDOM        string = "RANDOM"
 	IF            string = "IF"
 	ELSE          string = "ELSE"
+	ELSEIF        string = "ELSEIF"
 	ENDIF         string = "ENDIF"
 	EQUAL         string = "EQUAL"
 	NOTEQUAL      string = "NOTEQUAL"
 	CONCAT        string = "CONCAT"
-	GETCHAR       string = "GETCHAR"
+	CHARAT        string = "CHARAT"
 	LENGTH        string = "LENGTH"
-	UPPER         string = "UPPER"    //
-	LOWER         string = "LOWER"    //
-	CONTAINS      string = "CONTAINS" //
+	UPPER         string = "UPPER"
+	LOWER         string = "LOWER"
+	CONTAINS      string = "CONTAINS"
 	SAY           string = "SAY"
 	INPUT         string = "INPUT"
 	WHILE         string = "WHILE"
@@ -37,7 +38,7 @@ const (
 	BREAK         string = "BREAK"
 	FOREACH       string = "FOREACH"
 	ENDFOREACH    string = "ENDFOREACH"
-	ACCESSINDEX   string = "ACCESSINDEX"
+	GET           string = "GET"
 	APPEND        string = "APPEND"
 	PREPEND       string = "PREPEND"
 	REMOVEFIRST   string = "REMOVEFIRST"
@@ -45,10 +46,12 @@ const (
 	SWAP          string = "SWAP"
 	SETINDEX      string = "SETINDEX"
 	RANGEARRAY    string = "RANGEARRAY"
-	READFILE      string = "READFILE"      //
-	READFILELINES string = "READFILELINES" //
-	WRITEFILE     string = "WRITEFILE"     //
-	SPLIT         string = "SPLIT"         //
+	READFILE      string = "READFILE"
+	READFILELINES string = "READFILELINES"
+	WRITEFILE     string = "WRITEFILE"
+	SPLIT         string = "SPLIT"
+	EXIT          string = "EXIT"
+	REPLACE       string = "REPLACE"
 )
 
 type Token struct {

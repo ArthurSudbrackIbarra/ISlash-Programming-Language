@@ -21,14 +21,15 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 * [Things to Notice](#things-to-notice)
 * [Try ISlash](#try-islash)
 * [Uninstall ISlash](#uninstall-islash)
+* [Possible Future Features](#possible-future-features)
 
 ## Example Programs
 
-Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs).
+Example programs using the ISlash language  can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs). There you'll find simple scripts showcasing the instructions of the language, as well as more advanced ones, such as a **bubblesort**, a **tic-tac-toe game**, a **csv reader** script.
 
 In the example below, we are multiplying numbers inputed by the user.
 
-![Example Program](https://user-images.githubusercontent.com/69170322/184281568-9251885e-06d5-4089-a115-b09a803836cc.png)
+![Example Program](https://user-images.githubusercontent.com/69170322/184975724-e25bb028-2f75-4334-b0db-43264433f109.png)
 
 ## Language Support in VSCode
 
@@ -55,7 +56,7 @@ Instructions are **not case sensitive**.
 
 | Instruction   | Description                                                                 |
 |:-------------:|-----------------------------------------------------------------------------|
-| SET           | Sets/declares variables.                                                    |
+| VAR           | Sets/declares variables.                                                    |
 | ADD           | + operator.                                                                 |
 | SUB           | - operator.                                                                 |
 | MULT          | * operator.                                                                 |
@@ -74,6 +75,7 @@ Instructions are **not case sensitive**.
 | AND           | AND operator.                                                               |
 | OR            | OR operator.                                                                |
 | IF            | If statements.                                                              |
+| ELSEIF        | Else if statements.                                                         |
 | ELSE          | Else statements.                                                            |
 | ENDIF         | Closes if blocks.                                                           |
 | EQUAL         | == operator.                                                                |
@@ -83,29 +85,31 @@ Instructions are **not case sensitive**.
 | UPPER         | Turn strings into uppercase.                                                |
 | LOWER         | Turn strings into lowercase.                                                |
 | SPLIT         | Splits a string using a pattern, produces a string[] variable.              |
-| GETCHAR       | Gets the nth char of a string.                                              |
+| REPLACE       | Replaces a pattern in a string by another pattern.                          |
+| CHARAT        | Gets the nth char of a string.                                              |
 | SAY           | Prints to screen.                                                           |
 | INPUT         | Gets user input.                                                            |
 | WHILE         | While statements.                                                           |
+| BREAK         | Exits out of while blocks.                                                  |
 | ENDWHILE      | Closes while blocks.                                                        |
 | FOREACH       | Use to iterate over arrays.                                                 |
 | ENDFOREACH    | Closes foreach blocks.                                                      |
-| BREAK         | (Not implemented yet).                                                      |
 | APPEND        | Appends an element to an array.                                             |
 | PREPEND       | Preppends an element to an array.                                           |
 | REMOVEFIRST   | Removes the first element of an array.                                      |
 | REMOVELAST    | Removes the last element of an array.                                       |
 | SWAP          | Swaps arrays positions.                                                     |
-| ACCESSINDEX   | Gets the nth element of an array.                                           |
+| GET           | Gets the nth element of an array.                                           |
 | SETINDEX      | Changes the element at an index.                                            |
 | CONTAINS      | Checks if a string contains a character or if an array contains an element. |
 | READFILE      | Reads a file, produces a string variable.                                   |
 | READFILELINES | Reads a file line by line, produces a string[] variable.                    |
 | WRITEFILE     | Writes to a file, overrides previous content.                               |
+| EXIT          | Exits the program with a status code.                                       |
 
 ## Language Features
 
-Below, ISlash language features will be explained:
+Below, some ISlash language features will be explained:
 
 ### Comments
 
@@ -121,8 +125,8 @@ say "Cool!"
 ISlash allows the interpolation of Strings using the `$()` symbol:
 
 ```
-declare name "Arthur"
-declare age 20
+var name "Arthur"
+var age 20
 say "My name is $(name) and I am $(age) years old."
 ```
 
@@ -151,7 +155,7 @@ endforeach
 # element does not exist here!
 ```
 
-2. The **SET** command will create new variables if they don't exist yet. If they do, the previous value will be overrided.
+2. The **VAR** command will create new variables if they don't exist yet. If they do, the previous value will be replaced by the new one.
 
 ### 2. Arrays
 
@@ -160,12 +164,12 @@ endforeach
 Example:
 
 ```
-set array [1,2,3] # OK!
-set array ["Hello", "Bye"] # OK!
-set array []number # OK!
-set array []string # OK!
+var array [1,2,3] # OK!
+var array ["Hello", "Bye"] # OK!
+var array []number # OK!
+var array []string # OK!
 
-set array [] # NOT OK!
+var array [] # NOT OK!
 ```
 
 ## Try ISlash
@@ -232,3 +236,10 @@ docker rm islash-container
 ```sh
 docker rmi islash/islash-programming-language:v1
 ```
+
+## Possible Future Features
+
+These are some of the features that I might implement in the future:
+
+- Functions
+- Swich/Case

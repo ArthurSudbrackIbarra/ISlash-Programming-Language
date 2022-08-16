@@ -1,4 +1,4 @@
-set continue 1
+var continue 1
 
 while continue
     # Menu.
@@ -12,11 +12,10 @@ while continue
     # Get user option.
     input option "Choose an option: "
 
-    # 
-    set isAdd 0
-    set isSub 0
-    set isMult 0
-    set isDiv 0
+    var isAdd 0
+    var isSub 0
+    var isMult 0
+    var isDiv 0
 
     # Add
     equal option "a" isAdd

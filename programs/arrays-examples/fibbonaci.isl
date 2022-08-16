@@ -1,14 +1,14 @@
 input n "Enter the value for n: "
 
-set num1 1
-set num2 1
+var num1 1
+var num2 1
 
-set sequence []number
+var sequence []number
 
 while n
     append sequence num1
-    set aux num1
-    set num1 num2
+    var aux num1
+    var num1 num2
     add aux num2 num2
     decrement n
 endwhile

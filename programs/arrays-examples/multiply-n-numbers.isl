@@ -1,5 +1,5 @@
 # Declaring empty number array.
-set numbers []number
+var numbers []number
 
 # Getting user input.
 input limit "How many numbers do you want to multiply? "
