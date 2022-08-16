@@ -5,6 +5,6 @@ length word wordLength
 rangearray wordLength indexes
 
 foreach index indexes
-    getchar word index char
+    charat word index char
     say "Char $(index): $(char)"
 endforeach

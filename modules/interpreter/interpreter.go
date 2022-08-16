@@ -295,9 +295,9 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			variableName := currentToken.GetParameter(0)
 			assignValue := currentToken.GetParameter(1)
 			if isRawNumber, _ := isRawNumber(variableName); isRawNumber {
-				log.Fatalf("Error: Variable name cannot be a number. Line %d.", currentToken.GetLine())
+				log.Fatalf("Interpreter error: Variable name cannot be a number. Line %d.", currentToken.GetLine())
 			} else if isRawString, _ := isRawString(variableName); isRawString {
-				log.Fatalf("Error: Variable name cannot be a string. Line %d.", currentToken.GetLine())
+				log.Fatalf("Interpreter error: Variable name cannot be a string. Line %d.", currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(assignValue); isRawNumber {
 				interpreter.numberVarTable[variableName] = value
@@ -324,7 +324,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				interpreter.stringArrayVarTable[variableName] = interpreter.stringArrayVarTable[assignValue]
 				interpreter.deleteVarIfSameName(variableName, "stringarray")
 			} else {
-				log.Fatalf("Error: Invalid declaration of varible '%s'. Line %d.", variableName, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid declaration of varible '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
 		case token.ADD:
 			addValue1 := currentToken.GetParameter(0)
@@ -337,14 +337,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(addValue1) {
 				parsedAddValue1 = interpreter.numberVarTable[addValue1]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
 				parsedAddValue2 = value
 			} else if interpreter.isNumberVar(addValue2) {
 				parsedAddValue2 = interpreter.numberVarTable[addValue2]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = parsedAddValue1 + parsedAddValue2
 			interpreter.deleteVarIfSameName(variableName, "number")
@@ -359,14 +359,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(addValue1) {
 				parsedAddValue1 = interpreter.numberVarTable[addValue1]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
 				parsedAddValue2 = value
 			} else if interpreter.isNumberVar(addValue2) {
 				parsedAddValue2 = interpreter.numberVarTable[addValue2]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = parsedAddValue1 - parsedAddValue2
 			interpreter.deleteVarIfSameName(variableName, "number")
@@ -381,14 +381,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(addValue1) {
 				parsedAddValue1 = interpreter.numberVarTable[addValue1]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
 				parsedAddValue2 = value
 			} else if interpreter.isNumberVar(addValue2) {
 				parsedAddValue2 = interpreter.numberVarTable[addValue2]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = parsedAddValue1 * parsedAddValue2
 			interpreter.deleteVarIfSameName(variableName, "number")
@@ -403,14 +403,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(addValue1) {
 				parsedAddValue1 = interpreter.numberVarTable[addValue1]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
 				parsedAddValue2 = value
 			} else if interpreter.isNumberVar(addValue2) {
 				parsedAddValue2 = interpreter.numberVarTable[addValue2]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = parsedAddValue1 / parsedAddValue2
 			interpreter.deleteVarIfSameName(variableName, "number")
@@ -425,14 +425,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(addValue1) {
 				parsedAddValue1 = interpreter.numberVarTable[addValue1]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue1, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(addValue2); isRawNumber {
 				parsedAddValue2 = value
 			} else if interpreter.isNumberVar(addValue2) {
 				parsedAddValue2 = interpreter.numberVarTable[addValue2]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", addValue2, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = math.Mod(parsedAddValue1, parsedAddValue2)
 			interpreter.deleteVarIfSameName(variableName, "number")
@@ -447,14 +447,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(powerNumber) {
 				parsedPowerNumber = interpreter.numberVarTable[powerNumber]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", powerNumber, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", powerNumber, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(powerValue); isRawNumber {
 				parsedPowerValue = value
 			} else if interpreter.isNumberVar(powerValue) {
 				parsedPowerValue = interpreter.numberVarTable[powerValue]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", powerValue, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", powerValue, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = math.Pow(parsedPowerNumber, parsedPowerValue)
 			interpreter.deleteVarIfSameName(variableName, "number")
@@ -469,27 +469,27 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(rootNumber) {
 				parsedPowerRoot = interpreter.numberVarTable[rootNumber]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", rootNumber, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", rootNumber, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(rootValue); isRawNumber {
 				parsedRootValue = value
 			} else if interpreter.isNumberVar(rootValue) {
 				parsedRootValue = interpreter.numberVarTable[rootValue]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", rootValue, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", rootValue, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] = math.Pow(parsedPowerRoot, 1/parsedRootValue)
 			interpreter.deleteVarIfSameName(variableName, "number")
 		case token.INCREMENT:
 			variableName := currentToken.GetParameter(0)
 			if !interpreter.isNumberVar(variableName) {
-				log.Fatalf("Error: Invalid parameter '%s', not a number variable. Line %d.", variableName, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number variable. Line %d.", variableName, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] += 1
 		case token.DECREMENT:
 			variableName := currentToken.GetParameter(0)
 			if !interpreter.isNumberVar(variableName) {
-				log.Fatalf("Error: Invalid parameter '%s', not a number variable. Line %d.", variableName, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number variable. Line %d.", variableName, currentToken.GetLine())
 			}
 			interpreter.numberVarTable[variableName] -= 1
 		case token.GREATER:
@@ -787,13 +787,13 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 					parsedCondition = 0
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter for IF statement. Line %d.", currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter for IF statement. Line %d.", currentToken.GetLine())
 			}
 			if parsedCondition < 1 {
 				interpreter.conditionStack.Push(1)
 				i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
 				if i == -1 {
-					log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid IF block. Line %d", currentToken.GetLine())
 				}
 			} else {
 				interpreter.conditionStack.Push(0)
@@ -820,13 +820,13 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 						parsedCondition = 0
 					}
 				} else {
-					log.Fatalf("Error: Invalid parameter for ELSEIF statement. Line %d.", currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter for ELSEIF statement. Line %d.", currentToken.GetLine())
 				}
 				if parsedCondition < 1 {
 					interpreter.conditionStack.Push(1)
 					i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
 					if i == -1 {
-						log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
+						log.Fatalf("Interpreter error: Invalid IF block. Line %d", currentToken.GetLine())
 					}
 				} else {
 					interpreter.conditionStack.Push(0)
@@ -835,20 +835,20 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				interpreter.conditionStack.Push(0)
 				i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
 				if i == -1 {
-					log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid IF block. Line %d", currentToken.GetLine())
 				}
 			} else {
-				log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid IF block. Line %d", currentToken.GetLine())
 			}
 		case token.ELSE:
 			shouldExecute := interpreter.conditionStack.Top()
 			if shouldExecute == 0 {
 				i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
 				if i == -1 {
-					log.Fatalf("Error: Missing ENDIF statement. Line %d", currentToken.GetLine())
+					log.Fatalf("Interpreter error: Missing ENDIF statement. Line %d", currentToken.GetLine())
 				}
 			} else if shouldExecute != 1 {
-				log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid IF block. Line %d", currentToken.GetLine())
 			}
 		case token.ENDIF:
 			interpreter.conditionStack.Pop()
@@ -856,7 +856,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			variableName := currentToken.GetParameter(0)
 			concatValue := currentToken.GetParameter(1)
 			if !interpreter.isStringVar(variableName) {
-				log.Fatalf("Error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Referenced invalid variable '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(concatValue); isRawNumber {
 				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + fmt.Sprintf("%f", value)
@@ -867,7 +867,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringVar(concatValue) {
 				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[variableName] + interpreter.stringVarTable[concatValue]
 			} else {
-				log.Fatalf("Error: Referenced nonexistent variable '%s'. Line %d.", concatValue, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Referenced nonexistent variable '%s'. Line %d.", concatValue, currentToken.GetLine())
 			}
 		case token.UPPER:
 			str := currentToken.GetParameter(0)
@@ -878,7 +878,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringVar(str) {
 				parsedStr = interpreter.stringVarTable[str]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a raw string or string variable. Line %d.", str, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a raw string or string variable. Line %d.", str, currentToken.GetLine())
 			}
 			interpreter.stringVarTable[variableName] = strings.ToUpper(parsedStr)
 			interpreter.deleteVarIfSameName(variableName, "string")
@@ -891,7 +891,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringVar(str) {
 				parsedStr = interpreter.stringVarTable[str]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a raw string or string variable. Line %d.", str, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a raw string or string variable. Line %d.", str, currentToken.GetLine())
 			}
 			interpreter.stringVarTable[variableName] = strings.ToLower(parsedStr)
 			interpreter.deleteVarIfSameName(variableName, "string")
@@ -914,7 +914,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringArrayVar(target.(string)) {
 				target = interpreter.stringArrayVarTable[target.(string)]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a string or an array. Line %d.", target, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a string or an array. Line %d.", target, currentToken.GetLine())
 			}
 			if isRawString, value := isRawString(toFind.(string)); isRawString {
 				toFind = interpreter.handleString(value)
@@ -925,7 +925,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(toFind.(string)) {
 				toFind = interpreter.numberVarTable[toFind.(string)]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a string or a number. Line %d.", toFind, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a string or a number. Line %d.", toFind, currentToken.GetLine())
 			}
 			if reflect.TypeOf(target).String() == "string" {
 				if reflect.TypeOf(toFind).String() == "string" {
@@ -935,7 +935,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 						interpreter.numberVarTable[variableName] = 0
 					}
 				} else {
-					log.Fatalf("Error: Invalid parameter '%s', not a string. Line %d.", toFind, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter '%s', not a string. Line %d.", toFind, currentToken.GetLine())
 				}
 			} else if reflect.TypeOf(target).String() == "[]float64" {
 				if reflect.TypeOf(toFind).String() == "float64" {
@@ -945,7 +945,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 						interpreter.numberVarTable[variableName] = 0
 					}
 				} else {
-					log.Fatalf("Error: Invalid parameter '%s', not a number. Line %d.", toFind, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter '%s', not a number. Line %d.", toFind, currentToken.GetLine())
 				}
 			} else if reflect.TypeOf(target).String() == "[]string" {
 				if reflect.TypeOf(toFind).String() == "string" {
@@ -955,10 +955,10 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 						interpreter.numberVarTable[variableName] = 0
 					}
 				} else {
-					log.Fatalf("Error: Invalid parameter '%s', not a string. Line %d.", toFind, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter '%s', not a string. Line %d.", toFind, currentToken.GetLine())
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a string or an array. Line %d.", target, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a string or an array. Line %d.", target, currentToken.GetLine())
 			}
 		case token.LENGTH:
 			target := currentToken.GetParameter(0)
@@ -976,10 +976,10 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringArrayVar(target) {
 				interpreter.numberVarTable[variableName] = float64(len(interpreter.stringArrayVarTable[target]))
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
 			}
 			interpreter.deleteVarIfSameName(variableName, "number")
-		case token.GETCHAR:
+		case token.CHARAT:
 			str := currentToken.GetParameter(0)
 			index := currentToken.GetParameter(1)
 			parsedIndex := -1.0
@@ -989,21 +989,21 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(index) {
 				parsedIndex = interpreter.numberVarTable[index]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', must be a number or a number variable. Line %d.", index, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', must be a number or a number variable. Line %d.", index, currentToken.GetLine())
 			}
 			if isRawString, value := isRawString(str); isRawString {
 				handledStr := interpreter.handleString(value)
 				if int(parsedIndex) >= len(handledStr) {
-					log.Fatalf("Error: Index out of bounds [%s] for string character. Line %d.", index, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index out of bounds [%s] for string character. Line %d.", index, currentToken.GetLine())
 				}
 				interpreter.stringVarTable[variableName] = handledStr[int(parsedIndex) : int(parsedIndex)+1]
 			} else if interpreter.isStringVar(str) {
 				if int(parsedIndex) >= len(interpreter.stringVarTable[str]) {
-					log.Fatalf("Error: Index out of bounds [%s] for string character. Line %d.", index, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index out of bounds [%s] for string character. Line %d.", index, currentToken.GetLine())
 				}
 				interpreter.stringVarTable[variableName] = interpreter.stringVarTable[str][int(parsedIndex) : int(parsedIndex)+1]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", str, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", str, currentToken.GetLine())
 			}
 			interpreter.deleteVarIfSameName(variableName, "string")
 		case token.SAY:
@@ -1025,16 +1025,16 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringArrayVar(output) {
 				fmt.Println(interpreter.stringArrayVarTable[output])
 			} else {
-				log.Fatalf("Error: Referenced nonexistent variable '%s'. Line %d.", output, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Referenced nonexistent variable '%s'. Line %d.", output, currentToken.GetLine())
 			}
 		case token.INPUT:
 			variableName := currentToken.GetParameter(0)
 			text := currentToken.GetParameter(1)
 			if isRawNumber, _ := isRawNumber(variableName); isRawNumber {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", variableName, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
 			if isRawString, _ := isRawString(variableName); isRawString {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", variableName, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", variableName, currentToken.GetLine())
 			}
 			if isRawString, value := isRawString(text); isRawString {
 				text = interpreter.handleString(value)
@@ -1056,7 +1056,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else {
 					i = interpreter.findCloseLoopIndex(i, tokensList, token.WHILE, token.ENDWHILE)
 					if i == -1 {
-						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
+						log.Fatalf("Interpreter error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
 				}
 			} else if interpreter.isNumberVar(condition) {
@@ -1065,18 +1065,18 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else {
 					i = interpreter.findCloseLoopIndex(i, tokensList, token.WHILE, token.ENDWHILE)
 					if i == -1 {
-						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
+						log.Fatalf("Interpreter error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
 				}
 			}
 		case token.BREAK:
 			if interpreter.whileStack.IsEmpty() {
-				log.Fatalf("Error: Cannot use BREAK instruction here. %d.", currentToken.GetLine())
+				log.Fatalf("Interpreter error: Cannot use BREAK instruction here. %d.", currentToken.GetLine())
 			}
 			interpreter.whileStack.Pop()
 			i = interpreter.findCloseLoopIndex(i, tokensList, token.WHILE, token.ENDWHILE)
 			if i == -1 {
-				log.Fatalf("Error: Cannot use BREAK instruction here. %d.", currentToken.GetLine())
+				log.Fatalf("Interpreter error: Cannot use BREAK instruction here. %d.", currentToken.GetLine())
 			}
 		case token.ENDWHILE:
 			indexToGoBack := interpreter.whileStack.Pop()
@@ -1092,7 +1092,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else if interpreter.isNumberVar(element) {
 					interpreter.numberArrayVarTable[array] = append(interpreter.numberArrayVarTable[array], interpreter.numberVarTable[element])
 				} else {
-					log.Fatalf("Error: Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				if isRawString, value := isRawString(element); isRawString {
@@ -1100,10 +1100,10 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else if interpreter.isStringVar(element) {
 					interpreter.stringArrayVarTable[array] = append(interpreter.stringArrayVarTable[array], interpreter.stringVarTable[element])
 				} else {
-					log.Fatalf("Error: Invalid parameter '%s', not a string. Line %d.", element, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter '%s', not a string. Line %d.", element, currentToken.GetLine())
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
 		case token.PREPEND:
 			array := currentToken.GetParameter(0)
@@ -1114,7 +1114,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else if interpreter.isNumberVar(element) {
 					interpreter.numberArrayVarTable[array] = append([]float64{interpreter.numberVarTable[element]}, interpreter.numberArrayVarTable[array]...)
 				} else {
-					log.Fatalf("Error: Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				if isRawString, value := isRawString(element); isRawString {
@@ -1122,10 +1122,10 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else if interpreter.isStringVar(element) {
 					interpreter.stringArrayVarTable[array] = append([]string{interpreter.stringVarTable[element]}, interpreter.stringArrayVarTable[array]...)
 				} else {
-					log.Fatalf("Error: Invalid parameter '%s', not a string. Line %d.", element, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter '%s', not a string. Line %d.", element, currentToken.GetLine())
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
 		case token.REMOVELAST:
 			array := currentToken.GetParameter(0)
@@ -1137,7 +1137,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 					interpreter.numberVarTable[variableName] = lastElement
 					interpreter.deleteVarIfSameName(variableName, "number")
 				} else {
-					log.Fatalf("Error: Array '%s' is empty. Line %d.", array, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Array '%s' is empty. Line %d.", array, currentToken.GetLine())
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				if len(interpreter.stringArrayVarTable[array]) > 0 {
@@ -1146,10 +1146,10 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 					interpreter.stringVarTable[variableName] = lastElement
 					interpreter.deleteVarIfSameName(variableName, "string")
 				} else {
-					log.Fatalf("Error: Array '%s' is empty. Line %d.", array, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Array '%s' is empty. Line %d.", array, currentToken.GetLine())
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
 		case token.REMOVEFIRST:
 			array := currentToken.GetParameter(0)
@@ -1161,7 +1161,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 					interpreter.numberVarTable[variableName] = firstElement
 					interpreter.deleteVarIfSameName(variableName, "number")
 				} else {
-					log.Fatalf("Error: Array '%s' is empty. Line %d.", array, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Array '%s' is empty. Line %d.", array, currentToken.GetLine())
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				if len(interpreter.stringArrayVarTable[array]) > 0 {
@@ -1170,10 +1170,10 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 					interpreter.stringVarTable[variableName] = firstElement
 					interpreter.deleteVarIfSameName(variableName, "string")
 				} else {
-					log.Fatalf("Error: Array '%s' is empty. Line %d.", array, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Array '%s' is empty. Line %d.", array, currentToken.GetLine())
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
 		case token.SETINDEX:
 			array := currentToken.GetParameter(0)
@@ -1185,7 +1185,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(index) {
 				parsedIndex = interpreter.numberVarTable[index]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", index, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", index, currentToken.GetLine())
 			}
 			if interpreter.isNumberArrayVar(array) {
 				parsedNewValue := -1.0
@@ -1194,12 +1194,12 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else if interpreter.isNumberVar(newValue) {
 					parsedNewValue = interpreter.numberVarTable[newValue]
 				} else {
-					log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", newValue, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", newValue, currentToken.GetLine())
 				}
 				if parsedIndex >= 0 && parsedIndex < float64(len(interpreter.numberArrayVarTable[array])) {
 					interpreter.numberArrayVarTable[array][int(parsedIndex)] = parsedNewValue
 				} else {
-					log.Fatalf("Error: Index '%f' out of bounds. Line %d.", parsedIndex, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index '%f' out of bounds. Line %d.", parsedIndex, currentToken.GetLine())
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				parsedNewValue := ""
@@ -1208,15 +1208,15 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else if interpreter.isStringVar(newValue) {
 					parsedNewValue = interpreter.stringVarTable[newValue]
 				} else {
-					log.Fatalf("Error: Invalid parameter '%s', not a string or a string variable. Line %d.", newValue, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Invalid parameter '%s', not a string or a string variable. Line %d.", newValue, currentToken.GetLine())
 				}
 				if parsedIndex >= 0 && parsedIndex < float64(len(interpreter.stringArrayVarTable[array])) {
 					interpreter.stringArrayVarTable[array][int(parsedIndex)] = parsedNewValue
 				} else {
-					log.Fatalf("Error: Index '%f' out of bounds. Line %d.", parsedIndex, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index '%f' out of bounds. Line %d.", parsedIndex, currentToken.GetLine())
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
 		case token.SWAP:
 			array := currentToken.GetParameter(0)
@@ -1229,14 +1229,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(index1) {
 				parsedIndex1 = interpreter.numberVarTable[index1]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", index1, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", index1, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(index2); isRawNumber {
 				parsedIndex2 = value
 			} else if interpreter.isNumberVar(index2) {
 				parsedIndex2 = interpreter.numberVarTable[index2]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", index2, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", index2, currentToken.GetLine())
 			}
 			if interpreter.isNumberArrayVar(array) {
 				if parsedIndex1 >= 0 && parsedIndex1 < float64(len(interpreter.numberArrayVarTable[array])) && parsedIndex2 >= 0 && parsedIndex2 < float64(len(interpreter.numberArrayVarTable[array])) {
@@ -1245,7 +1245,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 					interpreter.numberArrayVarTable[array][int(parsedIndex1)] = value2
 					interpreter.numberArrayVarTable[array][int(parsedIndex2)] = value1
 				} else {
-					log.Fatalf("Error: Index '%s' or '%s' out of bounds. Line %d.", index1, index2, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index '%s' or '%s' out of bounds. Line %d.", index1, index2, currentToken.GetLine())
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				if parsedIndex1 >= 0 && parsedIndex1 < float64(len(interpreter.stringArrayVarTable[array])) && parsedIndex2 >= 0 && parsedIndex2 < float64(len(interpreter.stringArrayVarTable[array])) {
@@ -1254,12 +1254,12 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 					interpreter.stringArrayVarTable[array][int(parsedIndex1)] = value2
 					interpreter.stringArrayVarTable[array][int(parsedIndex2)] = value1
 				} else {
-					log.Fatalf("Error: Index '%s' or '%s' out of bounds. Line %d.", index1, index2, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index '%s' or '%s' out of bounds. Line %d.", index1, index2, currentToken.GetLine())
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
-		case token.ACCESSINDEX:
+		case token.GET:
 			array := currentToken.GetParameter(0)
 			index := currentToken.GetParameter(1)
 			parsedIndex := -1.0
@@ -1269,38 +1269,38 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(index) {
 				parsedIndex = interpreter.numberVarTable[index]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s', not a number or a number variable. Line %d.", index, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s', not a number or a number variable. Line %d.", index, currentToken.GetLine())
 			}
 			if isRawNumberArray, value := interpreter.isRawNumberArray(array); isRawNumberArray {
 				if int(parsedIndex) < len(value) {
 					interpreter.numberVarTable[variableName] = value[int(parsedIndex)]
 				} else {
-					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
 				}
 				interpreter.deleteVarIfSameName(variableName, "number")
 			} else if isRawStringArray, value := interpreter.isRawStringArray(array); isRawStringArray {
 				if int(parsedIndex) < len(value) {
 					interpreter.stringVarTable[variableName] = value[int(parsedIndex)]
 				} else {
-					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
 				}
 				interpreter.deleteVarIfSameName(variableName, "string")
 			} else if interpreter.isNumberArrayVar(array) {
 				if int(parsedIndex) < len(interpreter.numberArrayVarTable[array]) {
 					interpreter.numberVarTable[variableName] = interpreter.numberArrayVarTable[array][int(parsedIndex)]
 				} else {
-					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
 				}
 				interpreter.deleteVarIfSameName(variableName, "number")
 			} else if interpreter.isStringArrayVar(array) {
 				if int(parsedIndex) < len(interpreter.stringArrayVarTable[array]) {
 					interpreter.stringVarTable[variableName] = interpreter.stringArrayVarTable[array][int(parsedIndex)]
 				} else {
-					log.Fatalf("Error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
+					log.Fatalf("Interpreter error: Index out of bounds for array '%s' [%s]. Line %d.", array, index, currentToken.GetLine())
 				}
 				interpreter.deleteVarIfSameName(variableName, "string")
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
 			}
 		case token.FOREACH:
 			element := currentToken.GetParameter(0)
@@ -1363,7 +1363,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 					}
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
 			}
 		case token.ENDFOREACH:
 			goToIndex, notEmpty := interpreter.foreachIndexesStack.Top().([]int)
@@ -1383,7 +1383,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(arrayRange) {
 				parsedArrayRange = interpreter.numberVarTable[arrayRange]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", arrayRange, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", arrayRange, currentToken.GetLine())
 			}
 			interpreter.deleteVarIfSameName(variableName, "numberarray")
 			array := make([]float64, int(parsedArrayRange))
@@ -1402,14 +1402,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(min) {
 				parsedMin = interpreter.numberVarTable[min]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", min, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", min, currentToken.GetLine())
 			}
 			if isRawNumber, value := isRawNumber(max); isRawNumber {
 				parsedMax = value
 			} else if interpreter.isNumberVar(max) {
 				parsedMax = interpreter.numberVarTable[max]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", max, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", max, currentToken.GetLine())
 			}
 			rand.Seed(time.Now().UnixNano())
 			random := float64(rand.Intn(int(parsedMax-parsedMin+1))) + parsedMin
@@ -1424,7 +1424,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringVar(filePath) {
 				parsedFilePath = interpreter.stringVarTable[filePath]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
 			}
 			parsedFilePath = filepath.Join(sourceCodeDir, parsedFilePath)
 			fileContent := io.GetFileContent(parsedFilePath)
@@ -1439,7 +1439,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringVar(filePath) {
 				parsedFilePath = interpreter.stringVarTable[filePath]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
 			}
 			parsedFilePath = filepath.Join(sourceCodeDir, parsedFilePath)
 			fileContent := io.GetFileLinesNoTrim(parsedFilePath)
@@ -1455,7 +1455,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringVar(filePath) {
 				parsedFilePath = interpreter.stringVarTable[filePath]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", filePath, currentToken.GetLine())
 			}
 			if isRawString, value := isRawString(fileContent); isRawString {
 				parsedFileContent = value
@@ -1470,7 +1470,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 					parsedFileContent += strconv.FormatFloat(value, 'f', -1, 64) + " "
 				}
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", fileContent, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", fileContent, currentToken.GetLine())
 			}
 			parsedFilePath = filepath.Join(sourceCodeDir, parsedFilePath)
 			io.WriteToFile(parsedFilePath, parsedFileContent)
@@ -1485,14 +1485,14 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringVar(target) {
 				parsedTarget = interpreter.stringVarTable[target]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
 			}
 			if isRawString, value := isRawString(pattern); isRawString {
 				parsedPattern = value
 			} else if interpreter.isStringVar(pattern) {
 				parsedPattern = interpreter.stringVarTable[pattern]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", pattern, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", pattern, currentToken.GetLine())
 			}
 			splitted := strings.Split(parsedTarget, parsedPattern)
 			interpreter.stringArrayVarTable[variableName] = splitted
@@ -1510,21 +1510,21 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isStringVar(target) {
 				parsedTarget = interpreter.stringVarTable[target]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
 			}
 			if isRawString, value := isRawString(pattern); isRawString {
 				parsedPattern = value
 			} else if interpreter.isStringVar(pattern) {
 				parsedPattern = interpreter.stringVarTable[pattern]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", pattern, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", pattern, currentToken.GetLine())
 			}
 			if isRawString, value := isRawString(replacement); isRawString {
 				parsedReplacement = value
 			} else if interpreter.isStringVar(replacement) {
 				parsedReplacement = interpreter.stringVarTable[replacement]
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", replacement, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", replacement, currentToken.GetLine())
 			}
 			replaced := strings.ReplaceAll(parsedTarget, parsedPattern, parsedReplacement)
 			interpreter.stringVarTable[variableName] = replaced
@@ -1536,7 +1536,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			} else if interpreter.isNumberVar(exitCode) {
 				parsedExitCode = int(interpreter.numberVarTable[exitCode])
 			} else {
-				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", exitCode, currentToken.GetLine())
+				log.Fatalf("Interpreter error: Invalid parameter '%s'. Line %d.", exitCode, currentToken.GetLine())
 			}
 			os.Exit(parsedExitCode)
 		}

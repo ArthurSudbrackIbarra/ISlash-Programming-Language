@@ -21,11 +21,11 @@ removefirst dataIndexes _
 
 # Foreach loop.
 foreach dIndex dataIndexes
-    accessindex csvLines dIndex dataLine
+    get csvLines dIndex dataLine
     split dataLine "," dataFields
     foreach hIndex headerIndexes
-        accessindex headerFields hIndex fieldName
-        accessindex dataFields hIndex fieldValue
+        get headerFields hIndex fieldName
+        get dataFields hIndex fieldValue
         say "$(fieldName): $(fieldValue)"
     endforeach
     say "======================"

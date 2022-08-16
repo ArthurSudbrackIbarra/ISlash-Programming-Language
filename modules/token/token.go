@@ -21,12 +21,12 @@ const (
 	RANDOM        string = "RANDOM"
 	IF            string = "IF"
 	ELSE          string = "ELSE"
-	ELSEIF        string = "ELSEIF" //
+	ELSEIF        string = "ELSEIF"
 	ENDIF         string = "ENDIF"
 	EQUAL         string = "EQUAL"
 	NOTEQUAL      string = "NOTEQUAL"
 	CONCAT        string = "CONCAT"
-	GETCHAR       string = "GETCHAR"
+	CHARAT        string = "CHARAT"
 	LENGTH        string = "LENGTH"
 	UPPER         string = "UPPER"
 	LOWER         string = "LOWER"
@@ -38,7 +38,7 @@ const (
 	BREAK         string = "BREAK"
 	FOREACH       string = "FOREACH"
 	ENDFOREACH    string = "ENDFOREACH"
-	ACCESSINDEX   string = "ACCESSINDEX"
+	GET           string = "GET"
 	APPEND        string = "APPEND"
 	PREPEND       string = "PREPEND"
 	REMOVEFIRST   string = "REMOVEFIRST"
@@ -50,8 +50,8 @@ const (
 	READFILELINES string = "READFILELINES"
 	WRITEFILE     string = "WRITEFILE"
 	SPLIT         string = "SPLIT"
-	EXIT          string = "EXIT"    //
-	REPLACE       string = "REPLACE" //
+	EXIT          string = "EXIT"
+	REPLACE       string = "REPLACE"
 )
 
 type Token struct {

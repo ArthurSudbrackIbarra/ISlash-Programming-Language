@@ -15,9 +15,9 @@ less y yLimit yContinue
 
 while iContinue
     while yContinue
-        accessindex array y element1
+        get array y element1
         add y 1 yPlusOne
-        accessindex array yPlusOne element2
+        get array yPlusOne element2
         greater element1 element2 firstIsGreater
         if firstIsGreater
             swap array y yPlusOne

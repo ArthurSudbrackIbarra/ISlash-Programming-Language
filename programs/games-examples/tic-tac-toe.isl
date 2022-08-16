@@ -47,7 +47,7 @@ while 1
     # Replacing the position number with the player symbol.
     if inRow1
         # Verifying if the position is free.
-        accessindex row1 position element
+        get row1 position element
         notequal element PLAYER_1_SYMBOL notX
         notequal element PLAYER_2_SYMBOL notO
         and notX notO isFree
@@ -61,7 +61,7 @@ while 1
         if inRow2
             # Verifying if the position is free.
             sub position 3 position
-            accessindex row2 position element
+            get row2 position element
             notequal element PLAYER_1_SYMBOL notX
             notequal element PLAYER_2_SYMBOL notO
             and notX notO isFree
@@ -74,7 +74,7 @@ while 1
         else
             # Verifying if the position is free.
             sub position 6 position
-            accessindex row3 position element
+            get row3 position element
             notequal element PLAYER_1_SYMBOL notX
             notequal element PLAYER_2_SYMBOL notO
             and notX notO isFree
@@ -115,9 +115,9 @@ while 1
     # Verticals.
     rangearray 3 indexes
     foreach index indexes
-        accessindex row1 index element1
-        accessindex row2 index element2
-        accessindex row3 index element3
+        get row1 index element1
+        get row2 index element2
+        get row3 index element3
         equal element1 symbol eq1
         equal element2 symbol eq2
         equal element3 symbol eq3
@@ -130,9 +130,9 @@ while 1
     endforeach
 
     # Diagonal 1 - Right Left.
-    accessindex row1 0 element1
-    accessindex row2 1 element2
-    accessindex row3 2 element3
+    get row1 0 element1
+    get row2 1 element2
+    get row3 2 element3
     equal element1 symbol eq1
     equal element2 symbol eq2
     equal element3 symbol eq3
@@ -144,9 +144,9 @@ while 1
     endif
 
     # Diagonal 2 - Left Right.
-    accessindex row1 2 element1
-    accessindex row2 1 element2
-    accessindex row3 0 element3
+    get row1 2 element1
+    get row2 1 element2
+    get row3 0 element3
     equal element1 symbol eq1
     equal element2 symbol eq2
     equal element3 symbol eq3

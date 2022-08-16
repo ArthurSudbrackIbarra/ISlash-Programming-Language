@@ -17,8 +17,8 @@ set isPalidrome 1
 while limit
     # char1 = str[index1]
     # char2 = str[index2]
-    getchar str index1 char1
-    getchar str index2 char2
+    charat str index1 char1
+    charat str index2 char2
 
     # charsAreNotEqual = (char1 != char2)
     notequal char1 char2 charsAreNotEqual

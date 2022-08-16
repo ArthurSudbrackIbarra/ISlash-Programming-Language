@@ -21,6 +21,7 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 * [Things to Notice](#things-to-notice)
 * [Try ISlash](#try-islash)
 * [Uninstall ISlash](#uninstall-islash)
+* [Possible Future Features](#possible-future-features)
 
 ## Example Programs
 
@@ -74,6 +75,7 @@ Instructions are **not case sensitive**.
 | AND           | AND operator.                                                               |
 | OR            | OR operator.                                                                |
 | IF            | If statements.                                                              |
+| ELSEIF        | Else if statements.                                                         |
 | ELSE          | Else statements.                                                            |
 | ENDIF         | Closes if blocks.                                                           |
 | EQUAL         | == operator.                                                                |
@@ -83,29 +85,31 @@ Instructions are **not case sensitive**.
 | UPPER         | Turn strings into uppercase.                                                |
 | LOWER         | Turn strings into lowercase.                                                |
 | SPLIT         | Splits a string using a pattern, produces a string[] variable.              |
-| GETCHAR       | Gets the nth char of a string.                                              |
+| REPLACE       | Replaces a pattern in a string by another pattern.                          |
+| CHARAT        | Gets the nth char of a string.                                              |
 | SAY           | Prints to screen.                                                           |
 | INPUT         | Gets user input.                                                            |
 | WHILE         | While statements.                                                           |
+| BREAK         | Exits out of while blocks.                                                  |
 | ENDWHILE      | Closes while blocks.                                                        |
 | FOREACH       | Use to iterate over arrays.                                                 |
 | ENDFOREACH    | Closes foreach blocks.                                                      |
-| BREAK         | (Not implemented yet).                                                      |
 | APPEND        | Appends an element to an array.                                             |
 | PREPEND       | Preppends an element to an array.                                           |
 | REMOVEFIRST   | Removes the first element of an array.                                      |
 | REMOVELAST    | Removes the last element of an array.                                       |
 | SWAP          | Swaps arrays positions.                                                     |
-| ACCESSINDEX   | Gets the nth element of an array.                                           |
+| GET           | Gets the nth element of an array.                                           |
 | SETINDEX      | Changes the element at an index.                                            |
 | CONTAINS      | Checks if a string contains a character or if an array contains an element. |
 | READFILE      | Reads a file, produces a string variable.                                   |
 | READFILELINES | Reads a file line by line, produces a string[] variable.                    |
 | WRITEFILE     | Writes to a file, overrides previous content.                               |
+| EXIT          | Exits the program with a status code.                                       |
 
 ## Language Features
 
-Below, ISlash language features will be explained:
+Below, some ISlash language features will be explained:
 
 ### Comments
 
@@ -232,3 +236,10 @@ docker rm islash-container
 ```sh
 docker rmi islash/islash-programming-language:v1
 ```
+
+## Possible Future Features
+
+These are some of the features that I might implement in the future:
+
+- Functions
+- Swich/Case
