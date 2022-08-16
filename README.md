@@ -29,7 +29,7 @@ Example programs using the ISlash language can be found inside the [programs fol
 
 In the example below, we are multiplying numbers inputed by the user.
 
-![Example Program](https://user-images.githubusercontent.com/69170322/184281568-9251885e-06d5-4089-a115-b09a803836cc.png)
+![Example Program](https://user-images.githubusercontent.com/69170322/184975724-e25bb028-2f75-4334-b0db-43264433f109.png)
 
 ## Language Support in VSCode
 
