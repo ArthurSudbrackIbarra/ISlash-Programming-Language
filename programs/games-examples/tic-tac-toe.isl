@@ -43,7 +43,6 @@ while continue
         and notX notO isFree
         if isFree
             setindex row1 position symbol
-        # TEM ERRO DE ELSE AQUI, PORQUE O IF PROCURA O PRÓXIMO ELSE AO INVÉS DE IR PRO DA LINHA 56.
         else
             say "\nThe position is not free."
             decrement turn
@@ -78,17 +77,106 @@ while continue
         endif
     endif
 
-    # Checking if one of the players has won the game.
+    #
+    # Checking if the game has ended.
+    #
 
-    # Row 1 - Horizontal
-
-    # Checking if it's a draw.
-    greaterequal turn 9 draw
-    if draw
-        say "Game over, it's a draw!"
-        set continue 0     
+    # Horizontal 1.
+    equal row1 ["X","X","X"] condition1
+    equal row1 ["O","O","O"] condition2
+    or condition1 condition2 victory
+    if victory
+        say "\nVictory!"
+        set continue 0
     endif
 
+    # Horizontal 2.
+    equal row2 ["X","X","X"] condition1
+    equal row2 ["O","O","O"] condition2
+    or condition1 condition2 victory
+    if victory
+        say "\nVictory!"
+        set continue 0
+    endif
+
+    # Horizontal 3.
+    equal row3 ["X","X","X"] or1
+    equal row3 ["O","O","O"] or2
+    or or1 or2 victory
+    if victory
+        say "\nVictory!"
+        set continue 0
+    endif
+
+    # Verticals.
+    rangearray 3 indexes
+    foreach index indexes
+        accessindex row1 index element1
+        accessindex row2 index element2
+        accessindex row3 index element3
+        equal element1 "X" eq1
+        equal element2 "X" eq2
+        equal element3 "X" eq3
+        and eq1 eq2 victory1
+        and victory1 eq3 victory1
+        equal element1 "O" eq1
+        equal element2 "O" eq2
+        equal element3 "O" eq3
+        and eq1 eq2 victory2
+        and victory2 eq3 victory2
+        or victory1 victory2 victory
+        if victory
+            say "\nVictory!"
+            set continue 0
+        endif
+    endforeach
+
+    # Diagonal 1 - Right Left.
+    accessindex row1 0 element1
+    accessindex row2 1 element2
+    accessindex row3 2 element3
+    equal element1 "X" eq1
+    equal element2 "X" eq2
+    equal element3 "X" eq3
+    and eq1 eq2 victory1
+    and victory1 eq3 victory1
+    equal element1 "O" eq1
+    equal element2 "O" eq2
+    equal element3 "O" eq3
+    and eq1 eq2 victory2
+    and victory2 eq3 victory2
+    or victory1 victory2 victory
+    if victory
+        say "\nVictory!"
+        set continue 0
+    endif
+
+    # Diagonal 2 - Left Right.
+    accessindex row1 2 element1
+    accessindex row2 1 element2
+    accessindex row3 0 element3
+    equal element1 "X" eq1
+    equal element2 "X" eq2
+    equal element3 "X" eq3
+    and eq1 eq2 victory1
+    and victory1 eq3 victory1
+    equal element1 "O" eq1
+    equal element2 "O" eq2
+    equal element3 "O" eq3
+    and eq1 eq2 victory2
+    and victory2 eq3 victory2
+    or victory1 victory2 victory
+    if victory
+        say "\nVictory!"
+        set continue 0
+    endif
+
+    # Draw.
+    greaterequal turn 9 draw
+    if draw
+        say "\nIt's a draw!"
+        set continue 0     
+    endif
 
     # Setup for the next turn.
     set inRow1 0
@@ -97,4 +185,11 @@ while continue
     increment turn
 endwhile
 
-
+# Printing the board one last time.
+say ""
+say row1
+say "-------"
+say row2
+say "-------"
+say row3
+say ""
