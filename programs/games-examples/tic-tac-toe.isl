@@ -3,11 +3,11 @@ set row1 ["0","1","2"]
 set row2 ["3","4","5"]
 set row3 ["6","7","8"]
 
-# Variables that control the game flow.
-set continue 1
+# Variables that control the game turns.
 set turn 1
 
-while continue
+# While true:
+while 1
     # Printing the board.
     say ""
     say row1
@@ -87,7 +87,7 @@ while continue
     or condition1 condition2 victory
     if victory
         say "\nVictory!"
-        set continue 0
+        break
     endif
 
     # Horizontal 2.
@@ -96,7 +96,7 @@ while continue
     or condition1 condition2 victory
     if victory
         say "\nVictory!"
-        set continue 0
+        break
     endif
 
     # Horizontal 3.
@@ -105,7 +105,7 @@ while continue
     or or1 or2 victory
     if victory
         say "\nVictory!"
-        set continue 0
+        break
     endif
 
     # Verticals.
@@ -127,7 +127,7 @@ while continue
         or victory1 victory2 victory
         if victory
             say "\nVictory!"
-            set continue 0
+            break
         endif
     endforeach
 
@@ -148,7 +148,7 @@ while continue
     or victory1 victory2 victory
     if victory
         say "\nVictory!"
-        set continue 0
+        break
     endif
 
     # Diagonal 2 - Left Right.
@@ -168,14 +168,14 @@ while continue
     or victory1 victory2 victory
     if victory
         say "\nVictory!"
-        set continue 0
+        break
     endif
 
     # Draw.
     greaterequal turn 9 draw
     if draw
         say "\nIt's a draw!"
-        set continue 0     
+        break    
     endif
 
     # Setup for the next turn.

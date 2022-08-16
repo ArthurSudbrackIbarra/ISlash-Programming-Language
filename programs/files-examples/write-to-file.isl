@@ -1,13 +1,12 @@
-set continue 1
 set contentToWrite ""
 
-while continue
+while 1
     input str "Type a string or just press 'Enter' to stop: "
     length str strLength
     if strLength
         concat contentToWrite "$(str)\n"
     else
-        set continue 0
+        break
     endif
 endwhile
 
