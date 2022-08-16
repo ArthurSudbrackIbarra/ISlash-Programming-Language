@@ -1,21 +1,21 @@
 # Board rows.
-set row1 ["0","1","2"]
-set row2 ["3","4","5"]
-set row3 ["6","7","8"]
+var row1 ["0","1","2"]
+var row2 ["3","4","5"]
+var row3 ["6","7","8"]
 
 # Variable that controls the game turns.
-set turn 1
+var turn 1
 
 # [ Constants ]
 
-set PLAYER_1_NAME "Player 1"
-set PLAYER_1_SYMBOL "X"
+var PLAYER_1_NAME "Player 1"
+var PLAYER_1_SYMBOL "X"
 
-set PLAYER_2_NAME "Player 2"
-set PLAYER_2_SYMBOL "O"
+var PLAYER_2_NAME "Player 2"
+var PLAYER_2_SYMBOL "O"
 
-set VICTORY_MESSAGE "\nVictory!"
-set DRAW_MESSAGE "\nIt's a draw!"
+var VICTORY_MESSAGE "\nVictory!"
+var DRAW_MESSAGE "\nIt's a draw!"
 
 while 1
     # Printing the board.
@@ -31,11 +31,11 @@ while 1
     # Even turn number = Player 2.
     mod turn 2 isPlayer1
     if isPlayer1
-        set playerName PLAYER_1_NAME
-        set symbol PLAYER_1_SYMBOL
+        var playerName PLAYER_1_NAME
+        var symbol PLAYER_1_SYMBOL
     else
-        set playerName PLAYER_1_NAME
-        set symbol PLAYER_2_SYMBOL
+        var playerName PLAYER_1_NAME
+        var symbol PLAYER_2_SYMBOL
     endif
 
     # Finding out the correct row.
@@ -165,9 +165,9 @@ while 1
     endif
 
     # Setup for the next turn.
-    set inRow1 0
-    set inRow2 0
-    set inRow3 0
+    var inRow1 0
+    var inRow2 0
+    var inRow3 0
     increment turn
 endwhile
 

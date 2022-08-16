@@ -1,12 +1,12 @@
 # Modify 'n' to the value you wish. 7! in this example.
-set n 7
+var n 7
 
 # This will be our counter.
 # counter = n
-set counter n
+var counter n
 
 # Variable to store the multiplication of the numbers.
-set result 1
+var result 1
 
 # While counter > 0
 while counter

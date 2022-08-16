@@ -1,7 +1,7 @@
-set wordToFind "WATERMELONS"
-set occurences 0
+var wordToFind "WATERMELONS"
+var occurences 0
 
-set filePath "../resources/txt/sentence.txt"
+var filePath "../resources/txt/sentence.txt"
 readfilelines filePath fileLines
 
 foreach line fileLines

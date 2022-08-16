@@ -1,4 +1,4 @@
-set contentToWrite ""
+var contentToWrite ""
 
 while 1
     input str "Type a string or just press 'Enter' to stop: "
@@ -12,7 +12,7 @@ endwhile
 
 input fileDir "Enter the directory to save the file: "
 input fileName "Enter the file name: "
-set filePath ""
+var filePath ""
 
 concat filePath fileDir
 concat filePath "/"

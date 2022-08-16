@@ -1,6 +1,6 @@
 input n "Enter a value for n: "
 
-set index 1
+var index 1
 
 lessequal index n indexIsLessThanOrEqualN
 
@@ -11,7 +11,7 @@ while indexIsLessThanOrEqualN
     not remainer3 divisibleBy3
     not remainer5 divisibleBy5
 
-    set output ""
+    var output ""
 
     if divisibleBy3
         concat output "Fizz"

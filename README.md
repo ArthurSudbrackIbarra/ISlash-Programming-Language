@@ -56,7 +56,7 @@ Instructions are **not case sensitive**.
 
 | Instruction   | Description                                                                 |
 |:-------------:|-----------------------------------------------------------------------------|
-| SET           | Sets/declares variables.                                                    |
+| VAR           | Sets/declares variables.                                                    |
 | ADD           | + operator.                                                                 |
 | SUB           | - operator.                                                                 |
 | MULT          | * operator.                                                                 |
@@ -125,15 +125,15 @@ say "Cool!"
 ISlash allows the interpolation of Strings using the `$()` symbol:
 
 ```
-set name "Arthur"
-set age 20
+var name "Arthur"
+var age 20
 say "My name is $(name) and I am $(age) years old."
 ```
 
 ### New Lines in Strings
 
 To represent new lines, use the `\n` symbol:
-s
+
 ```
 say "Hi!\nThis is in a new line!"
 ```
@@ -155,7 +155,7 @@ endforeach
 # element does not exist here!
 ```
 
-2. The **SET** command will create new variables if they don't exist yet. If they do, the previous value will be overrided.
+2. The **VAR** command will create new variables if they don't exist yet. If they do, the previous value will be replaced by the new one.
 
 ### 2. Arrays
 
@@ -164,12 +164,12 @@ endforeach
 Example:
 
 ```
-set array [1,2,3] # OK!
-set array ["Hello", "Bye"] # OK!
-set array []number # OK!
-set array []string # OK!
+var array [1,2,3] # OK!
+var array ["Hello", "Bye"] # OK!
+var array []number # OK!
+var array []string # OK!
 
-set array [] # NOT OK!
+var array [] # NOT OK!
 ```
 
 ## Try ISlash

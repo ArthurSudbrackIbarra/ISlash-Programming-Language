@@ -1,5 +1,5 @@
-set continue 1
-set numbers []number
+var continue 1
+var numbers []number
 
 while continue
     input number "Type a number or type 0 to stop: "
@@ -7,7 +7,7 @@ while continue
     notequal number 0 continue
 endwhile
 
-set sum 0
+var sum 0
 
 foreach element numbers
     add element sum sum

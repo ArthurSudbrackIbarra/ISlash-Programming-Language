@@ -33,9 +33,9 @@ func MountTokens(filePath string) []*token.Token {
 			parameters = splittedInstruction[1:]
 		}
 		switch tokenType {
-		case token.SET:
+		case token.VAR:
 			if len(parameters) != 2 {
-				log.Fatalf("Lexer error: Invalid DECLARE statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
+				log.Fatalf("Lexer error: Invalid VAR statement, expected 2 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		case token.ADD:
 			if len(parameters) != 3 {

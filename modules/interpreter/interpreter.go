@@ -291,7 +291,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 		}
 		currentToken := tokensList[i]
 		switch currentToken.GetType() {
-		case token.SET:
+		case token.VAR:
 			variableName := currentToken.GetParameter(0)
 			assignValue := currentToken.GetParameter(1)
 			if isRawNumber, _ := isRawNumber(variableName); isRawNumber {

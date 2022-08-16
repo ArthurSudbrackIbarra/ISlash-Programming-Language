@@ -1,7 +1,7 @@
 package token
 
 const (
-	SET           string = "SET"
+	VAR           string = "VAR"
 	ADD           string = "ADD"
 	SUB           string = "SUB"
 	MULT          string = "MULT"

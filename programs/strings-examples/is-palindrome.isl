@@ -1,7 +1,7 @@
 input str "Enter a string: "
 
 # index1 = 0
-set index1 0
+var index1 0
 
 # index2 = length(str) - 1
 length str index2
@@ -11,7 +11,7 @@ decrement index2
 div index2 2 limit
 
 # isPalidrome = true
-set isPalidrome 1
+var isPalidrome 1
 
 # while limit > 0
 while limit
