@@ -50,6 +50,8 @@ const (
 	READFILELINES string = "READFILELINES"
 	WRITEFILE     string = "WRITEFILE"
 	SPLIT         string = "SPLIT"
+	EXIT          string = "EXIT"    //
+	REPLACE       string = "REPLACE" //
 )
 
 type Token struct {

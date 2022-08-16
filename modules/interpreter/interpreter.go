@@ -181,12 +181,13 @@ func (interpreter *Interpreter) handleString(str string) string {
 	return strings.ReplaceAll(interpolated, `\n`, "\n")
 }
 
+// Nao funciona pro break ainda porque o index do brek nao é o mesmo do while
 func (interpreter *Interpreter) findCloseLoopIndex(currentIndex int, tokensList []*token.Token, loopTypeBegin string, loopTypeEnd string) int {
 	whileStatementsCount := 0
 	currentWhileStatementOrder := 0
 	for i := 0; i < len(tokensList); i++ {
 		if tokensList[i].GetType() == loopTypeBegin {
-			if i == currentIndex {
+			if i <= currentIndex {
 				currentWhileStatementOrder = whileStatementsCount
 			}
 			whileStatementsCount += 1
@@ -1023,6 +1024,15 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 						log.Fatalf("Error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
 				}
+			}
+		case token.BREAK:
+			if interpreter.whileStack.IsEmpty() {
+				log.Fatalf("Error: Cannot use BREAK instruction here. %d.", currentToken.GetLine())
+			}
+			interpreter.whileStack.Pop()
+			i = interpreter.findCloseLoopIndex(i, tokensList, token.WHILE, token.ENDWHILE)
+			if i == -1 {
+				log.Fatalf("Error: Cannot use BREAK instruction here. %d.", currentToken.GetLine())
 			}
 		case token.ENDWHILE:
 			indexToGoBack := interpreter.whileStack.Pop()

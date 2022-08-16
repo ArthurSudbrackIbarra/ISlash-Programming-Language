@@ -225,6 +225,14 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 3 {
 				log.Fatalf("Invalid SPLIT statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.EXIT:
+			if len(parameters) != 1 {
+				log.Fatalf("Invalid EXIT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
+			}
+		case token.REPLACE:
+			if len(parameters) != 3 {
+				log.Fatalf("Invalid REPLACE statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		default:
 			log.Fatalf("Invalid instruction '%s'. Line %d.", tokenType, line)
 		}
