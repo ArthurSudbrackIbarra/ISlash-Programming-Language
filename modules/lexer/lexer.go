@@ -137,6 +137,10 @@ func MountTokens(filePath string) []*token.Token {
 			if len(parameters) != 1 {
 				log.Fatalf("Invalid IF statement, expected 1 parameters but got %d. Line %d.", len(parameters), line)
 			}
+		case token.ELSEIF:
+			if len(parameters) != 1 {
+				log.Fatalf("Invalid ELSEIF statement, expected 1 parameters but got %d. Line %d.", len(parameters), line)
+			}
 		case token.ELSE:
 			if len(parameters) != 0 {
 				log.Fatalf("Invalid ELSE statement, expected 0 parameters but got %d. Line %d.", len(parameters), line)
@@ -230,8 +234,8 @@ func MountTokens(filePath string) []*token.Token {
 				log.Fatalf("Invalid EXIT statement, expected 1 parameter but got %d. Line %d.", len(parameters), line)
 			}
 		case token.REPLACE:
-			if len(parameters) != 3 {
-				log.Fatalf("Invalid REPLACE statement, expected 3 parameters but got %d. Line %d.", len(parameters), line)
+			if len(parameters) != 4 {
+				log.Fatalf("Invalid REPLACE statement, expected 4 parameters but got %d. Line %d.", len(parameters), line)
 			}
 		default:
 			log.Fatalf("Invalid instruction '%s'. Line %d.", tokenType, line)

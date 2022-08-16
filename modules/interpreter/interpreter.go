@@ -793,18 +793,62 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				interpreter.conditionStack.Push(1)
 				i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
 				if i == -1 {
-					log.Fatalf("Invalid IF block. Line %d", currentToken.GetLine())
+					log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
 				}
 			} else {
 				interpreter.conditionStack.Push(0)
 			}
-		case token.ELSE:
-			shouldExecute := interpreter.conditionStack.Top()
-			if shouldExecute != 1 {
+		case token.ELSEIF:
+			shouldExecute := interpreter.conditionStack.Pop()
+			if shouldExecute == 1 {
+				condition := currentToken.GetParameter(0)
+				parsedCondition := -1.0
+				if isRawNumber, value := isRawNumber(condition); isRawNumber {
+					parsedCondition = value
+				} else if interpreter.isNumberVar(condition) {
+					parsedCondition = interpreter.numberVarTable[condition]
+				} else if interpreter.isStringVar(condition) {
+					if len(interpreter.stringVarTable[condition]) > 1 {
+						parsedCondition = 1
+					} else {
+						parsedCondition = 0
+					}
+				} else if isRawString, value := isRawString(condition); isRawString {
+					if len(value) > 1 {
+						parsedCondition = 1
+					} else {
+						parsedCondition = 0
+					}
+				} else {
+					log.Fatalf("Error: Invalid parameter for ELSEIF statement. Line %d.", currentToken.GetLine())
+				}
+				if parsedCondition < 1 {
+					interpreter.conditionStack.Push(1)
+					i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
+					if i == -1 {
+						log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
+					}
+				} else {
+					interpreter.conditionStack.Push(0)
+				}
+			} else if shouldExecute == 0 {
+				interpreter.conditionStack.Push(0)
 				i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
 				if i == -1 {
-					log.Fatalf("Missing ENDIF statement. Line %d", currentToken.GetLine())
+					log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
 				}
+			} else {
+				log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
+			}
+		case token.ELSE:
+			shouldExecute := interpreter.conditionStack.Top()
+			if shouldExecute == 0 {
+				i = interpreter.findNextConditionBlockIndex(i, tokensList) - 1
+				if i == -1 {
+					log.Fatalf("Error: Missing ENDIF statement. Line %d", currentToken.GetLine())
+				}
+			} else if shouldExecute != 1 {
+				log.Fatalf("Error: Invalid IF block. Line %d", currentToken.GetLine())
 			}
 		case token.ENDIF:
 			interpreter.conditionStack.Pop()
@@ -1048,7 +1092,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else if interpreter.isNumberVar(element) {
 					interpreter.numberArrayVarTable[array] = append(interpreter.numberArrayVarTable[array], interpreter.numberVarTable[element])
 				} else {
-					log.Fatalf("Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
+					log.Fatalf("Error: Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				if isRawString, value := isRawString(element); isRawString {
@@ -1056,10 +1100,10 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else if interpreter.isStringVar(element) {
 					interpreter.stringArrayVarTable[array] = append(interpreter.stringArrayVarTable[array], interpreter.stringVarTable[element])
 				} else {
-					log.Fatalf("Invalid parameter '%s', not a string. Line %d.", element, currentToken.GetLine())
+					log.Fatalf("Error: Invalid parameter '%s', not a string. Line %d.", element, currentToken.GetLine())
 				}
 			} else {
-				log.Fatalf("Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s', not an array variable. Line %d.", array, currentToken.GetLine())
 			}
 		case token.PREPEND:
 			array := currentToken.GetParameter(0)
@@ -1070,7 +1114,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				} else if interpreter.isNumberVar(element) {
 					interpreter.numberArrayVarTable[array] = append([]float64{interpreter.numberVarTable[element]}, interpreter.numberArrayVarTable[array]...)
 				} else {
-					log.Fatalf("Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
+					log.Fatalf("Error: Invalid parameter '%s', not a number. Line %d.", element, currentToken.GetLine())
 				}
 			} else if interpreter.isStringArrayVar(array) {
 				if isRawString, value := isRawString(element); isRawString {
@@ -1256,7 +1300,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				}
 				interpreter.deleteVarIfSameName(variableName, "string")
 			} else {
-				log.Fatalf("Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", array, currentToken.GetLine())
 			}
 		case token.FOREACH:
 			element := currentToken.GetParameter(0)
@@ -1453,6 +1497,48 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 			splitted := strings.Split(parsedTarget, parsedPattern)
 			interpreter.stringArrayVarTable[variableName] = splitted
 			interpreter.deleteVarIfSameName(variableName, "stringarray")
+		case token.REPLACE:
+			target := currentToken.GetParameter(0)
+			pattern := currentToken.GetParameter(1)
+			replacement := currentToken.GetParameter(2)
+			variableName := currentToken.GetParameter(3)
+			parsedTarget := ""
+			parsedPattern := ""
+			parsedReplacement := ""
+			if isRawString, value := isRawString(target); isRawString {
+				parsedTarget = value
+			} else if interpreter.isStringVar(target) {
+				parsedTarget = interpreter.stringVarTable[target]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", target, currentToken.GetLine())
+			}
+			if isRawString, value := isRawString(pattern); isRawString {
+				parsedPattern = value
+			} else if interpreter.isStringVar(pattern) {
+				parsedPattern = interpreter.stringVarTable[pattern]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", pattern, currentToken.GetLine())
+			}
+			if isRawString, value := isRawString(replacement); isRawString {
+				parsedReplacement = value
+			} else if interpreter.isStringVar(replacement) {
+				parsedReplacement = interpreter.stringVarTable[replacement]
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", replacement, currentToken.GetLine())
+			}
+			replaced := strings.ReplaceAll(parsedTarget, parsedPattern, parsedReplacement)
+			interpreter.stringVarTable[variableName] = replaced
+		case token.EXIT:
+			exitCode := currentToken.GetParameter(0)
+			parsedExitCode := 0
+			if isRawNumber, value := isRawNumber(exitCode); isRawNumber {
+				parsedExitCode = int(value)
+			} else if interpreter.isNumberVar(exitCode) {
+				parsedExitCode = int(interpreter.numberVarTable[exitCode])
+			} else {
+				log.Fatalf("Error: Invalid parameter '%s'. Line %d.", exitCode, currentToken.GetLine())
+			}
+			os.Exit(parsedExitCode)
 		}
 	}
 }
