@@ -205,21 +205,46 @@ func (interpreter *Interpreter) findCloseLoopIndex(currentIndex int, tokensList 
 	return -1
 }
 
-// Finnish this later...
 func (interpreter *Interpreter) findNextConditionBlockIndex(currentIndex int, tokensList []*token.Token) int {
 	levels := [][]int{}
 	currentLevel := -1
+	targetLevel := -1
 	for i := 0; i < len(tokensList); i++ {
 		if tokensList[i].GetType() == token.IF {
-			levels = append(levels, []int{i})
-			currentLevel += 1
+			if currentLevel == len(levels)-1 {
+				levels = append(levels, []int{i})
+				currentLevel += 1
+			} else {
+				currentLevel += 1
+				if currentLevel >= len(levels[currentLevel]) {
+					return -1
+				}
+				levels[currentLevel] = append(levels[currentLevel], i)
+			}
 		} else if tokensList[i].GetType() == token.ELSEIF || tokensList[i].GetType() == token.ELSE {
 			levels[currentLevel] = append(levels[currentLevel], i)
 		} else if tokensList[i].GetType() == token.ENDIF {
-			levels = levels[:currentLevel]
+			levels[currentLevel] = append(levels[currentLevel], i)
+			currentLevel -= 1
+		}
+		if i == currentIndex {
+			targetLevel = currentLevel
 		}
 	}
-	return 99999
+	if targetLevel == -1 {
+		return -1
+	}
+	for i := 0; i < len(levels[targetLevel]); i++ {
+		conditionIndex := levels[targetLevel][i]
+		if conditionIndex == currentIndex {
+			if i+1 < len(levels[targetLevel]) {
+				return levels[targetLevel][i+1]
+			} else {
+				return -1
+			}
+		}
+	}
+	return -1
 }
 
 func (interpreter *Interpreter) deleteVarIfSameName(varName string, varType string) {
