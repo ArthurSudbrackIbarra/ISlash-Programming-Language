@@ -1,6 +1,13 @@
 # List of possible words.
 var words ["Play","Melon","Whale","Subject","Magic"]
 
+# The user can choose a custom word too.
+input customWord "Type a custom word or type 0 to use a predefined word: "
+notequal customWord 0 isCustom
+if isCustom
+    var words [customWord]
+endif
+
 # maxRandomRange = length(words) - 1
 length words wordsArrayLength
 sub wordsArrayLength 1 maxRandomRange
@@ -33,7 +40,7 @@ var lifes 5
 
 while lifes
     # Getting user input and turning it into uppercase.
-    input guessedLetter "\nLifes: $(lifes) | Type a letter: "
+    input guessedLetter "\nLifes: $(lifes) | Letters: $(randomWordLength) | Type a letter: "
     upper guessedLetter guessedLetter
     # Checking if the word contains the letter.
     contains randomWord guessedLetter containsLetter
