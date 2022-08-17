@@ -15,7 +15,7 @@ var PLAYER_2_NAME "Player 2"
 var PLAYER_2_SYMBOL "O"
 
 var POSITION_NOT_FREE_MESSAGE "\nThe position is not free."
-var VICTORY_MESSAGE "\nVictory for "
+var VICTORY_MESSAGE "\nVictory for"
 var DRAW_MESSAGE "\nIt's a draw!"
 
 while 1
@@ -93,21 +93,21 @@ while 1
     # Horizontal 1.
     equal row1 [symbol,symbol,symbol] victory
     if victory
-        say "$(VICTORY_MESSAGE) $(playerName)."
+        say "$(VICTORY_MESSAGE) $(playerName)!"
         break
     endif
 
     # Horizontal 2.
     equal row2 [symbol,symbol,symbol] victory
     if victory
-        say "$(VICTORY_MESSAGE) $(playerName)."
+        say "$(VICTORY_MESSAGE) $(playerName)!"
         break
     endif
 
     # Horizontal 3.
     equal row3 [symbol,symbol,symbol] victory
     if victory
-        say "$(VICTORY_MESSAGE) $(playerName)."
+        say "$(VICTORY_MESSAGE) $(playerName)!"
         break
     endif
 
@@ -123,7 +123,7 @@ while 1
         and eq1 eq2 victory
         and victory eq3 victory
         if victory
-            say "$(VICTORY_MESSAGE) $(playerName)."
+            say "$(VICTORY_MESSAGE) $(playerName)!"
             break
         endif
     endforeach
@@ -138,7 +138,7 @@ while 1
     and eq1 eq2 victory
     and victory eq3 victory
     if victory
-        say "$(VICTORY_MESSAGE) $(playerName)."
+        say "$(VICTORY_MESSAGE) $(playerName)!"
         break
     endif
 
@@ -152,7 +152,7 @@ while 1
     and eq1 eq2 victory
     and victory eq3 victory
     if victory
-        say "$(VICTORY_MESSAGE) $(playerName)."
+        say "$(VICTORY_MESSAGE) $(playerName)!"
         break
     endif
 
