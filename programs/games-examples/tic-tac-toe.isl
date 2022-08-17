@@ -14,7 +14,8 @@ var PLAYER_1_SYMBOL "X"
 var PLAYER_2_NAME "Player 2"
 var PLAYER_2_SYMBOL "O"
 
-var VICTORY_MESSAGE "\nVictory!"
+var POSITION_NOT_FREE_MESSAGE "\nThe position is not free."
+var VICTORY_MESSAGE "\nVictory for "
 var DRAW_MESSAGE "\nIt's a draw!"
 
 while 1
@@ -54,36 +55,34 @@ while 1
         if isFree
             setindex row1 position symbol
         else
-            say "\nThe position is not free."
+            say POSITION_NOT_FREE_MESSAGE
+            decrement turn
+        endif
+    elseif inRow2
+        # Verifying if the position is free.
+        sub position 3 position
+        get row2 position element
+        notequal element PLAYER_1_SYMBOL notX
+        notequal element PLAYER_2_SYMBOL notO
+        and notX notO isFree
+        if isFree
+            setindex row2 position symbol
+        else
+            say POSITION_NOT_FREE_MESSAGE
             decrement turn
         endif
     else
-        if inRow2
-            # Verifying if the position is free.
-            sub position 3 position
-            get row2 position element
-            notequal element PLAYER_1_SYMBOL notX
-            notequal element PLAYER_2_SYMBOL notO
-            and notX notO isFree
-            if isFree
-                setindex row2 position symbol
-            else
-                say "\nThe position is not free."
-                decrement turn
-            endif
+        # Verifying if the position is free.
+        sub position 6 position
+        get row3 position element
+        notequal element PLAYER_1_SYMBOL notX
+        notequal element PLAYER_2_SYMBOL notO
+        and notX notO isFree
+        if isFree
+            setindex row3 position symbol
         else
-            # Verifying if the position is free.
-            sub position 6 position
-            get row3 position element
-            notequal element PLAYER_1_SYMBOL notX
-            notequal element PLAYER_2_SYMBOL notO
-            and notX notO isFree
-            if isFree
-                setindex row3 position symbol
-            else
-                say "\nThe position is not free."
-                decrement turn
-            endif
+            say POSITION_NOT_FREE_MESSAGE
+            decrement turn
         endif
     endif
 
@@ -94,21 +93,21 @@ while 1
     # Horizontal 1.
     equal row1 [symbol,symbol,symbol] victory
     if victory
-        say VICTORY_MESSAGE
+        say "$(VICTORY_MESSAGE) $(playerName)."
         break
     endif
 
     # Horizontal 2.
     equal row2 [symbol,symbol,symbol] victory
     if victory
-        say VICTORY_MESSAGE
+        say "$(VICTORY_MESSAGE) $(playerName)."
         break
     endif
 
     # Horizontal 3.
     equal row3 [symbol,symbol,symbol] victory
     if victory
-        say VICTORY_MESSAGE
+        say "$(VICTORY_MESSAGE) $(playerName)."
         break
     endif
 
@@ -124,7 +123,7 @@ while 1
         and eq1 eq2 victory
         and victory eq3 victory
         if victory
-            say VICTORY_MESSAGE
+            say "$(VICTORY_MESSAGE) $(playerName)."
             break
         endif
     endforeach
@@ -139,7 +138,7 @@ while 1
     and eq1 eq2 victory
     and victory eq3 victory
     if victory
-        say VICTORY_MESSAGE
+        say "$(VICTORY_MESSAGE) $(playerName)."
         break
     endif
 
@@ -153,7 +152,7 @@ while 1
     and eq1 eq2 victory
     and victory eq3 victory
     if victory
-        say VICTORY_MESSAGE
+        say "$(VICTORY_MESSAGE) $(playerName)."
         break
     endif
 
