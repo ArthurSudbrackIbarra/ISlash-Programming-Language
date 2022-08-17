@@ -35,7 +35,7 @@ while 1
         var playerName PLAYER_1_NAME
         var symbol PLAYER_1_SYMBOL
     else
-        var playerName PLAYER_1_NAME
+        var playerName PLAYER_2_NAME
         var symbol PLAYER_2_SYMBOL
     endif
 
