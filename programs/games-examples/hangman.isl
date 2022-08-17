@@ -2,7 +2,7 @@
 var words ["Play","Melon","Whale","Subject","Magic"]
 
 # The user can choose a custom word too.
-input customWord "Type a custom word or type 0 to use a predefined word: "
+input customWord "\nType a custom word or type 0 to use a predefined word: "
 notequal customWord 0 isCustom
 if isCustom
     var words [customWord]
@@ -37,45 +37,57 @@ rangearray randomWordLength wordIndexes
 
 # Variable to keep track of our lives.
 var lifes 5
+# Variable to keep track of the guessed letters.
+var guessedLetters []string
 
 while lifes
+    # Printing stats.
+    say "\nLifes: $(lifes) | Letters: $(randomWordLength) | Guesses: $(guessedLetters)"
     # Getting user input and turning it into uppercase.
-    input guessedLetter "\nLifes: $(lifes) | Letters: $(randomWordLength) | Type a letter: "
+    input guessedLetter "\nType a letter: "
     upper guessedLetter guessedLetter
-    # Checking if the word contains the letter.
-    contains randomWord guessedLetter containsLetter
-    if containsLetter
-        var newSecretWord ""
-        foreach index wordIndexes
-            # currentLetter = randomWord[index]
-            charat randomWord index currentLetter
-            # letterInSecretWord = secretWord[index]
-            charat secretWord index letterInSecretWord
-            # Checking if the current letter is equal to the guessed letter.
-            equal currentLetter guessedLetter match
-            if match
-                # If the letter is equal, concatenate the letter in 'newSecretWord'.
-                concat newSecretWord currentLetter
-            else
-                # If the letter is NOT equal, concatenate 'letterInSecretWord' in 'newSecretWord'.
-                concat newSecretWord letterInSecretWord
-            endif
-        endforeach
-        # secretWord = newSecretWord
-        var secretWord newSecretWord
-        # Printing the current state of the word.
-        say "\n$(secretWord)"
-        # Checking victory.
-        equal secretWord randomWord victory
-        if victory
-            say "\nYou win!"
-            exit 0
-        endif
+    # Checking if the letter hasn't been guessed before.
+    contains guessedLetters guessedLetter repeatedGuess
+    if repeatedGuess
+        say "\nThis letter has already been guessed."
     else
-        # Printing the current state of the word.
-        say "\n$(secretWord)"
-        # Decrementing user lifes.
-        decrement lifes
+        # Checking if the word contains the letter.
+        contains randomWord guessedLetter containsLetter
+        if containsLetter
+            var newSecretWord ""
+            foreach index wordIndexes
+                # currentLetter = randomWord[index]
+                charat randomWord index currentLetter
+                # letterInSecretWord = secretWord[index]
+                charat secretWord index letterInSecretWord
+                # Checking if the current letter is equal to the guessed letter.
+                equal currentLetter guessedLetter match
+                if match
+                    # If the letter is equal, concatenate the letter in 'newSecretWord'.
+                    concat newSecretWord currentLetter
+                else
+                    # If the letter is NOT equal, concatenate 'letterInSecretWord' in 'newSecretWord'.
+                    concat newSecretWord letterInSecretWord
+                endif
+            endforeach
+            # secretWord = newSecretWord
+            var secretWord newSecretWord
+            # Printing the current state of the word.
+            say "\n$(secretWord)"
+            # Checking victory.
+            equal secretWord randomWord victory
+            if victory
+                say "\nYou win!"
+                exit 0
+            endif
+        else
+            # Printing the current state of the word.
+            say "\n$(secretWord)"
+            # Decrementing user lifes.
+            decrement lifes
+        endif
+        # Appending the guessed letter to the 'guessedLetters' array.
+        append guessedLetters guessedLetter
     endif
 endwhile
 
