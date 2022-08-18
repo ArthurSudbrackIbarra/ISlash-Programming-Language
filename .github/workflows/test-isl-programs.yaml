@@ -27,7 +27,7 @@ jobs:
         id: "build-matrix"
         run: |
           echo '::set-output name=version_matrix::["12","14","16"]'
-          bash .github/workflows/get-programs-list.sh
+          ls -la
     outputs:
       version-matrix: ${{ steps.build-matrix.outputs.version-matrix }}
 
