@@ -164,12 +164,16 @@ endforeach
 Example:
 
 ```
-var array [1,2,3] # OK!
-var array ["Hello", "Bye"] # OK!
-var array []number # OK!
-var array []string # OK!
+# OK!
 
-var array [] # NOT OK!
+var array [1,2,3]
+var array ["Hello","Bye"]
+var array []number
+var array []string
+
+# NOT OK!
+
+var array []
 ```
 
 ## Try ISlash
