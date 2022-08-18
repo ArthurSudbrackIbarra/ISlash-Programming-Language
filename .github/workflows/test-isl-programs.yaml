@@ -1,5 +1,7 @@
 on:  
   push:
+    branches:
+    - "main"
   pull_request:
     branches:
       - "main"
@@ -14,7 +16,5 @@ jobs:
         with:
           go-version: "1.19"
       - name: "Run Shell Script"
-        run: "ls"
-      - name: "Test"
-        run: "go version"
+        run: "bash .github/workflows/test-isl-programs.sh"
     
