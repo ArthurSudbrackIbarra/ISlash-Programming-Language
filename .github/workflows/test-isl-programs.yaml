@@ -5,8 +5,9 @@ on:
   pull_request:
     branches:
       - "main"
+
 jobs:
-  test-isl-programs:
+  environment-setup:
     runs-on: "ubuntu-22.04"
     steps:
       - name: "Checkout Code"
@@ -15,8 +16,25 @@ jobs:
         uses: "actions/setup-go@v3"
         with:
           go-version: "1.19"
-      - name: "Go Build"
-        run: "go build"
-      - name: "Test ISlash Programs"
-        run: "bash .github/workflows/test-isl-programs.sh"
-    
+      - name: "Build ISlash Executable"
+        run: "go build -o /usr/bin/islash"
+
+  build-matrix:
+    needs: "environment-setup"
+    runs-on: "ubuntu-22.04"
+    steps:
+      - name: "Build Matrix"
+        run: |
+          echo '::set-output name=version_matrix::["12","14","16"]'
+    outputs:
+      version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
+
+  matrix:
+    needs: "build-matrix"
+    runs-on: "ubuntu-22.04"
+    strategy:
+      matrix:
+        version: ${{ fromJson(needs.build-matrix.outputs.version_matrix) }}
+    steps:
+      - name: "Test Matrix"
+        run: echo ${{ matrix.version }}
