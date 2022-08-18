@@ -1,7 +1,7 @@
 on:  
   push:
     branches:
-    - "main"
+      - "main"
   pull_request:
     branches:
       - "main"
@@ -15,6 +15,8 @@ jobs:
         uses: "actions/setup-go@v3"
         with:
           go-version: "1.19"
-      - name: "Run Shell Script"
+      - name: "Go Build"
+        run: "go build"
+      - name: "Test ISlash Programs"
         run: "bash .github/workflows/test-isl-programs.sh"
     

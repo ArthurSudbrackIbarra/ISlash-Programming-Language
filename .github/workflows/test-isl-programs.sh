@@ -1,1 +1,4 @@
-echo "This is a test!"
+for f in programs/**/*
+do
+  echo $f
+done
