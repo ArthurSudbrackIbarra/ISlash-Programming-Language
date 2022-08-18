@@ -1,6 +1,6 @@
+automation-scripts
 programs
 docker-compose.yaml
 Dockerfile
 README.md
 .gitattributes
-.gitignore

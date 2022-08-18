@@ -42,20 +42,8 @@ func GetFileLinesNoTrim(filePath string) []string {
 }
 
 func GetFileContent(filePath string) string {
-	file, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
-	scanner := bufio.NewScanner(file)
-	content := ""
-	for scanner.Scan() {
-		content += scanner.Text()
-	}
-	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
-	}
-	return content
+	content := GetFileLinesNoTrim(filePath)
+	return strings.Join(content, "\n")
 }
 
 func WriteToFile(filePath string, content string) {
