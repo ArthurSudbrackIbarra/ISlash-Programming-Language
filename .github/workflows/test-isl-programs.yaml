@@ -7,7 +7,7 @@ on:
       - "main"
 
 jobs:
-  environment-setup:
+  Environment-Setup:
     runs-on: "ubuntu-22.04"
     steps:
       - name: "Checkout Code"
@@ -19,22 +19,24 @@ jobs:
       - name: "Build ISlash Executable"
         run: "go build"
 
-  build-matrix:
-    needs: "environment-setup"
+  Build-Matrix:
+    needs: "Environment-Setup"
     runs-on: "ubuntu-22.04"
     steps:
       - name: "Build Matrix"
+        id: "build-matrix"
         run: |
           echo '::set-output name=version_matrix::["12","14","16"]'
+          bash .github/workflows/get-programs-list.sh
     outputs:
-      version_matrix: ${{ steps.set-matrix.outputs.version_matrix }}
+      version-matrix: ${{ steps.build-matrix.outputs.version-matrix }}
 
-  matrix:
-    needs: "build-matrix"
+  Test-Matrix:
+    needs: "Build-Matrix"
     runs-on: "ubuntu-22.04"
     strategy:
       matrix:
-        version: ${{ fromJson(needs.build-matrix.outputs.version_matrix) }}
+        version: ${{ fromJson(needs.build-matrix.outputs.version-matrix) }}
     steps:
       - name: "Test Matrix"
         run: echo ${{ matrix.version }}
