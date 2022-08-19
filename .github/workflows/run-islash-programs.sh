@@ -24,7 +24,7 @@ do
   fi
   # Running the ISlash program.
   echo "=== NOW RUNNING: $FILE ==="
-  ./islash $file
+  ./islash $FILE
   # Checking for errors.
   EXIT_CODE=$?
   if [ $EXIT_CODE -ne 0 ]; then
