@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Color.
+PURPLE='\033[0;94m'
+RESET='\033[0m'
+
 # Programs that won't be tested because they require user input.
 NO_TEST=(
   "programs/arrays-examples/fibbonaci.isl"
@@ -26,7 +30,7 @@ do
   if [[ " ${NO_TEST[*]} " =~ " ${FILE} " ]]; then
     continue
   fi
-  echo "======= [NOW RUNNING] $FILE ======="
+  echo -e "${PURPLE}======= [NOW RUNNING] $FILE =======${RESET}"
   echo
   # Running the ISlash program.
   ./islash $FILE
