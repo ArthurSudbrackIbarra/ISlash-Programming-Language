@@ -39,8 +39,8 @@ say "After removing last: $(array), element removed: $(element)\n"
 
 # CONTAINS
 # Skeleton: CONTAINS ARRAY ELEMENT VARIABLE_TO_STORE_RESULT
-contains array 1 contains1
+contains array 2 contains1
 contains array 999 contains999
 # If the array contains the element, VARIABLE_TO_STORE_RESULT will be 1, else 0.
-say "The array contains 1? $(contains1)"
+say "The array contains 2? $(contains1)"
 say "The array contains 999? $(contains999)"
