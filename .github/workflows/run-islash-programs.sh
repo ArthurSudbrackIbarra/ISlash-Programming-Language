@@ -14,6 +14,7 @@ NO_TEST=(
   "programs/numbers-examples/fizz-buzz.isl"
   "programs/numbers-examples/guess-the-number.isl"
   "programs/strings-examples/is-palindrome.isl"
+  "programs/strings-examples/contains.isl"
   "programs/strings-examples/spelling.isl"
 )
 
