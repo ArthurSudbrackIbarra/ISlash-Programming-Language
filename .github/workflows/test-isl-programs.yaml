@@ -7,7 +7,7 @@ on:
       - "main"
 
 jobs:
-  Environment-Setup:
+  Test-ISlash-Programs:
     runs-on: "ubuntu-22.04"
     steps:
       - name: "Checkout Code"
@@ -18,25 +18,5 @@ jobs:
           go-version: "1.19"
       - name: "Build ISlash Executable"
         run: "go build"
-
-  Build-Matrix:
-    needs: "Environment-Setup"
-    runs-on: "ubuntu-22.04"
-    steps:
-      - name: "Build Matrix"
-        id: "build-matrix"
-        run: |
-          echo '::set-output name=version_matrix::["12","14","16"]'
-          ls -la
-    outputs:
-      version-matrix: ${{ steps.build-matrix.outputs.version-matrix }}
-
-  Test-Matrix:
-    needs: "Build-Matrix"
-    runs-on: "ubuntu-22.04"
-    strategy:
-      matrix:
-        version: ${{ fromJson(needs.build-matrix.outputs.version-matrix) }}
-    steps:
-      - name: "Test Matrix"
-        run: echo ${{ matrix.version }}
+      - name: "Run ISlash Programs"
+        run: "bash ./.github/workflows/run-islash-programs.sh"
