@@ -18,7 +18,6 @@ NO_TEST=(
   "programs/strings-examples/spelling.isl"
 )
 
-# New line.
 echo
 
 # Recursively iterating through .isl files inside the '../../programs' directory.
@@ -27,14 +26,14 @@ do
   if [[ " ${NO_TEST[*]} " =~ " ${FILE} " ]]; then
     continue
   fi
+  echo "======= [NOW RUNNING] $FILE ======="
+  echo
   # Running the ISlash program.
-  echo "=== NOW RUNNING: $FILE ==="
   ./islash $FILE
   # Checking for errors.
   EXIT_CODE=$?
   if [ $EXIT_CODE -ne 0 ]; then
     exit $EXIT_CODE
   fi
-  # New line.
   echo
 done
