@@ -23,5 +23,5 @@ do
     continue
   fi
   # Running the ISlash program.
-  ../../islash $file
+  ./islash $file
 done
