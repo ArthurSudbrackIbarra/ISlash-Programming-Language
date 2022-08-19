@@ -1,6 +1,6 @@
 # Arithmetic Operators.
 
-# Skeleton:
+# Usage:
 # INSTRUCTION NUMBER_1 NUMBER_2 VARIABLE_TO_STORE_THE_RESULT
 
 # Let's define our operands:
