@@ -17,11 +17,19 @@ NO_TEST=(
 )
 
 # Recursively iterating through .isl files inside the '../../programs' directory.
-for file in programs/**/*.isl
+for FILE in programs/**/*.isl
 do
-  if [[ " ${NO_TEST[*]} " =~ " ${file} " ]]; then
+  if [[ " ${NO_TEST[*]} " =~ " ${FILE} " ]]; then
     continue
   fi
   # Running the ISlash program.
+  echo "=== NOW RUNNING: $FILE ==="
   ./islash $file
+  # Checking for errors.
+  EXIT_CODE=$?
+  if [ $EXIT_CODE -ne 0 ]; then
+    exit $EXIT_CODE
+  fi
+  # New line.
+  echo
 done
