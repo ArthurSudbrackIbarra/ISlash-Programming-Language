@@ -11,10 +11,14 @@ NO_TEST=(
   "programs/games-examples/hangman.isl"
   "programs/games-examples/tic-tac-toe.isl"
   "programs/numbers-examples/calculator.isl"
+  "programs/numbers-examples/fizz-buzz.isl"
   "programs/numbers-examples/guess-the-number.isl"
   "programs/strings-examples/is-palindrome.isl"
   "programs/strings-examples/spelling.isl"
 )
+
+# New line.
+echo
 
 # Recursively iterating through .isl files inside the '../../programs' directory.
 for FILE in programs/**/*.isl
