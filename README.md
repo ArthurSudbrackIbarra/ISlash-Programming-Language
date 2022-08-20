@@ -10,7 +10,7 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 
 <br/>
 <p align="center">
-    <img src="https://media.giphy.com/media/wHHEszbvEzizfTkeIa/giphy.gif"/>
+    <img src="https://media.giphy.com/media/n1K8iNYQB8AR2P1CKm/giphy.gif"/>
 </p>
 
 ## Table of Contents
