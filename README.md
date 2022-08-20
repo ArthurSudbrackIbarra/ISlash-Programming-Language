@@ -8,6 +8,11 @@
 
 My main goal when creating ISlash was learning Golang (Go), as I had never used that language before. The name 'ISlash' is a pun with my last name 'Ibarra', because 'barra' means 'slash' in portuguese, which is my native language.
 
+<br/>
+<p align="center">
+    <img src="https://media.giphy.com/media/wHHEszbvEzizfTkeIa/giphy.gif"/>
+</p>
+
 ## Table of Contents
 
 * [Example Programs](#example-programs)
