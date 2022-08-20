@@ -13,7 +13,6 @@ func main() {
 	/*
 		Finding the program path.
 	*/
-
 	if len(os.Args) < 2 {
 		log.Fatal("No program name specified.")
 	}
@@ -25,7 +24,6 @@ func main() {
 		log.Fatal("Unnable to get user's current directory.")
 	}
 	sourceCodePath := filepath.Join(cwd, os.Args[1])
-
 	/*
 		Mounting tokens with the lexer.
 	*/

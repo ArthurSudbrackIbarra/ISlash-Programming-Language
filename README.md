@@ -25,7 +25,7 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 
 ## Example Programs
 
-Example programs using the ISlash language  can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs). There you'll find simple scripts showcasing the instructions of the language, as well as more advanced ones, such as a **bubblesort**, a **tic-tac-toe game**, a **csv reader** script.
+Example programs using the ISlash language  can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs). There you'll find simple scripts showcasing the instructions of the language, as well as more advanced ones, such as a **bubblesort**, **hangman**, **tic-tac-toe game** and a **csv reader** script.
 
 In the example below, we are multiplying numbers inputed by the user.
 
@@ -107,6 +107,8 @@ Instructions are **not case sensitive**.
 | WRITEFILE     | Writes to a file, overrides previous content.                               |
 | EXIT          | Exits the program with a status code.                                       |
 
+Basic example programs using each of the instructions listed above can be found [here](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs/instructions-examples).
+
 ## Language Features
 
 Below, some ISlash language features will be explained:
@@ -164,12 +166,16 @@ endforeach
 Example:
 
 ```
-var array [1,2,3] # OK!
-var array ["Hello", "Bye"] # OK!
-var array []number # OK!
-var array []string # OK!
+# OK!
 
-var array [] # NOT OK!
+var array [1,2,3]
+var array ["Hello","Bye"]
+var array []number
+var array []string
+
+# NOT OK!
+
+var array []
 ```
 
 ## Try ISlash
@@ -213,7 +219,9 @@ islash myProgram.isl
 
 ![Running Programs](https://user-images.githubusercontent.com/69170322/183551455-e2b7d46f-7115-4a69-a03a-eafb5b67a323.png)
 
-**NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .isl files or create new ones in your host machine and then run them from inside the container. 
+**NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .isl files or create new ones in your host machine and then run them from inside the container.
+
+**TIP:** You can automatize steps 4-5 using the scripts inside the `automation-scripts` folder: `start-container.bat` and `start-container.sh`, depending on your OS.
 
 ## Uninstall ISlash
 

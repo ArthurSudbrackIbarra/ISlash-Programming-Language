@@ -181,25 +181,16 @@ func (interpreter *Interpreter) handleString(str string) string {
 	return strings.ReplaceAll(interpolated, `\n`, "\n")
 }
 
-// Nao funciona pro break ainda porque o index do brek nao é o mesmo do while
-func (interpreter *Interpreter) findCloseLoopIndex(currentIndex int, tokensList []*token.Token, loopTypeBegin string, loopTypeEnd string) int {
-	whileStatementsCount := 0
-	currentWhileStatementOrder := 0
+func (interpreter *Interpreter) findCloseLoopIndex(currentIndex int, tokensList []*token.Token) int {
+	stack := NewEmptyStack()
 	for i := 0; i < len(tokensList); i++ {
-		if tokensList[i].GetType() == loopTypeBegin {
-			if i <= currentIndex {
-				currentWhileStatementOrder = whileStatementsCount
-			}
-			whileStatementsCount += 1
-		}
-	}
-	endWhileToFindOrder := math.Abs(float64(currentWhileStatementOrder) - float64(whileStatementsCount))
-	endwhilesFound := 0
-	for i := 0; i < len(tokensList); i++ {
-		if tokensList[i].GetType() == loopTypeEnd {
-			endwhilesFound += 1
-			if endwhilesFound == int(endWhileToFindOrder) {
+		if tokensList[i].GetType() == token.WHILE {
+			stack.Push(i)
+		} else if tokensList[i].GetType() == token.ENDWHILE {
+			if i >= currentIndex {
 				return i
+			} else {
+				stack.Pop()
 			}
 		}
 	}
@@ -1054,7 +1045,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				if value >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findCloseLoopIndex(i, tokensList, token.WHILE, token.ENDWHILE)
+					i = interpreter.findCloseLoopIndex(i, tokensList)
 					if i == -1 {
 						log.Fatalf("Interpreter error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
@@ -1063,7 +1054,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				if interpreter.numberVarTable[condition] >= 1 {
 					interpreter.whileStack.Push(i)
 				} else {
-					i = interpreter.findCloseLoopIndex(i, tokensList, token.WHILE, token.ENDWHILE)
+					i = interpreter.findCloseLoopIndex(i, tokensList)
 					if i == -1 {
 						log.Fatalf("Interpreter error: Missing ENDWHILE statement for WHILE in line %d.", currentToken.GetLine())
 					}
@@ -1074,7 +1065,7 @@ func (interpreter *Interpreter) Interpret(tokensList []*token.Token, sourceCodeD
 				log.Fatalf("Interpreter error: Cannot use BREAK instruction here. %d.", currentToken.GetLine())
 			}
 			interpreter.whileStack.Pop()
-			i = interpreter.findCloseLoopIndex(i, tokensList, token.WHILE, token.ENDWHILE)
+			i = interpreter.findCloseLoopIndex(i, tokensList)
 			if i == -1 {
 				log.Fatalf("Interpreter error: Cannot use BREAK instruction here. %d.", currentToken.GetLine())
 			}
