@@ -5,7 +5,6 @@ on:
   pull_request:
     branches:
       - "main"
-
 jobs:
   Test-ISlash-Programs:
     runs-on: "ubuntu-22.04"

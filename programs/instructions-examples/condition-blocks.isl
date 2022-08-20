@@ -12,12 +12,12 @@
 # The 'CONDITION' argument can be a number, a string or an array.
 #
 #   Numbers:
-#       <= 0 = false
-#       > 1 = true
+#       <= 0 FALSE
+#       > 1 TRUE
 #
 #   Strings and Arrays:
-#       length 0 = false
-#       length > 0 = true
+#       length 0 FALSE
+#       length > 0 TRUE
 
 # Let's define some variables:
 var zero 0
