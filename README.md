@@ -107,6 +107,8 @@ Instructions are **not case sensitive**.
 | WRITEFILE     | Writes to a file, overrides previous content.                               |
 | EXIT          | Exits the program with a status code.                                       |
 
+Basic example programs using each of the instructions listed above can be found [here](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs/instructions-examples).
+
 ## Language Features
 
 Below, some ISlash language features will be explained:
@@ -217,7 +219,9 @@ islash myProgram.isl
 
 ![Running Programs](https://user-images.githubusercontent.com/69170322/183551455-e2b7d46f-7115-4a69-a03a-eafb5b67a323.png)
 
-**NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .isl files or create new ones in your host machine and then run them from inside the container. 
+**NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .isl files or create new ones in your host machine and then run them from inside the container.
+
+**TIP:** You can automatize steps 4-5 using the scripts inside the `automation-scripts` folder: `start-container.bat` and `start-container.sh`, depending on your OS.
 
 ## Uninstall ISlash
 

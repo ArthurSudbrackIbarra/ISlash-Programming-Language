@@ -1,6 +1,6 @@
 # Exit Program.
 
-# Usage: EXIT EXIT_CODE
+# Usage: exit EXIT_CODE
 
 say "Exiting the program with exit code 0."
 

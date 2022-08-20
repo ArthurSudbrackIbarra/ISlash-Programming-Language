@@ -1,7 +1,7 @@
 # Arithmetic Operators.
 
 # Usage:
-# INSTRUCTION NUMBER_1 NUMBER_2 VARIABLE_TO_STORE_THE_RESULT
+# INSTRUCTION NUMBER_1 NUMBER_2 VARIABLE_TO_STORE_RESULT
 
 # Let's define our operands:
 var num1 3

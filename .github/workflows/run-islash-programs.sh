@@ -14,6 +14,7 @@ NO_TEST=(
   "programs/files-examples/write-to-file.isl"
   "programs/games-examples/hangman.isl"
   "programs/games-examples/tic-tac-toe.isl"
+  "programs/instructions-examples/input-output.isl"
   "programs/numbers-examples/calculator.isl"
   "programs/numbers-examples/fizz-buzz.isl"
   "programs/numbers-examples/guess-the-number.isl"

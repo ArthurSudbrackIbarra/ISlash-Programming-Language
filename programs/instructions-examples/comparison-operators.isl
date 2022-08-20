@@ -1,9 +1,9 @@
 # Comparison operators.
 
 # Usage:
-# INSTRUCTION X Y VARIABLE_TO_STORE
+# INSTRUCTION X Y VARIABLE_TO_STORE_RESULT
 
-# The result stored in 'VARIABLE_TO_STORE' will be 1 if the comparison is true and 0 if false.
+# The result stored in 'VARIABLE_TO_STORe_RESULT' will be 1 if the comparison is true and 0 if false.
 
 # Let's define the numbers to compare:
 var num1 10

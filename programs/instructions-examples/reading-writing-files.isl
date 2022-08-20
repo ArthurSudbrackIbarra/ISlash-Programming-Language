@@ -1,7 +1,7 @@
 # Reading-Writing to Files.
 
 # Reading from Files:
-# Usage: INSTRUCTION FILE_PATH VARIABLE_TO_STORE_RESULT
+# Usage: INSTRUCTION FILE_PATH VARIABLE_TO_STORE_VALUE
 
 # Let's define a variable with the file path:
 var filePath "../resources/txt/sentence.txt"
