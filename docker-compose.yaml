@@ -1,10 +1,11 @@
 version: "3.9"
 services:
-  islash:
-    container_name: islash-container
-    build: .
-    image: islash/islash-programming-language:v1
+  islash-playground:
+    container_name: islash-playground-container
+    build:
+      context: .
+      dockerfile: ./Dockerfile.playground
     volumes:
       - type: bind
-        source: ./programs
-        target: /usr/local/islash/programs
+        source: ./example-programs
+        target: /home/islash-playground/example-programs
