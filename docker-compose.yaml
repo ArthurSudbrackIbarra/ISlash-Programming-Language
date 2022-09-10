@@ -2,9 +2,7 @@ version: "3.9"
 services:
   islash-playground:
     container_name: islash-playground-container
-    build:
-      context: .
-      dockerfile: ./Dockerfile.playground
+    build: .
     volumes:
       - type: bind
         source: ./example-programs
