@@ -1,7 +1,9 @@
 .github
 automation-scripts
-programs
+example-programs
 docker-compose.yaml
-Dockerfile
 README.md
+LICENSE
 .gitattributes
+Dockerfile.official
+Dockerfile.playground

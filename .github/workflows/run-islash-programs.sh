@@ -6,27 +6,27 @@ RESET='\033[0m'
 
 # Programs that won't be tested because they require user input.
 NO_TEST=(
-  "programs/arrays-examples/fibbonaci.isl"
-  "programs/arrays-examples/multiply-n-numbers.isl"
-  "programs/arrays-examples/simulating-a-map.isl"
-  "programs/arrays-examples/sum-of-inputed-numbers.isl"
-  "programs/arrays-examples/multiply-n-numbers.isl"
-  "programs/files-examples/write-to-file.isl"
-  "programs/games-examples/hangman.isl"
-  "programs/games-examples/tic-tac-toe.isl"
-  "programs/instructions-examples/input-output.isl"
-  "programs/numbers-examples/calculator.isl"
-  "programs/numbers-examples/fizz-buzz.isl"
-  "programs/numbers-examples/guess-the-number.isl"
-  "programs/strings-examples/is-palindrome.isl"
-  "programs/strings-examples/contains.isl"
-  "programs/strings-examples/spelling.isl"
+  "example-programs/arrays-examples/fibbonaci.isl"
+  "example-programs/arrays-examples/multiply-n-numbers.isl"
+  "example-programs/arrays-examples/simulating-a-map.isl"
+  "example-programs/arrays-examples/sum-of-inputed-numbers.isl"
+  "example-programs/arrays-examples/multiply-n-numbers.isl"
+  "example-programs/files-examples/write-to-file.isl"
+  "example-programs/games-examples/hangman.isl"
+  "example-programs/games-examples/tic-tac-toe.isl"
+  "example-programs/instructions-examples/input-output.isl"
+  "example-programs/numbers-examples/calculator.isl"
+  "example-programs/numbers-examples/fizz-buzz.isl"
+  "example-programs/numbers-examples/guess-the-number.isl"
+  "example-programs/strings-examples/is-palindrome.isl"
+  "example-programs/strings-examples/contains.isl"
+  "example-programs/strings-examples/spelling.isl"
 )
 
 echo
 
 # Recursively iterating through .isl files inside the '../../programs' directory.
-for FILE in programs/**/*.isl
+for FILE in example-programs/**/*.isl
 do
   if [[ " ${NO_TEST[*]} " =~ " ${FILE} " ]]; then
     continue
