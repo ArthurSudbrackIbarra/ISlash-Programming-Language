@@ -205,7 +205,7 @@ git clone https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language.gi
 cd ISlash-Programming-Language
 ```
 
-4. Start the Docker container:
+4. Start the playground Docker container:
 
 ```sh
 docker compose up -d
@@ -228,7 +228,7 @@ islash my-program.isl
 
 ![Running Programs](https://user-images.githubusercontent.com/69170322/183551455-e2b7d46f-7115-4a69-a03a-eafb5b67a323.png)
 
-**NOTE**: All files inside the 'programs' directory are shared between your host machine and the Docker ISlash container using a **bind mount volume**, so you can modify the .isl files or create new ones in your host machine and then run them from inside the container.
+**NOTE**: All files inside the 'example-programs' directory are shared between your host machine and the Docker container using a **bind mount volume**, so you can modify the .isl files or create new ones in your host machine and then run them from inside the container.
 
 **TIP:** You can automatize steps 4-5 using the scripts inside the `automation-scripts` folder: `start-container.bat` and `start-container.sh`, depending on your OS.
 
