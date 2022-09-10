@@ -114,7 +114,7 @@ Instructions are **not case sensitive**.
 |   WRITEFILE   | Writes to a file, overrides previous content.                               |
 |     EXIT      | Exits the program with a status code.                                       |
 
-Basic example programs using each of the instructions listed above can be found [here](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs/instructions-examples).
+Basic example programs using each of the instructions listed above can be found [here](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/example-programs/instructions-examples).
 
 ## Language Features
 
