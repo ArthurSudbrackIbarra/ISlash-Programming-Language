@@ -26,7 +26,7 @@ NO_TEST=(
 echo
 
 # Recursively iterating through .isl files inside the '../../programs' directory.
-for FILE in programs/**/*.isl
+for FILE in example-programs/**/*.isl
 do
   if [[ " ${NO_TEST[*]} " =~ " ${FILE} " ]]; then
     continue
