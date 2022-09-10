@@ -27,6 +27,7 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 - [Try ISlash - Playground](#try-islash---playground)
   - [Installation](#installation)
   - [Uninstallation](#uninstallation)
+- [Install ISlash Locally](#install-islash-locally)
 - [ISlash Docker Hub Image](#islash-docker-hub-image)
 - [Possible Future Features](#possible-future-features)
 
@@ -252,6 +253,40 @@ docker rm islash-playground-container
 
 ```sh
 docker rmi islash-programming-language_islash-playground
+```
+
+## Install ISlash Locally
+
+To install ISlash locally in your machine instead of using Docker, perform the following steps:
+
+1. Download [Go ^1.19](https://go.dev/dl/).
+
+2. Clone this repository.
+
+```sh
+git clone https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language.git
+```
+
+3. Go to the repository directory.
+
+```sh
+cd ISlash-Programming-Language
+```
+
+4. Build the ISlash executable, the command below will generate an 'islash.exe' file on Windows or an 'islash' file on unix based operating systems.
+
+```sh
+go build -o islash
+```
+
+5. Add the executable to your PATH.
+
+- (Windows) Add the repository directory to your PATH environment variable.
+
+- (Unix) Move the created executable 'islash' to /usr/bin.
+
+```sh
+sudo mv islash /usr/bin
 ```
 
 ## ISlash Docker Hub Image
