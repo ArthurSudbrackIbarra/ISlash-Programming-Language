@@ -214,7 +214,7 @@ docker compose up -d
 5. Enter inside the Docker container that you started:
 
 ```sh
-docker exec -it islash-container sh
+docker exec -it islash-playground-container sh
 ```
 
 6. Run the ISlash programs you wish with:
@@ -245,7 +245,7 @@ docker compose down
 2. Delete the container.
 
 ```sh
-docker rm islash-container
+docker rm islash-playground-container
 ```
 
 3. Delete the container image.
