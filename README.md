@@ -32,7 +32,7 @@ My main goal when creating ISlash was learning Golang (Go), as I had never used 
 
 ## Example Programs
 
-Example programs using the ISlash language can be found inside the [programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/programs). There you'll find simple scripts showcasing the instructions of the language, as well as more advanced ones, such as a **bubblesort**, **hangman**, **tic-tac-toe game** and a **csv reader** script.
+Example programs using the ISlash language can be found inside the [example programs folder](https://github.com/ArthurSudbrackIbarra/ISlash-Programming-Language/tree/main/example-programs). There you'll find simple scripts showcasing the instructions of the language, as well as more advanced ones, such as a **bubblesort**, **hangman**, **tic-tac-toe game** and a **csv reader** script.
 
 In the example below, we are multiplying numbers inputed by the user.
 
